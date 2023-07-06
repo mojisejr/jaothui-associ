@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String?
+  farmName  String?
+  wallet    String
+  address   String    @db.Text
+  lat       Float?
+  lon       Float?
+  role      String    @default("USER")
+  lineId    String?   @db.Text
+  payment   Payment[]
+  votes     Votes[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Payment {
+  id         Int       @id @default(autoincrement())
+  wallet     String
+  isLifeTime Boolean   @default(false)
+  active     Boolean   @default(true)
+  start      DateTime  @default(now())
+  end        DateTime?
+  slipUrl    String    @db.Text
+  approved   Int       @default(0)
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
+}
+
+model Votes {
+  id         Int       @id @default(autoincrement())
+  campaignId Int
+  wallet     String
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
+  Campiagn   Campiagn? @relation(fields: [campiagnId], references: [id])
+  campiagnId Int?
+}
+
+model Campiagn {
+  id          Int      @id @default(autoincrement())
+  name        String
+  for         String
+  description String?
+  imageUrl    String?
+  start       DateTime @default(now())
+  end         DateTime
+  ended       Boolean  @default(false)
+  voters      Votes[]
+}
+
+model Advertisements {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  imageUrl    String?
+  active      Boolean @default(true)
+}
