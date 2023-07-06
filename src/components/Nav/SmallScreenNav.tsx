@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const SmallScreenNav = () => {
   return (
@@ -20,8 +21,12 @@ const SmallScreenNav = () => {
             <li className="border-b-2 p-2 hover:bg-slate-200">
               Connect Wallet
             </li>
-            <li className="border-b-2 p-2 hover:bg-slate-200">สมัครสมาชิก</li>
-            <li className="p-2 hover:bg-slate-200">รายชื่อสมาชิก</li>
+            <li className="border-b-2 p-2 hover:bg-slate-200">
+              <Link href="/register">สมัครสมาชิก</Link>
+            </li>
+            <li className="p-2 hover:bg-slate-200">
+              <Link href="/member">รายชื่อสมาชิก</Link>
+            </li>
           </ul>
         </div>
       </div>
