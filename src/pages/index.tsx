@@ -1,5 +1,4 @@
 import Head from "next/head";
-import About from "~/components/Information/About";
 import Hero from "~/components/Hero";
 import Information from "~/components/Information";
 import Navbar from "~/components/Nav";

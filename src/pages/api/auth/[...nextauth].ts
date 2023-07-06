@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
       console.log("baseUrl", baseUrl);
       return baseUrl;
     },
-    session({ session, token, user }) {
+    session({ session }) {
       return session;
     },
     jwt(data) {
