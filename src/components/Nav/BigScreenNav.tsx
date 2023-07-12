@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import ConnectBitkubNextButton from "../Shared/BitkubButton";
+import { useBitkubNext } from "~/contexts/bitkubNextContext";
 
 const BigScreenNav = () => {
+  const { wallet, isConnected, signOut } = useBitkubNext();
   return (
     <div className="navbar relative z-10 hidden border-b-2 border-black w768:flex">
       <div className="navbar-start">
@@ -31,7 +34,13 @@ const BigScreenNav = () => {
         </Link>
       </div>
       <div className="navbar-end">
-        <button className="btn-outline btn rounded-full">Connect Wallet</button>
+        {!isConnected ? (
+          <ConnectBitkubNextButton />
+        ) : (
+          <div>
+            <button onClick={() => signOut()}>signOut</button>
+          </div>
+        )}
       </div>
     </div>
   );

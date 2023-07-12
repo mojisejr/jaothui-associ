@@ -6,12 +6,11 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
-// import { prisma } from "~/server/db";
-import { getServerAuthSession } from "../auth";
+import { prisma } from "~/server/db";
 
 /**
  * 1. CONTEXT
@@ -45,13 +44,11 @@ import { getServerAuthSession } from "../auth";
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (_opts: CreateNextContextOptions) => {
-  const { req, res } = _opts;
-  const session = await getServerAuthSession({ req, res });
+export const createTRPCContext = (_opts: CreateNextContextOptions) => {
+  console.log(_opts.req);
   return {
-    session,
+    prisma,
   };
-  // return createInnerTRPCContext({});
 };
 
 /**
@@ -98,20 +95,20 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 
-const isAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
+// const isAuthed = t.middleware(({ ctx, next }) => {
+//   if (!ctx.session || !ctx.session.user) {
+//     throw new TRPCError({ code: "UNAUTHORIZED" });
+//   }
 
-  return next({
-    ctx: {
-      session: {
-        ...ctx.session,
-        user: ctx.session.user,
-      },
-    },
-  });
-});
+//   return next({
+//     ctx: {
+//       session: {
+//         ...ctx.session,
+//         user: ctx.session.user,
+//       },
+//     },
+//   });
+// });
 
 export const publicProcedure = t.procedure;
-export const protectedProcedure = t.procedure.use(isAuthed);
+// export const protectedProcedure = t.procedure.use(isAuthed);
