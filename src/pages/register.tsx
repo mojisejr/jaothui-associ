@@ -1,8 +1,77 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Head from "next/head";
 import Footer from "~/components/Information/Footer";
 import Navbar from "~/components/Nav";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import { api } from "../utils/api";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { supabase } from "~/server/supabase";
+
+type Inputs = {
+  name: string;
+  tel: string;
+  address: string;
+  wallet: string;
+  payment: "1" | "2";
+  file: FileList;
+};
 
 const Register = () => {
+  const { isConnected, wallet, tokens } = useBitkubNext();
+  const {
+    isLoading: registering,
+    isSuccess: registered,
+    isError: registerError,
+    mutate: createNewMember,
+  } = api.register.register.useMutation();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<Inputs>();
+
+  useEffect(() => {
+    if (registerError || registered) {
+      if (registerError) {
+        toast.error("Error: Registration failed, please try again");
+      }
+      if (registered) {
+        toast.success("Success: Registration successfully");
+      }
+      reset();
+    }
+  }, [registerError, registered]);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
+    event?.preventDefault();
+    const extension = data.file[0]?.name.split(".")[1];
+    const { data: result, error } = await supabase.storage
+      .from("slipstorage")
+      .upload(
+        `${new Date().getTime()}_${data.wallet}.${extension as string}
+        `,
+        data.file[0]!,
+        {
+          cacheControl: "3600",
+          upsert: false,
+        }
+      );
+
+    if (error) {
+      toast.error("File uploading failed!, try again!");
+    } else {
+      createNewMember({
+        accessToken: tokens?.access_token as string,
+        ...data,
+        slipUrl: result.path,
+      });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -12,108 +81,148 @@ const Register = () => {
       </Head>
       <Navbar />
       <div className="flex max-h-full min-h-[600px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover text-white">
-        <div className="flex flex-col items-center w768:mt-[80px] w1440:mt-[150px]">
-          <div
-            style={{ fontFamily: "Kanit" }}
-            className="mb-2 text-[2rem] w768:text-[3rem]"
-          >
-            สมัครสมาชิก
+        {isConnected ? (
+          <>
+            <div className="flex flex-col items-center w768:mt-[80px] w1440:mt-[150px]">
+              <div
+                style={{ fontFamily: "Kanit" }}
+                className="mb-2 text-[2rem] w768:text-[3rem]"
+              >
+                สมัครสมาชิก
+              </div>
+              <div
+                className={`w-full ${
+                  registering ? "bg-[#eee]" : "bg-white"
+                } text-black`}
+              >
+                <form
+                  className="flex flex-col gap-3 p-10 shadow-lg"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">ชื่อ - นามสกุล</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      disabled={registering}
+                      {...register("name", { required: true })}
+                      className="input-bordered input w-full max-w-xs"
+                    />
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">เบอร์โทรศัพท์</span>
+                    </label>
+                    <input
+                      type="text"
+                      disabled={registering}
+                      required
+                      {...register("tel", { required: true })}
+                      className="input-bordered input w-full max-w-xs"
+                    />
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">ที่อยู่</span>
+                    </label>
+                    <input
+                      type="text"
+                      disabled={registering}
+                      {...register("address", { required: true })}
+                      className="input-bordered input w-full max-w-xs"
+                    />
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">Bitkub Next</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      disabled={true}
+                      value={wallet}
+                      {...register("wallet", { value: wallet })}
+                      className="input-bordered input w-full max-w-xs"
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">ตัวเลือกสมาชิก</span>
+                    </label>
+                    <select
+                      className="select-bordered select"
+                      required
+                      disabled={registering}
+                      {...register("payment", { required: true })}
+                    >
+                      <option disabled selected>
+                        เลือก
+                      </option>
+                      <option value="1">รายปี 100 บาท</option>
+                      <option value="2">ตลอดชีพ 600 บาท</option>
+                    </select>
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div>
+                    <div>หมายเลขบัญชีสมาคม</div>
+                    <div className="bg-slate-200 p-2">
+                      <div>ธนาคารxxxx</div>
+                      <div>เลขที่บัญชีxxxxxxxxxx</div>
+                      <div>ชื่อบัญชีxxxxx xxxxxxx</div>
+                    </div>
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                      <span className="label-text">แนบสลิป</span>
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      disabled={registering}
+                      required
+                      {...register("file", { required: true })}
+                      className="file-input-bordered file-input w-full max-w-xs"
+                    />
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <button className="btn" type="submit">
+                    {registering ? "กำลังบันทึก.." : "แจ้งชำระเงิน"}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="fixed left-0 top-0 flex min-h-screen w-full flex-col items-center justify-center">
+            <div className="text-[2rem]">Please Connect Wallet</div>
+            <div>Connecting your wallet is necessary before registering.</div>
           </div>
-          <div className="w-full bg-white text-black">
-            <form className="flex flex-col gap-3 p-10 shadow-lg">
-              <div className="form-control w-full max-w-xs">
-                <label className="label">
-                  <span className="label-text">ชื่อ - นามสกุล</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="input-bordered input w-full max-w-xs"
-                ></input>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">เบอร์โทรศัพท์</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="input-bordered input w-full max-w-xs"
-                ></input>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">ที่อยู่</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder=""
-                  className="input-bordered input w-full max-w-xs"
-                ></input>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">Bitkub Next</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  disabled={true}
-                  value="0x1234"
-                  className="input-bordered input w-full max-w-xs"
-                ></input>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">ตัวเลือกสมาชิก</span>
-                </label>
-                <select className="select-bordered select" required>
-                  <option disabled selected>
-                    เลือก
-                  </option>
-                  <option>รายปี 100 บาท</option>
-                  <option>ตลอดชีพ 600 บาท</option>
-                </select>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div>
-                <div>หมายเลขบัญชีสมาคม</div>
-                <div className="bg-slate-200 p-2">
-                  <div>ธนาคารxxxx</div>
-                  <div>เลขที่บัญชีxxxxxxxxxx</div>
-                  <div>ชื่อบัญชีxxxxx xxxxxxx</div>
-                </div>
-              </div>
-              <div className="form-control w-full max-w-xs">
-                <label className="label">
-                  <span className="label-text">แนบสลิป</span>
-                </label>
-                <input
-                  type="file"
-                  required
-                  className="file-input-bordered file-input w-full max-w-xs"
-                />
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <button className="btn" type="submit">
-                แจ้งชำระเงิน
-              </button>
-            </form>
-          </div>
-        </div>
+        )}
       </div>
       <Footer />
     </>

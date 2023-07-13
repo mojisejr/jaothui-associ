@@ -6,11 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
+import { getUser } from "./services/getUser";
+import { contextParser } from "./utils/contextParser";
 
 /**
  * 1. CONTEXT
@@ -44,11 +46,36 @@ import { prisma } from "~/server/db";
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (_opts: CreateNextContextOptions) => {
-  console.log(_opts.req);
-  return {
-    prisma,
-  };
+export const createTRPCContext = async (_opts: CreateNextContextOptions) => {
+  if (_opts.req.query.input != undefined) {
+    const authData = contextParser(JSON.stringify(_opts.req.query));
+    if (authData != null || authData != undefined) {
+      const user = await getUser(authData.accessToken!);
+      return {
+        user,
+        prisma,
+      };
+    } else {
+      return {
+        prisma,
+      };
+    }
+  } else if (_opts.req.body != undefined) {
+    const authData = contextParser(JSON.stringify(_opts.req.body));
+    if (authData != null || authData != undefined) {
+      const user = await getUser(authData.accessToken!);
+      return {
+        user,
+        prisma,
+      };
+    } else {
+      return {
+        prisma,
+      };
+    }
+  } else {
+    return { prisma };
+  }
 };
 
 /**
@@ -95,20 +122,13 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 
-// const isAuthed = t.middleware(({ ctx, next }) => {
-//   if (!ctx.session || !ctx.session.user) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
+const isAuthed = t.middleware(({ ctx, next }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
-//   return next({
-//     ctx: {
-//       session: {
-//         ...ctx.session,
-//         user: ctx.session.user,
-//       },
-//     },
-//   });
-// });
+  return next({ ctx });
+});
 
 export const publicProcedure = t.procedure;
-// export const protectedProcedure = t.procedure.use(isAuthed);
+export const protectedProcedure = t.procedure.use(isAuthed);

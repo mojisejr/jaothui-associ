@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import ConnectBitkubNextButton from "../Shared/BitkubButton";
+import { useBitkubNext } from "~/contexts/bitkubNextContext";
 
 const SmallScreenNav = () => {
+  const { isConnected, signOut } = useBitkubNext();
   return (
     <div className="navbar border-b-2 border-black w768:hidden">
       <div className="navbar-start">
@@ -19,7 +22,16 @@ const SmallScreenNav = () => {
             className="dropdown-content menu rounded-box z-[1] w-52  bg-base-100 text-[1rem] font-bold shadow-lg"
           >
             <li className="border-b-2 p-2 hover:bg-slate-200">
-              Connect Wallet
+              {!isConnected ? (
+                <ConnectBitkubNextButton />
+              ) : (
+                <button
+                  className="w768:btn-outline w768:btn w768:rounded-full"
+                  onClick={() => signOut()}
+                >
+                  ออกจากระบบ
+                </button>
+              )}
             </li>
             <li className="border-b-2 p-2 hover:bg-slate-200">
               <Link href="/register">สมัครสมาชิก</Link>

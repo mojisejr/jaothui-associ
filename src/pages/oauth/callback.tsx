@@ -2,14 +2,14 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import { motion } from "framer-motion";
 
 const Callback = () => {
   const { query, replace } = useRouter();
-  const { authorize, wallet, isConnected } = useBitkubNext();
+  const { authorize, isConnected, message, wallet } = useBitkubNext();
 
   useEffect(() => {
     if (query.code != undefined) {
-      console.log("code: ", query.code);
       authorize(query.code as string);
     }
 
@@ -20,7 +20,9 @@ const Callback = () => {
 
   return (
     <>
-      <div>Authenticating</div>
+      <div className="flex min-h-screen w-full items-center justify-center text-[3rem]">
+        {message}
+      </div>
     </>
   );
 };

@@ -19,7 +19,7 @@ const ConnectBitkubNextButton = () => {
   return (
     <>
       <ReactBitkubNextOauth2 {...bitkubNextProps}>
-        <button className="btn-outline btn rounded-full">
+        <button className="w768:btn-outline w768:btn w768:rounded-full">
           Connect Bitkubnext
         </button>
       </ReactBitkubNextOauth2>

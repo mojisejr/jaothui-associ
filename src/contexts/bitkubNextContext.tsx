@@ -12,6 +12,7 @@ import {
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { exchangeAuthorizationCode } from "@bitkub-blockchain/react-bitkubnext-oauth2";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const clientId =
   process.env.NODE_ENV == "production"
@@ -35,6 +36,8 @@ const cookieOptions = {
 type bitkubNextContextType = {
   isConnected: boolean;
   wallet?: `0x${string}` | undefined;
+  tokens?: { access_token?: string; refresh_token?: string };
+  message?: string;
   authorize: (code: string) => void;
   signOut: () => void;
 };
@@ -62,7 +65,12 @@ type BitkubNextContextProps = {
 
 export function BitkubNextProvider({ children }: BitkubNextContextProps) {
   const [wallet, setWallet] = useState<`0x${string}`>();
+  const [tokens, setTokens] = useState<AuthTokens>({
+    access_token: undefined,
+    refresh_token: undefined,
+  });
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("Authenticating..");
 
   useEffect(() => {
     _getAuthDataFromCookie();
@@ -79,6 +87,11 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
       wallet != undefined
     ) {
       setWallet(wallet as `0x${string}`);
+      setTokens({
+        access_token,
+        refresh_token,
+      });
+      setMessage("Authentication Successful.");
       setIsConnected(true);
     } else {
       setIsConnected(false);
@@ -118,6 +131,12 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
     setCookie("accessToken", accessToken, cookieOptions);
     setCookie("refreshToken", refreshToken, cookieOptions);
     setCookie("wallet", wallet, cookieOptions);
+
+    setTokens({
+      access_token: accessToken,
+      refresh_token: redirectURI,
+    });
+    setWallet(wallet as `0x${string}`);
   }
 
   function _resetCookies() {
@@ -143,9 +162,11 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
           userData.wallet as `0x${string}`
         );
         setIsConnected(true);
+        setMessage("Authentication Successful.");
       }
     } catch (error) {
       setIsConnected(false);
+      setMessage("Error: Authentication failed, please try again.");
       console.log("authentication error: ", error);
       throw new Error("Authentication failed");
     }
@@ -153,12 +174,19 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
 
   function signOut() {
     _resetCookies();
+    setTokens({
+      access_token: undefined,
+      refresh_token: undefined,
+    });
+    setWallet(wallet as `0x${string}`);
     setIsConnected(false);
   }
 
   const value = {
+    tokens,
     isConnected,
     wallet,
+    message,
     authorize,
     signOut,
   };

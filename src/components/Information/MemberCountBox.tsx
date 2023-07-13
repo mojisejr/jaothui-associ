@@ -1,7 +1,14 @@
 import YellowRoundedBox from "../Shared/YellowRoundedBox";
 import Image from "next/image";
+import { api } from "../../utils/api";
+import { useEffect } from "react";
 
 const MemberCountBox = () => {
+  const { data: member, isLoading, refetch } = api.user.userCount.useQuery();
+
+  useEffect(() => {
+    void refetch();
+  }, [isLoading, member]);
   return (
     <YellowRoundedBox>
       <div className="flex items-center justify-center gap-3 p-3">
@@ -24,10 +31,10 @@ const MemberCountBox = () => {
           </div>
           <div
             style={{ fontFamily: "Kanit" }}
-            className="text-[2rem]
-          w1440:text-[3rem]"
+            className="text-center
+          text-[2rem] w1440:text-[3rem]"
           >
-            XXX
+            {isLoading ? "XXX" : member}
           </div>
         </div>
       </div>
