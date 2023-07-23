@@ -1,7 +1,36 @@
 import Head from "next/head";
+import Profile from "~/components/Member/Profile";
 import Navbar from "~/components/Nav";
+import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { api } from "~/utils/api";
+import Footer from "~/components/Information/Footer";
+import Unauthurized from "~/components/Shared/Unauthorized";
 
 const Member = () => {
+  const { wallet, tokens, isConnected } = useBitkubNext();
+  const { data: registered } = api.user.isRegistered.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
+
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    if (!isConnected || !registered) {
+      void replace("/");
+    }
+  }, [isConnected, registered]);
+
+  if (!isConnected) {
+    return (
+      <>
+        <Unauthurized message="กำลังกลับหน้าหลัก..." />
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -10,6 +39,8 @@ const Member = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
+      <Profile />
+      <Footer />
     </>
   );
 };

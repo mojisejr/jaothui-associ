@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { getUser } from "./services/getUser";
 import { contextParser } from "./utils/contextParser";
+import { supabase } from "../supabase";
 
 /**
  * 1. CONTEXT
@@ -48,13 +49,19 @@ import { contextParser } from "./utils/contextParser";
  */
 export const createTRPCContext = async (_opts: CreateNextContextOptions) => {
   if (_opts.req.query.input != undefined) {
-    const authData = contextParser(JSON.stringify(_opts.req.query));
+    const authData = contextParser(_opts.req.query.input as string);
     if (authData != null || authData != undefined) {
       const user = await getUser(authData.accessToken!);
-      return {
-        user,
-        prisma,
-      };
+      if (user != undefined) {
+        return {
+          user,
+          prisma,
+        };
+      } else {
+        return {
+          prisma,
+        };
+      }
     } else {
       return {
         prisma,
@@ -130,5 +137,22 @@ const isAuthed = t.middleware(({ ctx, next }) => {
   return next({ ctx });
 });
 
+const isAdmin = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  const user = await prisma.user.findFirst({
+    where: {
+      wallet: ctx.user?.wallet as string,
+    },
+  });
+  if (user?.role == "ADMIN") {
+    return next({ ctx });
+  } else {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+});
+
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthed);
+export const adminProcedure = t.procedure.use(isAdmin);

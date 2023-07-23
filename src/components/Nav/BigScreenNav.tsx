@@ -3,20 +3,50 @@ import Link from "next/link";
 import ConnectBitkubNextButton from "../Shared/BitkubButton";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { ToastContainer } from "react-toastify";
+import { api } from "../../utils/api";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
 
 const BigScreenNav = () => {
+  const [isAdmin, setAdmin] = useState<boolean>(false);
   const { wallet, isConnected, tokens, signOut } = useBitkubNext();
+  const { data: registered } = api.user.isRegistered.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
+
+  const { data: user } = api.user.get.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
+
+  useEffect(() => {
+    if (isConnected && user?.role == "ADMIN") {
+      setAdmin(true);
+    }
+  }, [registered, isConnected, isAdmin]);
 
   return (
     <div className="navbar relative z-10 hidden border-b-2 border-black w768:flex">
       <div className="navbar-start">
         <ul className="flex gap-3 pl-2">
           <li>
-            <Link href="/register">สมัครสมาชิก</Link>
+            {registered != undefined && registered ? (
+              <Link href="/member">ข้อมูลสมาชิก</Link>
+            ) : (
+              <Link href="/register">สมัครสมาชิก</Link>
+            )}
           </li>
           <li>
-            <Link href="/member">รายชื่อสมาชิก</Link>
+            <Link href="/members">รายชื่อสมาชิก</Link>
+          </li>
+          <li>
+            {registered && isAdmin ? (
+              <Link href="/admin/dashboard">แดชบอร์ด</Link>
+            ) : null}
+          </li>
+          <li>
+            <Link href="/buffalomap">buffalo map</Link>
           </li>
         </ul>
       </div>

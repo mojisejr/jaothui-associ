@@ -24,6 +24,7 @@ export const getUser = async (accessToken: string) => {
       email,
     };
   } catch (error) {
-    throw new Error("Fetching Userdata failed.");
+    return undefined;
+    // throw new Error("Fetching Userdata failed.");
   }
 };

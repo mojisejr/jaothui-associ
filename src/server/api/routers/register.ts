@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter } from "../trpc";
 import { protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { registrationNotify } from "../services/line/notify";
 
 export const registerRouter = createTRPCRouter({
   register: protectedProcedure
@@ -35,6 +36,11 @@ export const registerRouter = createTRPCRouter({
       if (!created) {
         throw new TRPCError({ code: "FORBIDDEN" });
       } else {
+        await registrationNotify({
+          wallet: input.wallet,
+          isLifeTime: input.payment,
+          slipUrl: input.slipUrl,
+        });
         return created;
       }
     }),

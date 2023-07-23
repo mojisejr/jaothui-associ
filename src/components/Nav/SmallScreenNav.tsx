@@ -2,9 +2,28 @@ import Image from "next/image";
 import Link from "next/link";
 import ConnectBitkubNextButton from "../Shared/BitkubButton";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import { api } from "../../utils/api";
+import { useState, useEffect } from "react";
 
 const SmallScreenNav = () => {
-  const { isConnected, signOut } = useBitkubNext();
+  const [isAdmin, setAdmin] = useState<boolean>(false);
+  const { wallet, isConnected, tokens, signOut } = useBitkubNext();
+  const { data: registered } = api.user.isRegistered.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
+
+  const { data: user } = api.user.get.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
+
+  useEffect(() => {
+    if (isConnected && user?.role == "ADMIN") {
+      setAdmin(true);
+    }
+  }, [registered, isConnected, isAdmin]);
+
   return (
     <div className="navbar border-b-2 border-black w768:hidden">
       <div className="navbar-start">
@@ -34,10 +53,19 @@ const SmallScreenNav = () => {
               )}
             </li>
             <li className="border-b-2 p-2 hover:bg-slate-200">
-              <Link href="/register">สมัครสมาชิก</Link>
+              {registered != undefined && registered ? (
+                <Link href="/member">ข้อมูลสมาชิก</Link>
+              ) : (
+                <Link href="/register">สมัครสมาชิก</Link>
+              )}
             </li>
             <li className="p-2 hover:bg-slate-200">
-              <Link href="/member">รายชื่อสมาชิก</Link>
+              <Link href="/members">รายชื่อสมาชิก</Link>
+            </li>
+            <li>
+              {registered && isAdmin ? (
+                <Link href="/admin/dashboard">แดชบอร์ด</Link>
+              ) : null}
             </li>
           </ul>
         </div>
