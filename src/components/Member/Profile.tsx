@@ -1,15 +1,14 @@
-import InformationGrid from "./InformationGrid";
+import InformationGridV2 from "./InformatinoGridV2";
 
 const Profile = () => {
   return (
     <>
       <div
-        className="flex max-h-[767px] min-h-[600px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover text-white 
-  w425:h-[650px]
-  w768:h-[767px]
-"
+        className="flex max-h-full min-h-[700px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover py-3 text-white
+      w1024:pt-[50px]
+      w1440:pt-[100px]"
       >
-        <div className="mt-20 flex max-h-[500px] max-w-[900px] flex-col items-center justify-evenly">
+        <div className="flex max-w-[900px] flex-col items-center justify-evenly">
           <div
             style={{ fontFamily: "Kanit" }}
             className="
@@ -22,9 +21,10 @@ const Profile = () => {
       w1440:text-[3rem]
       "
           >
-            ข้อมูลสมาชิก
+            โปรไฟล์ของฉัน
           </div>
-          <InformationGrid />
+          {/* <InformationGrid /> */}
+          <InformationGridV2 />
         </div>
       </div>
     </>

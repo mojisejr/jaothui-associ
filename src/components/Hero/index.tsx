@@ -1,9 +1,12 @@
 import { ImSearch } from "react-icons/im";
+import MicrochipSearch from "../Shared/MicrochipSearch";
+
 const Hero = () => {
   return (
     <>
       <div
-        className="flex max-h-[767px] min-h-[600px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover text-white
+        className="flex max-h-[767px] min-h-[600px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover
+        text-white
         w425:h-[650px]
         w768:h-[767px]
       "
@@ -31,16 +34,7 @@ const Hero = () => {
             >
               ตรวจสอบพันธุ์ประวัติควาย
             </div>
-            <div className="flex gap-3 rounded-full border-2 border-black bg-white pr-3">
-              <input
-                type="text"
-                placeholder="MICROCHIP ID..."
-                className="input w-full max-w-[420px] rounded-full text-black focus:outline-none"
-              ></input>
-              <button className="text-black">
-                <ImSearch size={30} />
-              </button>
-            </div>
+            <MicrochipSearch />
           </div>
         </div>
       </div>
