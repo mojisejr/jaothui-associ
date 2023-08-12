@@ -20,9 +20,18 @@ export const adminRouter = createTRPCRouter({
             lt: 3,
           },
           NOT: {
-            approved: {
-              has: input.wallet,
-            },
+            OR: [
+              {
+                approver: {
+                  has: input.wallet,
+                },
+              },
+              {
+                rejector: {
+                  has: input.wallet,
+                },
+              },
+            ],
           },
         },
         include: {
@@ -44,6 +53,7 @@ export const adminRouter = createTRPCRouter({
         return result;
       }
     }),
+
   approveUserPayment: adminProcedure
     .input(
       z.object({
@@ -58,7 +68,7 @@ export const adminRouter = createTRPCRouter({
           approvedCount: {
             increment: 1,
           },
-          approved: {
+          approver: {
             push: input.wallet,
           },
         },
@@ -69,12 +79,16 @@ export const adminRouter = createTRPCRouter({
             lt: 3,
           },
           NOT: {
-            approved: {
+            approver: {
+              has: input.wallet,
+            },
+            rejector: {
               has: input.wallet,
             },
           },
         },
       });
+
       if (!updated) {
         const activated = await ctx.prisma.payment.updateMany({
           data: {
@@ -92,6 +106,63 @@ export const adminRouter = createTRPCRouter({
           throw new TRPCError({ code: "BAD_REQUEST" });
         } else {
           return activated;
+        }
+      } else {
+        return updated;
+      }
+    }),
+  rejectUserPayment: adminProcedure
+    .input(
+      z.object({
+        accessToken: z.string(),
+        wallet: z.string(),
+        target: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const updated = await ctx.prisma.payment.updateMany({
+        data: {
+          rejectedCount: {
+            increment: 1,
+          },
+          rejector: {
+            push: input.wallet,
+          },
+        },
+        where: {
+          wallet: input.target,
+          active: false,
+          rejectedCount: {
+            lt: 3,
+          },
+          NOT: {
+            approver: {
+              has: input.wallet,
+            },
+            rejector: {
+              has: input.wallet,
+            },
+          },
+        },
+      });
+
+      if (!updated) {
+        const rejected = await ctx.prisma.payment.updateMany({
+          data: {
+            start: new Date(),
+            active: false,
+          },
+          where: {
+            wallet: input.wallet,
+            rejectedCount: {
+              gte: 3,
+            },
+          },
+        });
+        if (!rejected) {
+          throw new TRPCError({ code: "BAD_REQUEST" });
+        } else {
+          return rejected;
         }
       } else {
         return updated;

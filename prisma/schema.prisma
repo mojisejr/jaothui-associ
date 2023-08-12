@@ -38,8 +38,10 @@ model Payment {
   start         DateTime  @default(now())
   end           DateTime?
   slipUrl       String    @db.Text
-  approved      String[]  @default([])
+  approver      String[]  @default([])
   approvedCount Int       @default(0)
+  rejector      String[]  @default([])
+  rejectedCount Int       @default(0)
   User          User?     @relation(fields: [userId], references: [id])
   userId        Int?
   currentStep   Int       @default(0)

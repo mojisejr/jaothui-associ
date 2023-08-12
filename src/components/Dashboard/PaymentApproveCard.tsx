@@ -22,6 +22,7 @@ function PaymentApproveCard({
   start,
 }: PaymentApproveProps) {
   const { tokens, wallet: bitkubWallet, isConnected } = useBitkubNext();
+
   const {
     mutate: approve,
     isLoading,
@@ -29,12 +30,19 @@ function PaymentApproveCard({
     isError,
   } = api.admin.approveUserPayment.useMutation();
 
+  const {
+    mutate: reject,
+    isLoading: rejecting,
+    isSuccess: rejected,
+    isError: rejectError,
+  } = api.admin.rejectUserPayment.useMutation();
+
   useEffect(() => {
     if (isSuccess) toast.success(`Approve for user ${name as string} success!`);
     if (isError) toast.error(`Approve for user ${name as string} failed`);
 
     void fetchwaitForPaymentUsers();
-  }, [isLoading, isSuccess, isError]);
+  }, [isLoading, isSuccess, isError, rejecting, rejected, rejectError]);
 
   const { refetch: fetchwaitForPaymentUsers } =
     api.admin.getWaitForPaymentApproval.useQuery({
@@ -45,6 +53,16 @@ function PaymentApproveCard({
   function handleApprovment() {
     if (!isLoading) {
       approve({
+        accessToken: tokens?.access_token as string,
+        wallet: bitkubWallet as string,
+        target: wallet as string,
+      });
+    }
+  }
+
+  function handleRejection() {
+    if (!rejecting) {
+      reject({
         accessToken: tokens?.access_token as string,
         wallet: bitkubWallet as string,
         target: wallet as string,
@@ -77,9 +95,16 @@ function PaymentApproveCard({
         <button
           onClick={() => handleApprovment()}
           className="rounded-lg bg-gray-200 px-2 py-1 hover:bg-green-400 disabled:text-gray-50 disabled:hover:bg-slate-500"
-          disabled={isLoading}
+          disabled={isLoading || rejecting}
         >
           {isLoading ? "โปรดรอ" : "อนุมัติ"}
+        </button>
+        <button
+          onClick={() => handleRejection()}
+          className="hover:text-thuiwhite rounded-lg bg-gray-200 px-2 py-1 hover:bg-red-400 disabled:text-gray-50 disabled:hover:bg-slate-500"
+          disabled={rejecting || isLoading}
+        >
+          {rejecting ? "โปรดรอ" : "ไม่อนุมัติ"}
         </button>
         <p className="text-[0.7rem] text-gray-500">{getDaysPassed(start!)}</p>
       </div>

@@ -29,6 +29,13 @@ export const registerRouter = createTRPCRouter({
               isLifeTime: input.payment == "2" ? true : false,
               active: false,
               slipUrl: input.slipUrl,
+              start: new Date(),
+              end:
+                input.payment == "2"
+                  ? null
+                  : new Date(
+                      new Date().setFullYear(new Date().getFullYear() + 1)
+                    ),
             },
           },
         },
@@ -39,7 +46,7 @@ export const registerRouter = createTRPCRouter({
         await registrationNotify({
           wallet: input.wallet,
           isLifeTime: input.payment,
-          slipUrl: input.slipUrl,
+          name: input.name,
         });
         return created;
       }

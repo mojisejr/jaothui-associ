@@ -5,21 +5,35 @@ import qs from "qs";
 
 export async function registrationNotify({
   wallet,
+  name,
   isLifeTime,
-  slipUrl,
 }: {
   wallet: string;
+  name: string | null;
   isLifeTime: string;
-  slipUrl: string;
 }) {
   try {
     const token = process.env.line as string;
     const response = await axios.post(
       process.env.line_uri as string,
+      /*การแจ้งเตือนสมัครสมาชิก✨️
+  Wallet :
+
+  ชื่อ : 
+
+  สถานะ : ตลอดชีพ
+
+  กรุณาตรวจสอบการโอนเงิน📍*/
       qs.stringify({
-        message: `${new Date().toLocaleDateString()}:  wallet = ${wallet} สมัครเข้ามาแบบ ${
-          isLifeTime == "2" ? "600 บาท ตลอดชีพ" : "100 บาท รายปี"
-        } ชื่อ fileslip โอน ${slipUrl} กรุณาตรวจสอบเพื่อ approve`,
+        message: `แจ้งเตือนสมัครสมาชิก
+        Wallet: ${wallet}
+        
+        ชื่อ:  ${name ? name : "ไม่ระบุชื่อ"}
+        
+        สถานะ: ${isLifeTime ? "ตลอดชีพ" : "รายปี"} 
+        
+        กรุณาตรวจสอบชำระเงิน 📌
+        https://jaothui-associ.vercel.app`,
       }),
       {
         headers: {
