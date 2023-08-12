@@ -8,9 +8,15 @@ const DymamicMap = () => {
   return (
     <MapContainer
       center={[13.736717, 100.523186]}
-      zoom={5.3}
+      zoom={5.7}
       scrollWheelZoom={false}
-      style={{ height: "600px", width: "800px" }}
+      className="h-[300px] w-[300px]
+      w768:h-[400px]
+      w768:w-[500px]
+      w1440:h-[400px]
+      w1440:w-[700px]
+      "
+      // style={{ minWidth: "300px", minHeight: "450px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

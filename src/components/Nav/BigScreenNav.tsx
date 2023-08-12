@@ -38,15 +38,12 @@ const BigScreenNav = () => {
             )}
           </li>
           <li>
-            <Link href="/members">รายชื่อสมาชิก</Link>
+            <Link href="/member-list">รายชื่อสมาชิก</Link>
           </li>
           <li>
             {registered && isAdmin ? (
               <Link href="/admin/dashboard">แดชบอร์ด</Link>
             ) : null}
-          </li>
-          <li>
-            <Link href="/buffalomap">buffalo map</Link>
           </li>
         </ul>
       </div>

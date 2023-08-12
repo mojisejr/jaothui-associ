@@ -13,7 +13,6 @@ import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { getUser } from "./services/getUser";
 import { contextParser } from "./utils/contextParser";
-import { supabase } from "../supabase";
 
 /**
  * 1. CONTEXT

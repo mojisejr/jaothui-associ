@@ -60,9 +60,9 @@ const SmallScreenNav = () => {
               )}
             </li>
             <li className="p-2 hover:bg-slate-200">
-              <Link href="/members">รายชื่อสมาชิก</Link>
+              <Link href="/member-list">รายชื่อสมาชิก</Link>
             </li>
-            <li>
+            <li className="p-2 hover:bg-slate-200">
               {registered && isAdmin ? (
                 <Link href="/admin/dashboard">แดชบอร์ด</Link>
               ) : null}

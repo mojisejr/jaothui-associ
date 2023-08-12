@@ -8,6 +8,12 @@ import Guide from "./Guide";
 import Advertisement from "./Ads";
 import Footer from "./Footer";
 
+import dynamic from "next/dynamic";
+
+const Dynamap = dynamic(() => import("~/components/BuffaloMap/dynamicMap"), {
+  ssr: false,
+});
+
 const Information = () => {
   return (
     <>
@@ -43,6 +49,15 @@ const Information = () => {
           <About />
           <Guide />
           <Advertisement />
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="px-1 py-2 text-[2rem] text-white"
+              style={{ fontFamily: "Kanit" }}
+            >
+              Buffalo Map
+            </div>
+            <Dynamap />
+          </div>
           <Footer />
         </div>
       </div>
