@@ -48,4 +48,26 @@ export const userRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
     }),
+  getActiveUsers: publicProcedure
+    .input(z.object({ page: z.number().default(1) }))
+    .query(async ({ input, ctx }) => {
+      const count = await ctx.prisma.user.count();
+      //100 perpage
+      const itemsPerPage = 100;
+      const totalPages = count / itemsPerPage;
+      const startPosition = input.page * itemsPerPage;
+
+      const users = await ctx.prisma.user.findMany({
+        skip: totalPages < startPosition - 1 ? startPosition : totalPages,
+        take: itemsPerPage,
+        where: {
+          active: true,
+        },
+        include: {
+          payment: true,
+        },
+      });
+
+      return { users, totalPages };
+    }),
 });
