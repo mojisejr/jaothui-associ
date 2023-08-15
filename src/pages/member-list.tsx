@@ -42,18 +42,27 @@ const MemberList = () => {
       </Head>
       <Navbar />
       <div
-        className="flex flex-col justify-center pt-[120px]"
+        className="flex flex-col justify-center pt-[80px]"
         style={{ fontFamily: "Kanit" }}
       >
         <div className="grid min-h-screen w-full grid-cols-5">
           <div className="col-span-1"></div>
-          <div className="col-span-3">
-            <div className="flex justify-between gap-2">
+          <div className="col-span-5 w768:col-span-3">
+            <div
+              className="flex flex-col items-center justify-center gap-2 py-2
+            w768:flex-row
+            w768:justify-between
+            w768:px-3"
+            >
               <h2 className="py-2 text-3xl font-bold">รายชื่อสมาชิก</h2>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold">ค้นหา</span>
+                <span className="hidden text-xl font-bold">ค้นหา</span>
                 <div className="flex gap-2">
-                  <input className="bg-gray-200" type="text"></input>
+                  <input
+                    className="bg-gray-200 p-1"
+                    type="text"
+                    placeholder="memberId/Wallet"
+                  ></input>
                   <button type="submit">
                     <GrSearch size={30} />
                   </button>
