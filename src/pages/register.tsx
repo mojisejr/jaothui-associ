@@ -8,6 +8,7 @@ import { api } from "../utils/api";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "~/server/supabase";
+import { useRouter } from "next/router";
 
 type Inputs = {
   name: string;
@@ -33,6 +34,7 @@ const Register = () => {
     formState: { errors },
     reset,
   } = useForm<Inputs>();
+  const { replace } = useRouter();
 
   useEffect(() => {
     if (registerError || registered) {
@@ -45,6 +47,12 @@ const Register = () => {
       reset();
     }
   }, [registerError, registered]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      void replace("/");
+    }
+  }, [isConnected]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
     event?.preventDefault();

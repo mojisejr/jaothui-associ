@@ -2,6 +2,7 @@ import Head from "next/head";
 import Hero from "~/components/Hero";
 import Information from "~/components/Information";
 import Navbar from "~/components/Nav";
+import PleaseConnectWalletDialog from "~/components/Shared/PleaseConnectWalletDialog";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Information />
+      <PleaseConnectWalletDialog />
     </>
   );
 }

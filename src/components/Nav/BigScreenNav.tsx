@@ -34,7 +34,15 @@ const BigScreenNav = () => {
             {registered != undefined && registered ? (
               <Link href="/member">ข้อมูลสมาชิก</Link>
             ) : (
-              <Link href="/register">สมัครสมาชิก</Link>
+              <Link
+                href={isConnected ? "/register" : "/"}
+                onClick={() => {
+                  if (!isConnected)
+                    window.please_connect_wallet_dialog.showModal();
+                }}
+              >
+                สมัครสมาชิก
+              </Link>
             )}
           </li>
           <li>

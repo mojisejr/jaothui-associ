@@ -40,7 +40,7 @@ const SmallScreenNav = () => {
             tabIndex={0}
             className="dropdown-content menu rounded-box z-[1] w-52  bg-base-100 text-[1rem] font-bold shadow-lg"
           >
-            <li className="border-b-2 p-2 hover:bg-slate-200">
+            <li className="py-2 hover:bg-slate-200">
               {!isConnected ? (
                 <ConnectBitkubNextButton />
               ) : (
@@ -52,21 +52,29 @@ const SmallScreenNav = () => {
                 </button>
               )}
             </li>
-            <li className="border-b-2 p-2 hover:bg-slate-200">
+            <li className="py-2 hover:bg-slate-200">
               {registered != undefined && registered ? (
                 <Link href="/member">ข้อมูลสมาชิก</Link>
               ) : (
-                <Link href="/register">สมัครสมาชิก</Link>
+                <Link
+                  href={isConnected ? "/register" : "/"}
+                  onClick={() => {
+                    if (!isConnected)
+                      window.please_connect_wallet_dialog.showModal();
+                  }}
+                >
+                  สมัครสมาชิก
+                </Link>
               )}
             </li>
-            <li className="p-2 hover:bg-slate-200">
+            <li className="py-2 hover:bg-slate-200">
               <Link href="/member-list">รายชื่อสมาชิก</Link>
             </li>
-            <li className="p-2 hover:bg-slate-200">
-              {registered && isAdmin ? (
+            {registered && isAdmin ? (
+              <li className="py-2 hover:bg-slate-200">
                 <Link href="/admin/dashboard">แดชบอร์ด</Link>
-              ) : null}
-            </li>
+              </li>
+            ) : null}
           </ul>
         </div>
       </div>

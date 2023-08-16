@@ -70,4 +70,17 @@ export const userRouter = createTRPCRouter({
 
       return { users, totalPages };
     }),
+  getById: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const result = await ctx.prisma.user.findFirst({
+        where: {
+          wallet: input.text,
+        },
+        include: {
+          payment: true,
+        },
+      });
+      return result;
+    }),
 });

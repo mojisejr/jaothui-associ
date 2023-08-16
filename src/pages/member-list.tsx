@@ -1,15 +1,29 @@
 import Head from "next/head";
 import Navbar from "~/components/Nav";
+import Modal from "~/components/Shared/Modal";
 import { api } from "~/utils/api";
 import { GrSearch } from "react-icons/gr";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const MemberList = () => {
+  const [active, setActive] = useState<boolean>(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const { data, isLoading, refetch } = api.user.getActiveUsers.useQuery({
     page: currentPage,
   });
+  const {
+    data: searchData,
+    isLoading: searching,
+    isError: searchError,
+    isSuccess: searched,
+    mutate: search,
+  } = api.user.getById.useMutation();
+
+  useEffect(() => {
+    setActive(true);
+  }, []);
 
   useEffect(() => {
     setTotalPages(data?.totalPages as number);
@@ -18,6 +32,13 @@ const MemberList = () => {
   useEffect(() => {
     void refetch();
   }, [currentPage]);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    if (searched && !window.search_dialog.hasAttribute("Open")) {
+      window.search_dialog.showModal();
+    }
+  }, [searched]);
 
   function handleNextPage() {
     if (currentPage < totalPages) {
@@ -30,6 +51,16 @@ const MemberList = () => {
       setCurrentPage(currentPage - 1);
     } else if (currentPage <= 0) {
       setCurrentPage(0);
+    }
+  }
+
+  function handleSearch() {
+    if (!searchInputRef.current?.value) {
+      return;
+    } else {
+      search({
+        text: searchInputRef.current?.value,
+      });
     }
   }
 
@@ -59,68 +90,75 @@ const MemberList = () => {
                 <span className="hidden text-xl font-bold">ค้นหา</span>
                 <div className="flex gap-2">
                   <input
+                    ref={searchInputRef}
                     className="bg-gray-200 p-1"
                     type="text"
                     placeholder="memberId/Wallet"
                   ></input>
-                  <button type="submit">
+                  <button type="submit" onClick={handleSearch}>
                     <GrSearch size={30} />
                   </button>
                 </div>
               </div>
             </div>
             <div className="h-[75vh] overflow-auto">
-              <table className="w-full">
-                <thead className="bg-gray-300">
-                  <th className="px-2 py-3">no.</th>
-                  <th className="px-2 py-3">wallet/member Id.</th>
-                  <th className="px-2 py-3">name</th>
-                  <th className="px-2 py-3">type</th>
-                </thead>
-                <tbody className="text-center">
-                  {isLoading ? (
-                    <tr>
-                      <td className="px-3 py-3">
-                        <span className="loading loading-spinner loading-md"></span>
-                      </td>
-                    </tr>
-                  ) : (
-                    <>
-                      {data == undefined ? (
-                        <tr>
-                          <td className="font-bold">Empty</td>
-                        </tr>
-                      ) : (
-                        <>
-                          {data.users.map((user, index) => (
-                            <tr className="hover:bg-gray-100" key={index}>
-                              <td className="px-1 py-2">{index + 1}</td>
-                              <td>{`${user.wallet.slice(
-                                0,
-                                5
-                              )}...${user.wallet.slice(37)}`}</td>
-                              <td className="px-1 py-2">{user.name}</td>
-                              <td className="px-1 py-2">
-                                {user.payment.length <= 0 ? (
-                                  <>N/A</>
-                                ) : (
-                                  <>
-                                    {user.payment[0]?.isLifeTime ? (
-                                      <div className="px-1 py-2">ตลอดชีพ</div>
-                                    ) : (
-                                      <div className="px-1 py-2">รายปี</div>
-                                    )}
-                                  </>
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </>
-                      )}
-                    </>
-                  )}
-                </tbody>
-              </table>
+              {active ? (
+                <table className="w-full">
+                  <thead className="bg-gray-300">
+                    <th className="px-2 py-3">no.</th>
+                    <th className="px-2 py-3">wallet/member Id.</th>
+                    <th className="px-2 py-3">name</th>
+                    <th className="px-2 py-3">type</th>
+                  </thead>
+                  <tbody className="text-center">
+                    {isLoading ? (
+                      <tr>
+                        <td className="px-3 py-3">
+                          <span className="loading loading-spinner loading-md"></span>
+                        </td>
+                      </tr>
+                    ) : (
+                      <>
+                        {data == undefined ? (
+                          <tr>
+                            <td className="font-bold">Empty</td>
+                          </tr>
+                        ) : (
+                          <>
+                            {data.users.map((user, index) => (
+                              <tr className="hover:bg-gray-100" key={index}>
+                                <td className="px-1 py-2">{index + 1}</td>
+                                <td>{`${user.wallet.slice(
+                                  0,
+                                  5
+                                )}...${user.wallet.slice(37)}`}</td>
+                                <td className="px-1 py-2">{user.name}</td>
+                                <td className="px-1 py-2">
+                                  {user.payment.length <= 0 ? (
+                                    <>N/A</>
+                                  ) : (
+                                    <>
+                                      {user.payment[0]?.isLifeTime ? (
+                                        <div className="px-1 py-2">ตลอดชีพ</div>
+                                      ) : (
+                                        <div className="px-1 py-2">รายปี</div>
+                                      )}
+                                    </>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </tbody>
+                </table>
+              ) : (
+                <div>
+                  <span className="loading loading-spinner loading-md"></span>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end py-3">
@@ -140,8 +178,53 @@ const MemberList = () => {
           <div className="col-span-1"></div>
         </div>
       </div>
+      <MemberSearchDialog
+        name={searchData?.name as string}
+        wallet={searchData?.wallet}
+        type={searchData?.payment[0]?.isLifeTime}
+      />
     </>
   );
 };
+
+interface MemberSearchDialogProps {
+  wallet?: string;
+  name?: string;
+  type?: boolean;
+}
+
+function MemberSearchDialog({ wallet, name, type }: MemberSearchDialogProps) {
+  return (
+    <Modal id="search_dialog">
+      {wallet != undefined ? (
+        <>
+          <ul className="steps steps-vertical">
+            <li data-content="➤" className="step">
+              <div>
+                BitkubNext/เลขสมาชิก:{" "}
+                <span className=" font-bold text-green-800">{wallet}</span>
+              </div>
+            </li>
+            <li data-content="➤" className="step">
+              <div>
+                ชื่อ: <span className=" font-bold text-green-800">{name}</span>
+              </div>
+            </li>
+            <li data-content="➤" className="step">
+              <div>
+                ประเภทสมาชิก:{" "}
+                <span className="font-bold text-green-800">
+                  {type ? "ตลอดชีพ" : "รายปี"}
+                </span>
+              </div>
+            </li>
+          </ul>
+        </>
+      ) : (
+        <div className="font-bold">Not Found</div>
+      )}
+    </Modal>
+  );
+}
 
 export default MemberList;
