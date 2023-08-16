@@ -7,7 +7,7 @@ const WalletOrId = ({ text }: WalletOrIdProps) => {
     return <>N/A</>;
   }
 
-  if (text.slice(0, 1) != "0x") {
+  if (text.slice(0, 2) !== "0x") {
     return <>{text}</>;
   }
 
