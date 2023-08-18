@@ -17,11 +17,13 @@ model User {
   farmName      String?
   wallet        String    @unique
   address       String    @db.Text
+  province      String    @db.Text
   lat           Float?
   lon           Float?
   role          String    @default("USER")
   lineId        String?   @unique @db.Text
-  tel           Int?      @unique
+  email         String?
+  tel           String?   @db.Text   
   payment       Payment[]
   active        Boolean   @default(false)
   approved      String[]  @default([])
