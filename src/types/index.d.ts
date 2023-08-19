@@ -12,5 +12,9 @@ declare global {
       showModal: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    register_result_dialog: {
+      showModal: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
   }
 }

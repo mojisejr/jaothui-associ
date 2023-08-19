@@ -12,6 +12,8 @@ export const registerRouter = createTRPCRouter({
         name: z.string().nullable(),
         wallet: z.string(),
         address: z.string(),
+        province: z.string(),
+        email: z.string().nullable(),
         payment: z.string(),
         tel: z.string(),
         slipUrl: z.string(),
@@ -23,6 +25,8 @@ export const registerRouter = createTRPCRouter({
           name: input.name,
           wallet: input.wallet,
           address: input.address,
+          province: input.province,
+          email: input.email,
           payment: {
             create: {
               wallet: input.wallet,

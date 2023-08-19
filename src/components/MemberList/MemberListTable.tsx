@@ -94,7 +94,6 @@ const MemberListTable = () => {
           {active ? (
             <table className="w-full">
               <thead className="bg-gray-300">
-                <th className="px-2 py-3">no.</th>
                 <th className="px-2 py-3">wallet/member Id.</th>
                 <th className="px-2 py-3">name</th>
                 <th className="px-2 py-3">type</th>
@@ -116,7 +115,6 @@ const MemberListTable = () => {
                       <>
                         {data.users.map((user, index) => (
                           <tr className="hover:bg-gray-100" key={index}>
-                            <td className="px-1 py-2">{index + 1}</td>
                             <td>
                               <WalletOrId text={user.wallet} />
                             </td>

@@ -5,21 +5,42 @@ import Navbar from "~/components/Nav";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { api } from "../utils/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { supabase } from "~/server/supabase";
 import { useRouter } from "next/router";
+import {
+  getProvinces,
+  getAmphoeFromProvince,
+  getDistrictsFromAmphoe,
+} from "~/utils/addressHelper";
+import RegisterResultDialog from "~/components/Register/RegisterResultDialog";
 
 type Inputs = {
   name: string;
   tel: string;
   address: string;
+  email?: string;
+  district: string;
+  amphoe: string;
+  province: string;
+  zipcode: number;
   wallet: string;
   payment: "1" | "2";
   file: FileList;
 };
 
 const Register = () => {
+  const [{ province, amphoe }, setAddress] = useState<{
+    province?: string;
+    amphoe?: string;
+    district?: string;
+  }>({
+    province: undefined,
+    amphoe: undefined,
+    district: undefined,
+  });
+
   const { isConnected, wallet, tokens } = useBitkubNext();
   const {
     isLoading: registering,
@@ -37,12 +58,25 @@ const Register = () => {
   const { replace } = useRouter();
 
   useEffect(() => {
+    const subscription = watch(({ province, amphoe, district }) => {
+      setAddress({ province, amphoe, district });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
+  useEffect(() => {
     if (registerError || registered) {
       if (registerError) {
         toast.error("Error: Registration failed, please try again");
+        window.register_result_dialog.hasAttribute("Open")
+          ? null
+          : window.register_result_dialog.showModal();
       }
       if (registered) {
         toast.success("Success: Registration successfully");
+        window.register_result_dialog.hasAttribute("Open")
+          ? null
+          : window.register_result_dialog.showModal();
       }
       reset();
     }
@@ -75,6 +109,8 @@ const Register = () => {
       createNewMember({
         accessToken: tokens?.access_token as string,
         ...data,
+        email: data.email as string,
+        address: `${data.address} ${data.district} ${data.amphoe} ${data.province} ${data.zipcode}`,
         slipUrl: result.path,
       });
     }
@@ -88,6 +124,7 @@ const Register = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
+      <RegisterResultDialog success={registered} />
       <div className="flex max-h-full min-h-[600px] justify-center bg-[url('/images/bgmain.jpg')] bg-cover text-white">
         {isConnected ? (
           <>
@@ -143,7 +180,24 @@ const Register = () => {
                   </div>
                   <div className="form-control w-full max-w-xs p-2">
                     <label className="label">
-                      <span className="label-text">ที่อยู่</span>
+                      <span className="label-text">อีเมล์(ถ้ามี)</span>
+                    </label>
+                    <input
+                      type="text"
+                      disabled={registering}
+                      required
+                      {...register("email")}
+                      className="input-bordered input w-full max-w-xs"
+                    />
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">บ้านเลขที่</span>
                     </label>
                     <input
                       type="text"
@@ -156,6 +210,94 @@ const Register = () => {
                         *required
                       </span>
                     </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">จังหวัด</span>
+                    </label>
+                    <select
+                      className="select-bordered select"
+                      required
+                      disabled={registering}
+                      {...register("province", { required: true })}
+                    >
+                      <option disabled selected>
+                        เลือก
+                      </option>
+                      {getProvinces().map((p, index) => (
+                        <option key={index} value={p}>
+                          {p}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">อำเภอ</span>
+                    </label>
+                    <select
+                      className="select-bordered select"
+                      required
+                      disabled={registering}
+                      {...register("amphoe", { required: true })}
+                    >
+                      <option disabled selected>
+                        เลือก
+                      </option>
+                      {getAmphoeFromProvince(province!).map((p, index) => (
+                        <option key={index} value={p}>
+                          {p}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">ตำบล</span>
+                    </label>
+                    <select
+                      className="select-bordered select"
+                      required
+                      disabled={registering}
+                      {...register("district", { required: true })}
+                    >
+                      <option disabled selected>
+                        เลือก
+                      </option>
+                      {getDistrictsFromAmphoe(province!, amphoe!).map(
+                        (p, index) => (
+                          <option key={index} value={p}>
+                            {p}
+                          </option>
+                        )
+                      )}
+                    </select>
+                    <label className="label">
+                      <span className="label-text-alt text-red-500">
+                        *required
+                      </span>
+                    </label>
+                  </div>
+                  <div className="form-control w-full max-w-xs p-2">
+                    <label className="label">
+                      <span className="label-text">รหัสไปรษณี</span>
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      {...register("zipcode", { required: true })}
+                      className="input-bordered input w-full max-w-xs"
+                    />
                   </div>
                   <div className="form-control w-full max-w-xs p-2">
                     <label className="label">
@@ -226,9 +368,9 @@ const Register = () => {
             </div>
           </>
         ) : (
-          <div className="fixed left-0 top-0 flex min-h-screen w-full flex-col items-center justify-center">
+          <div className="flex min-h-screen w-full flex-col items-center justify-center">
             <div className="text-[2rem]">Please Connect Wallet</div>
-            <div>Connecting your wallet is necessary before registering.</div>
+            <div>กรุณาเชื่อมต่อกระเป๋า bitkubnext ก่อนทำการสมัครสมาชิก</div>
           </div>
         )}
       </div>
