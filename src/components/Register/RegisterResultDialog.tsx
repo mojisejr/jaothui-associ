@@ -35,7 +35,7 @@ const ErrorReuslt = () => {
         <div className="text-xl font-bold text-red-400">
           เกิดข้อผิดพลาดในการสมัคร!
         </div>
-        <div>ติดต่อสมาคมเพื่อแก้ไข</div>
+        <div>ติดต่อสมาคมเพื่อแก้ไข หรือ กรุณาลองใหม่อีกครั้ง</div>
         <Link href="/" className="btn font-bold">
           <BsArrowUpRight size={30} /> กลับหน้าหลัก
         </Link>

@@ -180,20 +180,14 @@ const Register = () => {
                   </div>
                   <div className="form-control w-full max-w-xs p-2">
                     <label className="label">
-                      <span className="label-text">อีเมล์(ถ้ามี)</span>
+                      <span className="label-text">อีเมล(ถ้ามี)</span>
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       disabled={registering}
-                      required
-                      {...register("email")}
+                      {...register("email", { required: false })}
                       className="input-bordered input w-full max-w-xs"
                     />
-                    <label className="label">
-                      <span className="label-text-alt text-red-500">
-                        *required
-                      </span>
-                    </label>
                   </div>
                   <div className="form-control w-full max-w-xs p-2">
                     <label className="label">
