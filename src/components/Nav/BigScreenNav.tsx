@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { api } from "../../utils/api";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
+import Loading from "../Shared/LoadingIndicator";
 
 const BigScreenNav = () => {
   const [isAdmin, setAdmin] = useState<boolean>(false);
@@ -15,7 +16,7 @@ const BigScreenNav = () => {
     wallet: wallet as string,
   });
 
-  const { data: user } = api.user.get.useQuery({
+  const { data: user, isLoading: loadingUser } = api.user.get.useQuery({
     accessToken: tokens?.access_token as string,
     wallet: wallet as string,
   });
@@ -31,18 +32,24 @@ const BigScreenNav = () => {
       <div className="navbar-start">
         <ul className="flex gap-3 pl-2">
           <li>
-            {registered != undefined && registered ? (
-              <Link href="/member">ข้อมูลสมาชิก</Link>
+            {loadingUser ? (
+              <Loading />
             ) : (
-              <Link
-                href={isConnected ? "/register" : "/"}
-                onClick={() => {
-                  if (!isConnected)
-                    window.please_connect_wallet_dialog.showModal();
-                }}
-              >
-                สมัครสมาชิก
-              </Link>
+              <>
+                {registered != undefined && registered ? (
+                  <Link href="/member">ข้อมูลสมาชิก</Link>
+                ) : (
+                  <Link
+                    href={isConnected ? "/register" : "/"}
+                    onClick={() => {
+                      if (!isConnected)
+                        window.please_connect_wallet_dialog.showModal();
+                    }}
+                  >
+                    สมัครสมาชิก
+                  </Link>
+                )}
+              </>
             )}
           </li>
           <li>

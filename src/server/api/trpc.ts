@@ -11,7 +11,6 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
-import { getUser } from "./services/getUser";
 import { contextParser } from "./utils/contextParser";
 
 /**
@@ -46,14 +45,14 @@ import { contextParser } from "./utils/contextParser";
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (_opts: CreateNextContextOptions) => {
+export const createTRPCContext = (_opts: CreateNextContextOptions) => {
   if (_opts.req.query.input != undefined) {
     const authData = contextParser(_opts.req.query.input as string);
-    if (authData != null || authData != undefined) {
-      const user = await getUser(authData.accessToken!);
-      if (user != undefined) {
+    if (authData != undefined) {
+      // const user = await getUser(authData.accessToken!);
+      if (authData != undefined) {
         return {
-          user,
+          user: authData,
           prisma,
         };
       } else {
@@ -68,10 +67,10 @@ export const createTRPCContext = async (_opts: CreateNextContextOptions) => {
     }
   } else if (_opts.req.body != undefined) {
     const authData = contextParser(JSON.stringify(_opts.req.body));
-    if (authData != null || authData != undefined) {
-      const user = await getUser(authData.accessToken!);
+    if (authData != undefined) {
+      // const user = await getUser(authData.accessToken!);
       return {
-        user,
+        user: authData,
         prisma,
       };
     } else {
@@ -142,7 +141,7 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
   }
   const user = await prisma.user.findFirst({
     where: {
-      wallet: ctx.user?.wallet as string,
+      wallet: ctx.user?.wallet,
     },
   });
   if (user?.role == "ADMIN") {

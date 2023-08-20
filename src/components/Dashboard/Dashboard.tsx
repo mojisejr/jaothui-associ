@@ -6,6 +6,7 @@ import PedigreeCountBox from "../Information/PedigreeCountBox";
 import FarmCountBox from "../Information/FarmCountBox";
 import PaymentApproveCard from "./PaymentApproveCard";
 import MemberApprovementCard from "./MemberApprovmentCard";
+import Loading from "../Shared/LoadingIndicator";
 
 const ApprovementDashBoard = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -14,17 +15,23 @@ const ApprovementDashBoard = () => {
     wallet: wallet as string,
     accessToken: tokens?.access_token as string,
   });
-  const { data: waitForPaymentUsers, refetch: fetchwaitForPaymentUsers } =
-    api.admin.getWaitForPaymentApproval.useQuery({
-      accessToken: tokens?.access_token as string,
-      wallet: wallet as string,
-    });
+  const {
+    data: waitForPaymentUsers,
+    isLoading: loadingPayment,
+    refetch: fetchwaitForPaymentUsers,
+  } = api.admin.getWaitForPaymentApproval.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
 
-  const { data: waitForActiveUsers, refetch: fetchWaitForActive } =
-    api.admin.getWaitForApprovement.useQuery({
-      accessToken: tokens?.access_token as string,
-      wallet: wallet as string,
-    });
+  const {
+    data: waitForActiveUsers,
+    isLoading: loadingActive,
+    refetch: fetchWaitForActive,
+  } = api.admin.getWaitForApprovement.useQuery({
+    accessToken: tokens?.access_token as string,
+    wallet: wallet as string,
+  });
 
   useEffect(() => {
     void fetchwaitForPaymentUsers();
@@ -64,14 +71,20 @@ const ApprovementDashBoard = () => {
                 <div className="flex justify-between px-3 py-2 text-lg font-bold">
                   <div>รอยืนยันการชำระเงิน</div>
                   <div>
-                    {waitForPaymentUsers == undefined
-                      ? "N/A"
-                      : waitForPaymentUsers?.length}{" "}
-                    คน
+                    {loadingPayment ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        {waitForPaymentUsers == undefined
+                          ? "N/A"
+                          : waitForPaymentUsers?.length}{" "}
+                        คน
+                      </>
+                    )}
                   </div>
                 </div>
-                {waitForPaymentUsers == undefined ? (
-                  <div>ไม่มีข้อมูล</div>
+                {loadingPayment ? (
+                  <Loading />
                 ) : (
                   <>
                     {waitForPaymentUsers?.map((user) => (
@@ -95,14 +108,20 @@ const ApprovementDashBoard = () => {
                 <div className="flex justify-between px-3 py-2 text-lg font-bold">
                   <div>รอยืนยันหลัง 15 วัน</div>
                   <div>
-                    {waitForActiveUsers == undefined
-                      ? "N/A"
-                      : waitForActiveUsers?.length}
-                    คน
+                    {loadingActive ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        {waitForActiveUsers == undefined
+                          ? "N/A"
+                          : waitForActiveUsers?.length}{" "}
+                        คน
+                      </>
+                    )}
                   </div>
                 </div>
-                {waitForActiveUsers == undefined ? (
-                  <div>ไม่มีข้อมูล</div>
+                {loadingActive ? (
+                  <Loading />
                 ) : (
                   <>
                     {waitForActiveUsers?.map((user) => (

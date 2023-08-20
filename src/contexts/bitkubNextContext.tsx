@@ -12,7 +12,6 @@ import {
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { exchangeAuthorizationCode } from "@bitkub-blockchain/react-bitkubnext-oauth2";
 import axios from "axios";
-import { useRouter } from "next/router";
 
 const clientId =
   process.env.NODE_ENV == "production"
@@ -86,6 +85,7 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
       refresh_token != undefined &&
       wallet != undefined
     ) {
+      console.log("HAS_COOKIE_AUTH");
       setWallet(wallet as `0x${string}`);
       setTokens({
         access_token,
@@ -94,6 +94,7 @@ export function BitkubNextProvider({ children }: BitkubNextContextProps) {
       setMessage("Authentication Successful.");
       setIsConnected(true);
     } else {
+      console.log("HAS_NO_COOKIE_AUTH");
       setIsConnected(false);
     }
   }

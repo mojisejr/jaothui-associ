@@ -1,5 +1,3 @@
-import { TRPCError } from "@trpc/server";
-
 type InputData = {
   "0": {
     json: {

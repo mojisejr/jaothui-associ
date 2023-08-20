@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { TRPCError } from "@trpc/server";
 import axios from "axios";
 export const getUser = async (accessToken: string) => {
   try {
@@ -24,7 +25,10 @@ export const getUser = async (accessToken: string) => {
       email,
     };
   } catch (error) {
-    return undefined;
-    // throw new Error("Fetching Userdata failed.");
+    // return undefined;
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Cannot Fetch User From Bitkub",
+    });
   }
 };
