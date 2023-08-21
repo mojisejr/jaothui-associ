@@ -4,7 +4,6 @@ import ConnectBitkubNextButton from "../Shared/BitkubButton";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { api } from "../../utils/api";
 import { useState, useEffect } from "react";
-import Loading from "../Shared/LoadingIndicator";
 
 const SmallScreenNav = () => {
   const [isAdmin, setAdmin] = useState<boolean>(false);
@@ -14,7 +13,7 @@ const SmallScreenNav = () => {
     wallet: wallet as string,
   });
 
-  const { data: user, isLoading: loadingUser } = api.user.get.useQuery({
+  const { data: user } = api.user.get.useQuery({
     accessToken: tokens?.access_token as string,
     wallet: wallet as string,
   });
@@ -53,28 +52,31 @@ const SmallScreenNav = () => {
                 </button>
               )}
             </li>
-            <li className="py-2 hover:bg-slate-200">
-              {loadingUser ? (
-                <div className="text-center">
-                  <Loading />
-                </div>
-              ) : (
-                <>
-                  {registered != undefined && registered ? (
-                    <Link href="/member">ข้อมูลสมาชิก</Link>
-                  ) : (
-                    <Link
-                      href={isConnected ? "/register" : "/"}
-                      onClick={() => {
-                        if (!isConnected)
-                          window.please_connect_wallet_dialog.showModal();
-                      }}
-                    >
-                      สมัครสมาชิก
-                    </Link>
-                  )}
-                </>
+            <li>
+              {registered != undefined && registered ? null : (
+                <Link
+                  href={isConnected ? "/register" : "/"}
+                  onClick={() => {
+                    if (!isConnected)
+                      window.please_connect_wallet_dialog.showModal();
+                  }}
+                >
+                  สมัครสมาชิก
+                </Link>
               )}
+            </li>
+            <li>
+              {registered != undefined && registered && isConnected ? (
+                <Link
+                  href={isConnected ? "/member" : "/"}
+                  onClick={() => {
+                    if (!isConnected)
+                      window.please_connect_wallet_dialog.showModal();
+                  }}
+                >
+                  ข้อมูลสมาชิก
+                </Link>
+              ) : null}
             </li>
             <li className="py-2 hover:bg-slate-200">
               <Link href="/member-list">รายชื่อสมาชิก</Link>

@@ -6,7 +6,6 @@ import { ToastContainer } from "react-toastify";
 import { api } from "../../utils/api";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
-import Loading from "../Shared/LoadingIndicator";
 
 const BigScreenNav = () => {
   const [isAdmin, setAdmin] = useState<boolean>(false);
@@ -16,7 +15,7 @@ const BigScreenNav = () => {
     wallet: wallet as string,
   });
 
-  const { data: user, isLoading: loadingUser } = api.user.get.useQuery({
+  const { data: user } = api.user.get.useQuery({
     accessToken: tokens?.access_token as string,
     wallet: wallet as string,
   });
@@ -25,32 +24,37 @@ const BigScreenNav = () => {
     if (isConnected && user?.role == "ADMIN") {
       setAdmin(true);
     }
-  }, [registered, isConnected, isAdmin, loadingUser]);
+  }, [registered, isConnected, isAdmin]);
 
   return (
     <div className="navbar relative z-10 hidden border-b-2 border-black w768:flex">
       <div className="navbar-start">
         <ul className="flex gap-3 pl-2">
           <li>
-            {loadingUser ? (
-              <Loading />
-            ) : (
-              <>
-                {registered != undefined && registered ? (
-                  <Link href="/member">ข้อมูลสมาชิก</Link>
-                ) : (
-                  <Link
-                    href={isConnected ? "/register" : "/"}
-                    onClick={() => {
-                      if (!isConnected)
-                        window.please_connect_wallet_dialog.showModal();
-                    }}
-                  >
-                    สมัครสมาชิก
-                  </Link>
-                )}
-              </>
+            {registered != undefined && registered ? null : (
+              <Link
+                href={isConnected ? "/register" : "/"}
+                onClick={() => {
+                  if (!isConnected)
+                    window.please_connect_wallet_dialog.showModal();
+                }}
+              >
+                สมัครสมาชิก
+              </Link>
             )}
+          </li>
+          <li>
+            {registered != undefined && registered && isConnected ? (
+              <Link
+                href={isConnected ? "/member" : "/"}
+                onClick={() => {
+                  if (!isConnected)
+                    window.please_connect_wallet_dialog.showModal();
+                }}
+              >
+                ข้อมูลสมาชิก
+              </Link>
+            ) : null}
           </li>
           <li>
             <Link href="/member-list">รายชื่อสมาชิก</Link>
