@@ -15,6 +15,7 @@ import {
   getDistrictsFromAmphoe,
 } from "~/utils/addressHelper";
 import RegisterResultDialog from "~/components/Register/RegisterResultDialog";
+import Loading from "~/components/Shared/LoadingIndicator";
 
 type Inputs = {
   name: string;
@@ -331,9 +332,12 @@ const Register = () => {
                   <div>
                     <div>หมายเลขบัญชีสมาคม</div>
                     <div className="bg-slate-200 p-2">
-                      <div>ธนาคารxxxx</div>
-                      <div>เลขที่บัญชีxxxxxxxxxx</div>
-                      <div>ชื่อบัญชีxxxxx xxxxxxx</div>
+                      <div>ธนาคารกรุงศรีอยุธยา</div>
+                      <div>
+                        เลขที่บัญชี{" "}
+                        <span className="font-bold">438-1-26937-1</span>
+                      </div>
+                      <div>ชื่อบัญชี สมาคมอนุรักษ์และพัฒนาควายไทย</div>
                     </div>
                   </div>
                   <div className="form-control w-full max-w-xs">
@@ -355,7 +359,14 @@ const Register = () => {
                     </label>
                   </div>
                   <button className="btn" type="submit">
-                    {registering ? "กำลังบันทึก.." : "แจ้งชำระเงิน"}
+                    {registering ? (
+                      <div className="flex gap-2">
+                        <Loading />
+                        <span>กำลังบันทึก..</span>
+                      </div>
+                    ) : (
+                      "แจ้งชำระเงิน"
+                    )}
                   </button>
                 </form>
               </div>

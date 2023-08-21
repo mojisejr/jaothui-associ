@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
-import { motion } from "framer-motion";
 
 const Callback = () => {
   const { query, replace } = useRouter();

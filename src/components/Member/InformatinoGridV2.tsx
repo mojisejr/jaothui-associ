@@ -1,7 +1,6 @@
 import React from "react";
 import { api } from "../../utils/api";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
-import { useEffect, useState } from "react";
 import MicrochipSearch from "../Shared/MicrochipSearch";
 import MemberBuffaloCard from "./MemberBuffalo";
 import MemberPedigreeCard from "./MemberPedigree";

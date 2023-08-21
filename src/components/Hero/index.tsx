@@ -1,4 +1,3 @@
-import { ImSearch } from "react-icons/im";
 import MicrochipSearch from "../Shared/MicrochipSearch";
 
 const Hero = () => {
