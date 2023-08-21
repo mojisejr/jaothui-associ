@@ -63,7 +63,6 @@ export const adminRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("updating payment approving...");
       const updated = await ctx.prisma.payment.updateMany({
         data: {
           approvedCount: {
@@ -90,8 +89,6 @@ export const adminRouter = createTRPCRouter({
         },
       });
 
-      console.log("updated: ", updated);
-
       if (updated.count > 0) {
         const activated = await ctx.prisma.payment.updateMany({
           data: {
@@ -105,9 +102,7 @@ export const adminRouter = createTRPCRouter({
             },
           },
         });
-        if (activated.count <= 0) {
-          throw new TRPCError({ code: "BAD_REQUEST" });
-        } else {
+        if (activated.count > 0) {
           return activated;
         }
       } else {
@@ -162,9 +157,7 @@ export const adminRouter = createTRPCRouter({
             },
           },
         });
-        if (rejected.count <= 0) {
-          throw new TRPCError({ code: "BAD_REQUEST" });
-        } else {
+        if (rejected.count > 0) {
           return rejected;
         }
       } else {
@@ -248,9 +241,7 @@ export const adminRouter = createTRPCRouter({
             },
           },
         });
-        if (activated.count <= 0) {
-          throw new TRPCError({ code: "BAD_REQUEST" });
-        } else {
+        if (activated.count > 0) {
           return activated;
         }
       } else {

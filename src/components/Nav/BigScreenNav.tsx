@@ -25,7 +25,7 @@ const BigScreenNav = () => {
     if (isConnected && user?.role == "ADMIN") {
       setAdmin(true);
     }
-  }, [registered, isConnected, isAdmin]);
+  }, [registered, isConnected, isAdmin, loadingUser]);
 
   return (
     <div className="navbar relative z-10 hidden border-b-2 border-black w768:flex">
