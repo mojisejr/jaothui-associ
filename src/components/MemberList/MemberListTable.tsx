@@ -118,7 +118,7 @@ const MemberListTable = () => {
                             <td>
                               <WalletOrId text={user.wallet} />
                             </td>
-                            <td className="px-1 py-2">{user.name}</td>
+                            <td className="px-1 py-2 text-left">{user.name}</td>
                             <td className="px-1 py-2">
                               {user.payment.length <= 0 ? (
                                 <>N/A</>
