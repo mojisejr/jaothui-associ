@@ -1,7 +1,7 @@
 import { GrSearch } from "react-icons/gr";
 import { useState, useEffect, useRef } from "react";
 import { api } from "~/utils/api";
-import MemberSearchDialog from "./MemberSearchDialog";
+import MemberSearchByNameDialog from "./MemberSearchByNameDialog";
 import Loading from "../Shared/LoadingIndicator";
 import WalletOrId from "./WalletOrId";
 
@@ -13,12 +13,19 @@ const MemberListTable = () => {
   const { data, isLoading, refetch } = api.user.getActiveUsers.useQuery({
     page: currentPage,
   });
+  // const {
+  //   data: searchData,
+  //   isLoading: searching,
+  //   isSuccess: searched,
+  //   mutate: search,
+  // } = api.user.getById.useMutation();
+
   const {
     data: searchData,
     isLoading: searching,
     isSuccess: searched,
     mutate: search,
-  } = api.user.getById.useMutation();
+  } = api.user.getUsersByName.useMutation();
 
   useEffect(() => {
     setActive(true);
@@ -34,8 +41,8 @@ const MemberListTable = () => {
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    if (searched && !window.search_dialog.hasAttribute("Open")) {
-      window.search_dialog.showModal();
+    if (searched && !window.search_by_name_dialog.hasAttribute("Open")) {
+      window.search_by_name_dialog.showModal();
     }
   }, [searched]);
 
@@ -58,7 +65,7 @@ const MemberListTable = () => {
       return;
     } else {
       search({
-        text: searchInputRef.current?.value,
+        name: searchInputRef.current?.value,
       });
     }
   }
@@ -81,7 +88,7 @@ const MemberListTable = () => {
                 ref={searchInputRef}
                 className="rounded-md bg-gray-200 px-2 py-2"
                 type="text"
-                placeholder="memberId/Wallet"
+                placeholder="name or member Id"
                 disabled={searching}
               ></input>
               <button type="submit" onClick={handleSearch} disabled={searching}>
@@ -94,7 +101,7 @@ const MemberListTable = () => {
           {active ? (
             <table className="w-full">
               <thead className="bg-gray-300">
-                <th className="px-2 py-3">wallet/member Id.</th>
+                <th className="px-2 py-3">wallet/Id</th>
                 <th className="px-2 py-3">name</th>
                 <th className="px-2 py-3">type</th>
               </thead>
@@ -162,10 +169,16 @@ const MemberListTable = () => {
         </div>
       </div>
       <div className="col-span-1"></div>
-      <MemberSearchDialog
-        name={searchData?.name as string}
-        wallet={searchData?.wallet}
-        type={searchData?.payment[0]?.isLifeTime}
+      <MemberSearchByNameDialog
+        users={
+          searchData != undefined
+            ? searchData?.map((s) => ({
+                name: s.name as string,
+                wallet: s.wallet,
+                type: s.payment[0]?.isLifeTime as boolean,
+              }))
+            : []
+        }
       />
     </div>
   );

@@ -3,6 +3,7 @@ import MemberSearchDialog from "../MemberList/MemberSearchDialog";
 import { api } from "~/utils/api";
 import { useEffect, useRef } from "react";
 import Loading from "../Shared/LoadingIndicator";
+import MemberSearchByNameDialog from "../MemberList/MemberSearchByNameDialog";
 
 const MemberSearch = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -12,16 +13,15 @@ const MemberSearch = () => {
     isLoading: searching,
     isSuccess: searched,
     mutate: search,
-  } = api.user.getById.useMutation();
+  } = api.user.getUsersByName.useMutation();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    if (window.search_dialog != undefined) {
-      if (searched && !window.search_dialog.hasAttribute("Open")) {
-        window.search_dialog.showModal();
+    if (window.search_by_name_dialog != undefined) {
+      if (searched && !window.search_by_name_dialog.hasAttribute("Open")) {
+        window.search_by_name_dialog.showModal();
       }
     }
-    console.log(window.search_dialog);
   }, [searched, searchData]);
 
   function handleSearch() {
@@ -29,7 +29,7 @@ const MemberSearch = () => {
       return;
     } else {
       void search({
-        text: searchInputRef.current?.value,
+        name: searchInputRef.current?.value,
       });
     }
   }
@@ -52,7 +52,7 @@ const MemberSearch = () => {
         >
           <input
             type="text"
-            placeholder="MEMBER ID..."
+            placeholder="Name or Member Id"
             disabled={searching}
             className="input w-full max-w-[420px] rounded-full text-black focus:outline-none disabled:bg-gray-300"
             required
@@ -63,10 +63,16 @@ const MemberSearch = () => {
           </button>
         </div>
       </div>
-      <MemberSearchDialog
-        wallet={searchData?.wallet}
-        name={searchData?.name as string}
-        type={searchData?.payment[0]?.isLifeTime}
+      <MemberSearchByNameDialog
+        users={
+          searchData != undefined
+            ? searchData?.map((s) => ({
+                name: s.name as string,
+                wallet: s.wallet,
+                type: s.payment[0]?.isLifeTime as boolean,
+              }))
+            : []
+        }
       />
     </>
   );

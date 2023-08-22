@@ -83,4 +83,33 @@ export const userRouter = createTRPCRouter({
       });
       return result;
     }),
+  getUsersByName: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const users = await ctx.prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: input.name,
+              },
+            },
+            {
+              wallet: {
+                contains: input.name,
+              },
+            },
+          ],
+        },
+        include: {
+          payment: true,
+        },
+      });
+
+      return users;
+    }),
 });

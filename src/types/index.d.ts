@@ -12,6 +12,10 @@ declare global {
       showModal: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    search_by_name_dialog: {
+      showModal: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
     register_result_dialog: {
       showModal: () => void;
       hasAttribute: (name: string) => boolean;
