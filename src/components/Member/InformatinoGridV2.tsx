@@ -24,7 +24,8 @@ function InformationGridV2() {
               : "N/A"}{" "}
           </div>
           <div className="text-xl">
-            <span className="font-bold">email:</span> {user?.email}
+            <span className="font-bold">email:</span>{" "}
+            {user ? user?.email : "N/A"}
           </div>
           <div className="flex">
             <MemberModalDialog />
