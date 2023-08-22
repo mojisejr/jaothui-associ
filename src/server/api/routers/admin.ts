@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, adminProcedure } from "../trpc";
 import { z } from "zod";
 import { supabase } from "~/server/supabase";
