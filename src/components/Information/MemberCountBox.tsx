@@ -2,6 +2,7 @@ import YellowRoundedBox from "../Shared/YellowRoundedBox";
 import Image from "next/image";
 import { api } from "../../utils/api";
 import { useEffect } from "react";
+import Loading from "../Shared/LoadingIndicator";
 
 const MemberCountBox = () => {
   const { data: member, isLoading, refetch } = api.user.userCount.useQuery();
@@ -34,7 +35,7 @@ const MemberCountBox = () => {
             className="text-center
           text-[2rem] w1440:text-[3rem]"
           >
-            {isLoading ? "XXX" : member}
+            {isLoading ? <Loading /> : member}
           </div>
         </div>
       </div>

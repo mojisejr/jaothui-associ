@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import Image from "next/image";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -32,7 +32,7 @@ const DymamicMap = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {addresses?.map((addr, index) => (
-            <Marker key={index} position={[addr.lat as number, addr.lon]}>
+            <Marker key={index} position={[addr.lat, addr.lon]}>
               <Popup>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">

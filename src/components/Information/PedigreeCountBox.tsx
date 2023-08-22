@@ -1,6 +1,7 @@
 import YellowRoundedBox from "../Shared/YellowRoundedBox";
 import Image from "next/image";
 import { api } from "../../utils/api";
+import Loading from "../Shared/LoadingIndicator";
 
 const PedigreeCountBox = () => {
   const { data: pedigrees, isLoading } =
@@ -31,7 +32,7 @@ const PedigreeCountBox = () => {
             className="text-center 
           text-[2rem] w1440:text-[3rem]"
           >
-            {isLoading ? "XXX" : `${pedigrees!}`}
+            {isLoading ? <Loading /> : `${pedigrees!}`}
           </div>
         </div>
       </div>
