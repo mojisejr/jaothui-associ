@@ -10,36 +10,18 @@ const Advertisement = () => {
           <div className="carousel-item w-full w1024:w-1/2">
             <Image
               className="w-full"
-              src="/images/bgmain.jpg"
-              width={300}
-              height={300}
+              src="/images/ads/ads1.jpg"
+              width={640}
+              height={640}
               alt="ads"
             />
           </div>
           <div className="carousel-item w-full w1024:w-1/2">
             <Image
               className="w-full"
-              src="/images/bgmain.jpg"
-              width={300}
-              height={300}
-              alt="ads"
-            />
-          </div>
-          <div className="carousel-item w-full w1024:w-1/2">
-            <Image
-              className="w-full"
-              src="/images/bgmain.jpg"
-              width={300}
-              height={300}
-              alt="ads"
-            />
-          </div>
-          <div className="carousel-item w-full w1024:w-1/2">
-            <Image
-              className="w-full"
-              src="/images/bgmain.jpg"
-              width={300}
-              height={300}
+              src="/images/ads/ads2.jpg"
+              width={640}
+              height={640}
               alt="ads"
             />
           </div>

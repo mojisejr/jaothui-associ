@@ -24,15 +24,9 @@ function InformationGridV2() {
               : "N/A"}{" "}
           </div>
           <div className="text-xl">
-            <span className="font-bold">email:</span> N/A
+            <span className="font-bold">email:</span> {user?.email}
           </div>
           <div className="flex">
-            {/* <div
-              className="btn rounded-xl bg-[#55ff34] font-bold text-black"
-              onClick={() => window.member_dialog.showModal()}
-            >
-              Verify
-            </div> */}
             <MemberModalDialog />
           </div>
         </div>

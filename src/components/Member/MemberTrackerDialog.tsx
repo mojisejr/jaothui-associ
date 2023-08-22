@@ -3,10 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useEffect, useState } from "react";
 import Modal from "../Shared/Modal";
-import Image from "next/image";
 import { BsThreeDots } from "react-icons/bs";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { api } from "~/utils/api";
+import { FaWpforms } from "react-icons/fa6";
+import { FaSearchDollar } from "react-icons/fa";
+import { MdFactCheck, MdOutlineApproval } from "react-icons/md";
 
 const MemberModalDialog = () => {
   const { wallet, tokens } = useBitkubNext();
@@ -31,35 +33,55 @@ const MemberModalDialog = () => {
   return (
     <>
       <div
-        className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+        className={`btn rounded-xl ${
+          user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
+        } font-bold text-black`}
         onClick={() => window.member_dialog.showModal()}
       >
         {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
       </div>
       <Modal id="member_dialog">
         <div id="icon-box" className="flex items-center justify-evenly gap-2">
-          <div>
-            <Image src="/images/step1.png" width={50} height={50} alt="step1" />
+          <div className="flex flex-col items-center">
+            {/* <Image src="/images/step1.png" width={50} height={50} alt="step1" /> */}
+            <div className="text-green-500">
+              <FaWpforms size={60} />
+            </div>
             <p className="text-[10px]">กรอกข้อมูล + แจ้งชำระเงิน</p>
           </div>
           <BsThreeDots size={30} />
           <div>
-            <Image src="/images/step2.png" width={50} height={50} alt="step2" />
+            <div className="text-green-500">
+              <FaSearchDollar size={60} />
+            </div>
             <p className="text-[10px]">ตรวจสอบชำระเงิน</p>
           </div>
           <BsThreeDots size={30} />
           <div>
-            <Image
-              src="/images/wait15day.png"
-              width={50}
-              height={50}
-              alt="wait15"
-            />
+            <div
+              className={`${
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+                user?.payment[0]?.approvedCount! >= 3
+                  ? "text-green-500"
+                  : "text-black"
+              }`}
+            >
+              <MdFactCheck size={60} />
+            </div>
             <p className="text-[10px]">เสนอชื่อ 15 วัน</p>
           </div>
           <BsThreeDots size={30} />
           <div>
-            <Image src="/images/step3.png" width={60} height={60} alt="step3" />
+            <div
+              className={`${
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+                user?.payment[0]?.approvedCount! >= 3 && user?.active
+                  ? "text-green-500"
+                  : "text-black"
+              }`}
+            >
+              <MdOutlineApproval size={60} />
+            </div>
             <p className="text-[10px]">อนุมัติสมาชิก</p>
           </div>
         </div>
@@ -70,7 +92,7 @@ const MemberModalDialog = () => {
           id="description-box"
           className="my-2 flex flex-col items-center justify-center bg-gray-400 py-2"
         >
-          <div>DD MM YY</div>
+          <div className="font-bold">{`${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`}</div>
           <div>#9999999999</div>
           <div>ติดต่อสอบถามเพิ่มเติม xxxxxxxxx</div>
         </div>

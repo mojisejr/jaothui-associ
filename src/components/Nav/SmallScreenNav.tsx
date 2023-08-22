@@ -74,7 +74,7 @@ const SmallScreenNav = () => {
                       window.please_connect_wallet_dialog.showModal();
                   }}
                 >
-                  ข้อมูลสมาชิก
+                  โปรไฟล์ของฉัน
                 </Link>
               ) : null}
             </li>

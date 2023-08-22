@@ -23,7 +23,6 @@ const Profile = () => {
           >
             โปรไฟล์ของฉัน
           </div>
-          {/* <InformationGrid /> */}
           <InformationGridV2 />
         </div>
       </div>
