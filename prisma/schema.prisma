@@ -23,13 +23,26 @@ model User {
   role          String    @default("USER")
   lineId        String?   @unique @db.Text
   email         String?
-  tel           String?   @db.Text   
+  tel           String?   @db.Text
   payment       Payment[]
   active        Boolean   @default(false)
   approved      String[]  @default([])
   approvedCount Int       @default(0)
   createdAt     DateTime  @default(now())
   updateAt      DateTime  @updatedAt
+}
+
+model Farm {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.Text
+  lat         Float
+  lon         Float
+  imageUrl    String? @default("/images/thuiLogo.png")
+  description String?
+  tel         String?
+  websiteUrl  String?
+  facebook    String?
+  twitter     String?
 }
 
 model Payment {
