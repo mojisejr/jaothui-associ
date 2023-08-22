@@ -30,8 +30,8 @@ const FarmCountBox = () => {
           ) : (
             <div
               style={{ fontFamily: "Kanit" }}
-              className="text-[2rem]
-          w1440:text-[3rem]"
+              className="text-center 
+          text-[2rem] w1440:text-[3rem]"
             >
               {data?.length}
             </div>
