@@ -1,7 +1,10 @@
 import YellowRoundedBox from "../Shared/YellowRoundedBox";
 import Image from "next/image";
+import { api } from "~/utils/api";
+import Loading from "../Shared/LoadingIndicator";
 
 const FarmCountBox = () => {
+  const { data, isLoading } = api.farm.get.useQuery();
   return (
     <YellowRoundedBox>
       <div className="flex items-center justify-center gap-3 p-3">
@@ -22,13 +25,17 @@ const FarmCountBox = () => {
           >
             ฟาร์มสมาชิก
           </div>
-          <div
-            style={{ fontFamily: "Kanit" }}
-            className="text-[2rem]
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div
+              style={{ fontFamily: "Kanit" }}
+              className="text-[2rem]
           w1440:text-[3rem]"
-          >
-            XXX
-          </div>
+            >
+              {data?.length}
+            </div>
+          )}
         </div>
       </div>
     </YellowRoundedBox>
