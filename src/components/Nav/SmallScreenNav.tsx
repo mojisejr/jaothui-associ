@@ -27,9 +27,9 @@ const SmallScreenNav = () => {
   return (
     <div className="navbar border-b-2 border-black w768:hidden">
       <div className="navbar-start">
-        <div className="w-[80px]">
+        <Link href="/" className="w-[80px]">
           <Image src="/images/logo.png" width={150} height={150} alt="logo" />
-        </div>
+        </Link>
       </div>
       <div className="navbar-end">
         <div className="dropdown-buttom dropdown-end dropdown">
@@ -55,10 +55,12 @@ const SmallScreenNav = () => {
             <li>
               {registered != undefined && registered ? null : (
                 <Link
-                  href={isConnected ? "/register" : "/"}
+                  href="#"
+                  // href={isConnected ? "/register" : "/"}
                   onClick={() => {
-                    if (!isConnected)
-                      window.please_connect_wallet_dialog.showModal();
+                    // if (!isConnected)
+                    //   window.please_connect_wallet_dialog.showModal();
+                    window.alert_message_dialog.showModal();
                   }}
                 >
                   สมัครสมาชิก

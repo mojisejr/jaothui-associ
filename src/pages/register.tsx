@@ -83,11 +83,15 @@ const Register = () => {
     }
   }, [registerError, registered]);
 
+  // useEffect(() => {
+  //   if (!isConnected) {
+  //     void replace("/");
+  //   }
+  // }, [isConnected]);
+
   useEffect(() => {
-    if (!isConnected) {
-      void replace("/");
-    }
-  }, [isConnected]);
+    void replace("/");
+  }, []);
 
   const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
     event?.preventDefault();
@@ -374,8 +378,9 @@ const Register = () => {
           </>
         ) : (
           <div className="flex min-h-screen w-full flex-col items-center justify-center">
-            <div className="text-[2rem]">Please Connect Wallet</div>
-            <div>กรุณาเชื่อมต่อกระเป๋า bitkubnext ก่อนทำการสมัครสมาชิก</div>
+            <>
+              <Loading />
+            </>
           </div>
         )}
       </div>

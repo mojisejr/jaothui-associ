@@ -20,5 +20,9 @@ declare global {
       showModal: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    alert_message_dialog: {
+      showModal: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
   }
 }

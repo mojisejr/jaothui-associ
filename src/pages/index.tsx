@@ -2,6 +2,7 @@ import Head from "next/head";
 import Hero from "~/components/Hero";
 import Information from "~/components/Information";
 import Navbar from "~/components/Nav";
+import AlertMessageDialog from "~/components/Shared/AlertMessageDialog";
 import PleaseConnectWalletDialog from "~/components/Shared/PleaseConnectWalletDialog";
 
 export default function Home() {
@@ -16,6 +17,10 @@ export default function Home() {
       <Hero />
       <Information />
       <PleaseConnectWalletDialog />
+      <AlertMessageDialog
+        title={"ประกาศ!"}
+        message={"เปิดให้สมัครสมาชิก 26 สิงหาคม นี้ !"}
+      />
     </>
   );
 }
