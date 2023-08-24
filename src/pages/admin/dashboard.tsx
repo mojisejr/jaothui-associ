@@ -7,19 +7,18 @@ import { useEffect, useState } from "react";
 import ApprovementDashBoard from "~/components/Dashboard/Dashboard";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { useRouter } from "next/router";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const Approvement = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: admin } = api.user.get.useQuery({
-    wallet: wallet as string,
-    accessToken: tokens?.access_token as string,
-  });
+  const { isConnected } = useBitkubNext();
   const { replace } = useRouter();
+
+  const { admin, isSuccess: adminOK, isError: adminErr } = useIsAdmin();
 
   useEffect(() => {
     if (isConnected) {
-      if (admin?.role === "ADMIN") {
+      if (admin && adminOK) {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
@@ -27,7 +26,7 @@ const Approvement = () => {
       }
     }
     if (!isConnected) void replace("/");
-  }, [isAdmin, admin, isConnected]);
+  }, [isAdmin, admin, isConnected, adminOK, adminErr]);
 
   if (!isAdmin) {
     return (

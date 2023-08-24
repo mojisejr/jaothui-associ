@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { api } from "../../utils/api";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const BigScreenNav = () => {
   const [isAdmin, setAdmin] = useState<boolean>(false);
@@ -15,16 +16,15 @@ const BigScreenNav = () => {
     wallet: wallet as string,
   });
 
-  const { data: user } = api.user.get.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
+  const { admin, isSuccess: adminOK, isError: adminErr } = useIsAdmin();
 
   useEffect(() => {
-    if (isConnected && user?.role == "ADMIN") {
-      setAdmin(true);
+    if (isConnected && adminOK && admin) {
+      setAdmin(adminOK);
+    } else if (adminErr) {
+      setAdmin(false);
     }
-  }, [registered, isConnected, isAdmin]);
+  }, [registered, isConnected, isAdmin, adminOK, adminErr]);
 
   return (
     <div className="navbar relative z-10 hidden border-b-2 border-black w768:flex">

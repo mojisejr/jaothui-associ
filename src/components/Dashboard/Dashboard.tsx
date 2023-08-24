@@ -7,14 +7,15 @@ import FarmCountBox from "../Information/FarmCountBox";
 import PaymentApproveCard from "./PaymentApproveCard";
 import MemberApprovementCard from "./MemberApprovmentCard";
 import Loading from "../Shared/LoadingIndicator";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const ApprovementDashBoard = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: admin } = api.user.get.useQuery({
-    wallet: wallet as string,
-    accessToken: tokens?.access_token as string,
-  });
+  // const { data: admin } = api.user.get.useQuery({
+  //   wallet: wallet as string,
+  //   accessToken: tokens?.access_token as string,
+  // });
   const {
     data: waitForPaymentUsers,
     isLoading: loadingPayment,
@@ -33,6 +34,8 @@ const ApprovementDashBoard = () => {
     wallet: wallet as string,
   });
 
+  const { admin, isSuccess: adminOK } = useIsAdmin();
+
   useEffect(() => {
     void fetchwaitForPaymentUsers();
     void fetchWaitForActive();
@@ -40,13 +43,13 @@ const ApprovementDashBoard = () => {
 
   useEffect(() => {
     if (isConnected) {
-      if (admin?.role === "ADMIN") {
+      if (admin && adminOK) {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
       }
     }
-  }, [isAdmin, admin, isConnected]);
+  }, [isAdmin, admin, isConnected, adminOK]);
 
   return (
     <>

@@ -4,6 +4,7 @@ import ConnectBitkubNextButton from "../Shared/BitkubButton";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { api } from "../../utils/api";
 import { useState, useEffect } from "react";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const SmallScreenNav = () => {
   const [isAdmin, setAdmin] = useState<boolean>(false);
@@ -13,16 +14,15 @@ const SmallScreenNav = () => {
     wallet: wallet as string,
   });
 
-  const { data: user } = api.user.get.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
+  const { admin, isSuccess: adminOK, isError: adminErr } = useIsAdmin();
 
   useEffect(() => {
-    if (isConnected && user?.role == "ADMIN") {
-      setAdmin(true);
+    if (isConnected && adminOK && admin) {
+      setAdmin(admin);
+    } else if (adminErr) {
+      setAdmin(false);
     }
-  }, [registered, isConnected, isAdmin]);
+  }, [registered, isConnected, isAdmin, adminOK, adminErr]);
 
   return (
     <div className="navbar border-b-2 border-black w768:hidden">

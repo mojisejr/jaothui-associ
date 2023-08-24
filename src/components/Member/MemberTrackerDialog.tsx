@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 import { FaWpforms } from "react-icons/fa6";
 import { FaSearchDollar } from "react-icons/fa";
 import { MdFactCheck, MdOutlineApproval } from "react-icons/md";
+import Link from "next/link";
 
 const MemberModalDialog = () => {
   const { wallet, tokens } = useBitkubNext();
@@ -32,14 +33,25 @@ const MemberModalDialog = () => {
   }, [user]);
   return (
     <>
-      <div
-        className={`btn rounded-xl ${
-          user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
-        } font-bold text-black`}
-        onClick={() => window.member_dialog.showModal()}
-      >
-        {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
+      <div className="flex gap-3">
+        <div
+          className={`btn rounded-xl ${
+            user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
+          } font-bold text-black`}
+          onClick={() => window.member_dialog.showModal()}
+        >
+          {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
+        </div>
+        {user?.active ? (
+          <Link
+            href="/member/card"
+            className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+          >
+            บัตรสมาชิก
+          </Link>
+        ) : null}
       </div>
+
       <Modal id="member_dialog">
         <div id="icon-box" className="flex items-center justify-evenly gap-2">
           <div className="flex flex-col items-center">

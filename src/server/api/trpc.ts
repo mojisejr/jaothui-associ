@@ -12,6 +12,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { contextParser } from "./utils/contextParser";
+import { getStateOf } from "./services/blockchain/MemberNFT/read";
 
 /**
  * 1. CONTEXT
@@ -139,16 +140,23 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  const user = await prisma.user.findFirst({
-    where: {
-      wallet: ctx.user?.wallet,
-    },
-  });
-  if (user?.role == "ADMIN") {
+  // const user = await prisma.user.findFirst({
+  //   where: {
+  //     wallet: ctx.user?.wallet,
+  //   },
+  // });
+  const userData = await getStateOf(ctx.user?.wallet as `0x${string}`);
+
+  if (userData[2]) {
     return next({ ctx });
   } else {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+  // if (user?.role == "ADMIN") {
+  //   return next({ ctx });
+  // } else {
+  //   throw new TRPCError({ code: "UNAUTHORIZED" });
+  // }
 });
 
 export const publicProcedure = t.procedure;
