@@ -1,6 +1,7 @@
 import { useContractRead } from "wagmi";
 import { abi, address } from "./testnet";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import { checkAdminPeriod } from "~/utils/checkAdminPeriod";
 
 export function useIsAdmin() {
   const { wallet } = useBitkubNext();
@@ -12,8 +13,13 @@ export function useIsAdmin() {
     args: [wallet],
   });
 
+  const isAdmin =
+    data == undefined
+      ? false
+      : checkAdminPeriod(data as [bigint, bigint, boolean]);
+
   return {
-    admin: data != undefined ? (data as [number, number, boolean][2]) : false,
+    admin: isAdmin,
     isSuccess,
     isError,
     isLoading,

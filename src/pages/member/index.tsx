@@ -10,18 +10,21 @@ import Unauthurized from "~/components/Shared/Unauthorized";
 
 const Member = () => {
   const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: registered } = api.user.isRegistered.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
+  const { data: registered, isSuccess: isRegisterOK } =
+    api.user.isRegistered.useQuery({
+      accessToken: tokens?.access_token as string,
+      wallet: wallet as string,
+    });
 
   const { replace } = useRouter();
 
   useEffect(() => {
-    if (!isConnected || !registered) {
-      void replace("/");
+    if (isRegisterOK) {
+      if (!isConnected || !registered) {
+        void replace("/");
+      }
     }
-  }, [isConnected, registered]);
+  }, [isConnected, registered, isRegisterOK]);
 
   if (!isConnected) {
     return (

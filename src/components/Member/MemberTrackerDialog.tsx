@@ -10,10 +10,11 @@ import { FaWpforms } from "react-icons/fa6";
 import { FaSearchDollar } from "react-icons/fa";
 import { MdFactCheck, MdOutlineApproval } from "react-icons/md";
 import Link from "next/link";
+import Loading from "../Shared/LoadingIndicator";
 
 const MemberModalDialog = () => {
   const { wallet, tokens } = useBitkubNext();
-  const { data: user } = api.user.get.useQuery({
+  const { data: user, isLoading: userLoading } = api.user.get.useQuery({
     accessToken: tokens?.access_token as string,
     wallet: wallet as string,
   });
@@ -33,24 +34,28 @@ const MemberModalDialog = () => {
   }, [user]);
   return (
     <>
-      <div className="flex gap-3">
-        <div
-          className={`btn rounded-xl ${
-            user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
-          } font-bold text-black`}
-          onClick={() => window.member_dialog.showModal()}
-        >
-          {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
-        </div>
-        {user?.active ? (
-          <Link
-            href="/member/card"
-            className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+      {!userLoading ? (
+        <div className="flex gap-3">
+          <div
+            className={`btn rounded-xl ${
+              user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
+            } font-bold text-black`}
+            onClick={() => window.member_dialog.showModal()}
           >
-            บัตรสมาชิก
-          </Link>
-        ) : null}
-      </div>
+            {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
+          </div>
+          {user?.active ? (
+            <Link
+              href="/member/card"
+              className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+            >
+              บัตรสมาชิก
+            </Link>
+          ) : null}
+        </div>
+      ) : (
+        <Loading />
+      )}
 
       <Modal id="member_dialog">
         <div id="icon-box" className="flex items-center justify-evenly gap-2">

@@ -7,6 +7,7 @@ import {
   address as tAddress,
 } from "~/blockchain/MemberNFT/testnet";
 import { testnetClient } from "../provider";
+import { checkAdminPeriod } from "~/utils/checkAdminPeriod";
 
 export async function getStateOf(wallet: `0x${string}`) {
   const data = await testnetClient.readContract({
@@ -17,9 +18,7 @@ export async function getStateOf(wallet: `0x${string}`) {
     args: [wallet],
   });
 
-  if (data != undefined || data != null) {
-    return data as [number, number, boolean];
-  } else {
-    return [];
-  }
+  return data == undefined
+    ? false
+    : checkAdminPeriod(data as [bigint, bigint, boolean]);
 }

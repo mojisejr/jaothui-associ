@@ -1,4 +1,4 @@
-const address = "0xc041650515b7636f940cef6d113a541e62F04684";
+const address = "0x13BbD4De067e0Fa34c9a73D3A75936A52B04b5ef";
 const abi = [
   {
     type: "constructor",
@@ -8,8 +8,6 @@ const abi = [
       { type: "address", name: "_committee", internalType: "address" },
       { type: "address", name: "_transferRouter", internalType: "address" },
       { type: "address", name: "_dev", internalType: "address" },
-      { type: "string", name: "_cUri", internalType: "string" },
-      { type: "string", name: "_mUri", internalType: "string" },
       { type: "uint256", name: "_acceptedKycLevel", internalType: "uint256" },
     ],
   },
@@ -200,7 +198,7 @@ const abi = [
       {
         type: "tuple",
         name: "",
-        internalType: "struct JaothuiAssocORGKAP721.CommiteeState",
+        internalType: "struct KwaithaiAssocMemberKAP721.CommiteeState",
         components: [
           { type: "uint256" },
           { type: "uint256" },
@@ -319,6 +317,13 @@ const abi = [
     type: "function",
     stateMutability: "nonpayable",
     outputs: [],
+    name: "removeApprover",
+    inputs: [{ type: "address", name: "_approver", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
     name: "removeCommitee",
     inputs: [{ type: "uint256", name: "_tokenId", internalType: "uint256" }],
   },
@@ -389,6 +394,13 @@ const abi = [
     type: "function",
     stateMutability: "nonpayable",
     outputs: [],
+    name: "setApprover",
+    inputs: [{ type: "address", name: "_approver", internalType: "address" }],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
     name: "setBatchCommittee",
     inputs: [
       { type: "uint256[]", name: "_tokenIds", internalType: "uint256[]" },
@@ -407,6 +419,13 @@ const abi = [
     outputs: [],
     name: "setCommittee",
     inputs: [{ type: "uint256", name: "_tokenId", internalType: "uint256" }],
+  },
+  {
+    type: "function",
+    stateMutability: "nonpayable",
+    outputs: [],
+    name: "setCommitteeOf",
+    inputs: [{ type: "address", name: "_member", internalType: "address" }],
   },
   {
     type: "function",

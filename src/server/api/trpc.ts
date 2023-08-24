@@ -145,9 +145,11 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
   //     wallet: ctx.user?.wallet,
   //   },
   // });
-  const userData = await getStateOf(ctx.user?.wallet as `0x${string}`);
+  const isAdmin = await getStateOf(ctx.user?.wallet as `0x${string}`);
 
-  if (userData[2]) {
+  console.log(isAdmin);
+
+  if (isAdmin) {
     return next({ ctx });
   } else {
     throw new TRPCError({ code: "UNAUTHORIZED" });
