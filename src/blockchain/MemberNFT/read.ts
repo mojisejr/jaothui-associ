@@ -1,5 +1,5 @@
 import { useContractRead } from "wagmi";
-import { abi, address } from "./testnet";
+import { abi, address } from "./mainnet";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { checkAdminPeriod } from "~/utils/checkAdminPeriod";
 
