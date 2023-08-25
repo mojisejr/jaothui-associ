@@ -83,6 +83,9 @@ const SmallScreenNav = () => {
             <li className="py-2 hover:bg-slate-200">
               <Link href="/member-list">รายชื่อสมาชิก</Link>
             </li>
+            <li className="py-2 hover:bg-slate-200">
+              <Link href="/wait-list">รายชื่อผู้สมัคร</Link>
+            </li>
             {registered && isAdmin ? (
               <li className="py-2 hover:bg-slate-200">
                 <Link href="/admin/dashboard">แดชบอร์ด</Link>

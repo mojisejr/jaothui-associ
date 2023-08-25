@@ -110,7 +110,7 @@ const MemberModalDialog = () => {
           className="my-2 flex flex-col items-center justify-center bg-gray-400 py-2"
         >
           <div className="font-bold">{`${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`}</div>
-          <div>#9999999999</div>
+          <div className="font-bold text-white">คุณ {user?.name}</div>
           <div>ติดต่อสอบถามเพิ่มเติม xxxxxxxxx</div>
         </div>
       </Modal>

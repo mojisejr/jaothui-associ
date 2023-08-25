@@ -2,13 +2,15 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter } from "../trpc";
 import { publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { getDaysPassedSincePaid } from "../utils/getDaysPassedSincePaid";
 
 export const userRouter = createTRPCRouter({
+  //@Dev: Get user count
   userCount: publicProcedure.query(async ({ ctx }) => {
     const count = await ctx.prisma.user.count();
     return count;
   }),
-
+  //@Dev: Check if user is registered or not
   isRegistered: publicProcedure
     .input(
       z.object({
@@ -27,6 +29,7 @@ export const userRouter = createTRPCRouter({
         return false;
       }
     }),
+  //@Dev: get user by wallet
   get: publicProcedure
     .input(
       z.object({
@@ -48,6 +51,7 @@ export const userRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
     }),
+  //@Dev: get all active users
   getActiveUsers: publicProcedure
     .input(z.object({ page: z.number().default(1) }))
     .query(async ({ input, ctx }) => {
@@ -70,6 +74,35 @@ export const userRouter = createTRPCRouter({
 
       return { users, totalPages };
     }),
+  //@Dev: get all waitForApprovementUser
+  getWaitForApprovementUsers: publicProcedure.query(async ({ input, ctx }) => {
+    const users = await ctx.prisma.user.findMany({
+      where: {
+        active: false,
+      },
+      include: {
+        payment: {
+          where: {
+            active: true,
+          },
+        },
+      },
+    });
+
+    const usersWithDaysPassed = users
+      .map((user) => ({
+        ...user,
+        daysPassed: getDaysPassedSincePaid(user.payment[0]?.start as Date),
+      }))
+      .filter((user) => user.payment[0]?.active == true);
+
+    if (usersWithDaysPassed.length <= 0) {
+      return [];
+    } else {
+      return usersWithDaysPassed;
+    }
+  }),
+  //@Dev: searhUserByWallet
   getById: publicProcedure
     .input(z.object({ text: z.string() }))
     .mutation(async ({ input, ctx }) => {
@@ -83,6 +116,7 @@ export const userRouter = createTRPCRouter({
       });
       return result;
     }),
+  //@Dev: searchUserByName or Wallet
   getUsersByName: publicProcedure
     .input(
       z.object({

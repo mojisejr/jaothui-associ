@@ -1,18 +1,14 @@
-import { GrSearch } from "react-icons/gr";
+// import { GrSearch } from "react-icons/gr";
 import { useState, useEffect, useRef } from "react";
 import { api } from "~/utils/api";
-import MemberSearchByNameDialog from "./MemberSearchByNameDialog";
 import Loading from "../Shared/LoadingIndicator";
-import WalletOrId from "./WalletOrId";
+// import MemberSearchByNameDialog from "../MemberList/MemberSearchByNameDialog";
+import WalletOrId from "../MemberList/WalletOrId";
 
-const MemberListTable = () => {
+const WaitListTable = () => {
   const [active, setActive] = useState<boolean>(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const { data, isLoading, refetch } = api.user.getActiveUsers.useQuery({
-    page: currentPage,
-  });
+  // const searchInputRef = useRef<HTMLInputElement>(null);
+  const { data, isLoading } = api.user.getWaitForApprovementUsers.useQuery();
   // const {
   //   data: searchData,
   //   isLoading: searching,
@@ -20,55 +16,33 @@ const MemberListTable = () => {
   //   mutate: search,
   // } = api.user.getById.useMutation();
 
-  const {
-    data: searchData,
-    isLoading: searching,
-    isSuccess: searched,
-    mutate: search,
-  } = api.user.getUsersByName.useMutation();
+  // const {
+  //   data: searchData,
+  //   isLoading: searching,
+  //   isSuccess: searched,
+  //   mutate: search,
+  // } = api.user.getUsersByName.useMutation();
 
   useEffect(() => {
     setActive(true);
   }, []);
 
-  useEffect(() => {
-    setTotalPages(data?.totalPages as number);
-  }, [isLoading]);
+  // useEffect(() => {
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  //   if (searched && !window.search_by_name_dialog.hasAttribute("Open")) {
+  //     window.search_by_name_dialog.showModal();
+  //   }
+  // }, [searched]);
 
-  useEffect(() => {
-    void refetch();
-  }, [currentPage]);
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    if (searched && !window.search_by_name_dialog.hasAttribute("Open")) {
-      window.search_by_name_dialog.showModal();
-    }
-  }, [searched]);
-
-  function handleNextPage() {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
-
-  function handlePrevPage() {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    } else if (currentPage <= 0) {
-      setCurrentPage(0);
-    }
-  }
-
-  function handleSearch() {
-    if (!searchInputRef.current?.value) {
-      return;
-    } else {
-      search({
-        name: searchInputRef.current?.value,
-      });
-    }
-  }
+  // function handleSearch() {
+  //   if (!searchInputRef.current?.value) {
+  //     return;
+  //   } else {
+  //     search({
+  //       name: searchInputRef.current?.value,
+  //     });
+  //   }
+  // }
 
   return (
     <div className="grid min-h-screen w-full grid-cols-5">
@@ -80,8 +54,14 @@ const MemberListTable = () => {
     w768:justify-between
     w768:px-3"
         >
-          <h2 className="py-2 text-3xl font-bold">รายชื่อสมาชิก</h2>
-          <div className="flex items-center gap-2">
+          <div className="py-2">
+            <h2 className="text-3xl font-bold">รายชื่อผู้สมัคร</h2>
+            <h3 className=" text-gray-800">
+              ผู้สมัครที่ได้รับอนุมัติชำระเงินแล้ว รอ 15 วัน
+            </h3>
+          </div>
+
+          {/* <div className="flex items-center gap-2">
             <span className="hidden text-xl font-bold">ค้นหา</span>
             <div className="flex gap-2">
               <input
@@ -95,7 +75,7 @@ const MemberListTable = () => {
                 {searching ? <Loading /> : <GrSearch size={30} />}
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="h-[75vh] overflow-auto">
           {active ? (
@@ -104,6 +84,7 @@ const MemberListTable = () => {
                 <th className="px-2 py-3">wallet/Id</th>
                 <th className="px-2 py-3">name</th>
                 <th className="px-2 py-3">type</th>
+                <th className="px-2 py-3">registered</th>
               </thead>
               <tbody className="text-center">
                 {isLoading ? (
@@ -114,13 +95,13 @@ const MemberListTable = () => {
                   </tr>
                 ) : (
                   <>
-                    {data == undefined || data.users.length <= 0 ? (
+                    {data == undefined || data.length <= 0 ? (
                       <tr>
                         <td className="font-bold">ไม่มีข้อมูล</td>
                       </tr>
                     ) : (
                       <>
-                        {data.users.map((user, index) => (
+                        {data.map((user, index) => (
                           <tr className="hover:bg-gray-100" key={index}>
                             <td>
                               <WalletOrId text={user.wallet} />
@@ -139,6 +120,9 @@ const MemberListTable = () => {
                                 </>
                               )}
                             </td>
+                            <td className="px-1 py-2 font-bold text-red-400">
+                              {user.daysPassed} of 15
+                            </td>
                           </tr>
                         ))}
                       </>
@@ -153,23 +137,9 @@ const MemberListTable = () => {
             </div>
           )}
         </div>
-
-        <div className="flex justify-end py-3">
-          <div className="join">
-            <button className="join-item btn" onClick={handlePrevPage}>
-              {"<<"}
-            </button>
-            <button className="join-item btn">{`Page ${
-              currentPage + 1
-            }`}</button>
-            <button className="join-item btn" onClick={handleNextPage}>
-              {">>"}
-            </button>
-          </div>
-        </div>
       </div>
       <div className="col-span-1"></div>
-      <MemberSearchByNameDialog
+      {/* <MemberSearchByNameDialog
         users={
           searchData != undefined
             ? searchData?.map((s) => ({
@@ -179,9 +149,9 @@ const MemberListTable = () => {
               }))
             : []
         }
-      />
+      /> */}
     </div>
   );
 };
 
-export default MemberListTable;
+export default WaitListTable;

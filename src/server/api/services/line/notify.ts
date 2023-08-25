@@ -33,7 +33,7 @@ export async function registrationNotify({
         สถานะ: ${isLifeTime ? "ตลอดชีพ" : "รายปี"} 
         
         กรุณาตรวจสอบชำระเงิน 📌
-        https://jaothui-associ.vercel.app`,
+        https://kwaithai.com`,
       }),
       {
         headers: {

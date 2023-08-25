@@ -36,9 +36,9 @@ const BigScreenNav = () => {
                 href="#"
                 // href={isConnected ? "/register" : "/"}
                 onClick={() => {
-                  // if (!isConnected)
-                  //   window.please_connect_wallet_dialog.showModal();
-                  window.alert_message_dialog.showModal();
+                  if (!isConnected)
+                    // window.please_connect_wallet_dialog.showModal();
+                    window.alert_message_dialog.showModal();
                 }}
               >
                 สมัครสมาชิก
@@ -60,6 +60,9 @@ const BigScreenNav = () => {
           </li>
           <li>
             <Link href="/member-list">รายชื่อสมาชิก</Link>
+          </li>
+          <li>
+            <Link href="/wait-list">รายชื่อผู้สมัคร</Link>
           </li>
           <li>
             {registered && isAdmin ? (
