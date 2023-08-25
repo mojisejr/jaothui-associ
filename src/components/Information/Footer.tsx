@@ -13,21 +13,21 @@ const Footer = () => {
       <div className="mt-[10px] flex flex-col gap-[20px]">
         <Link
           className="hover:text-thuiyellow flex items-center gap-[20px] transition-[2s]"
-          href="https://www.facebook.com/jaothui"
+          href="https://www.facebook.com/ThaiBuffaloCD?mibextid=2JQ9oc"
         >
-          <AiFillFacebook size={50} /> Facebook
+          Facebook
         </Link>
         <Link
           className="hover:text-thuiyellow flex items-center gap-[20px] transition-[2s]"
-          href="https://twitter.com/jaothui_nft"
+          href="https://dld.go.th/th/index.php/th/"
         >
-          <AiFillTwitterCircle size={50} /> Twitter
+          กรมปศุสัตว์
         </Link>
         <Link
           className="hover:text-thuiyellow flex items-center gap-[20px] transition-[2s]"
-          href="https://discord.gg/tPZYZ5rjc7"
+          href="https://ag-ebook.lib.ku.ac.th/org-shelf/dld.php"
         >
-          <SiDiscord size={50} /> Discord
+          E-book กรมปศุสัตว์
         </Link>
       </div>
     </motion.div>
