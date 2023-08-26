@@ -83,15 +83,15 @@ const Register = () => {
     }
   }, [registerError, registered]);
 
-  // useEffect(() => {
-  //   if (!isConnected) {
-  //     void replace("/");
-  //   }
-  // }, [isConnected]);
-
   useEffect(() => {
-    void replace("/");
-  }, []);
+    if (!isConnected) {
+      void replace("/");
+    }
+  }, [isConnected]);
+
+  // useEffect(() => {
+  //   void replace("/");
+  // }, []);
 
   const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
     event?.preventDefault();

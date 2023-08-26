@@ -33,12 +33,12 @@ const BigScreenNav = () => {
           <li>
             {registered != undefined && registered ? null : (
               <Link
-                href="#"
-                // href={isConnected ? "/register" : "/"}
+                // href="#"
+                href={isConnected ? "/register" : "/"}
                 onClick={() => {
                   if (!isConnected)
-                    // window.please_connect_wallet_dialog.showModal();
-                    window.alert_message_dialog.showModal();
+                    window.please_connect_wallet_dialog.showModal();
+                  // window.alert_message_dialog.showModal();
                 }}
               >
                 สมัครสมาชิก
