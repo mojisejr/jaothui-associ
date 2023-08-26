@@ -47,7 +47,7 @@ const Card = () => {
       </Head>
       <Navbar />
       <div className="flex min-h-screen w-full items-center justify-center">
-        <div className="card-compact card w-96 rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+        <div className="card card-compact w-96 rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           <figure className="px-3 py-3">
             <Image
               className="rounded-xl"
@@ -84,8 +84,8 @@ const Card = () => {
               <div>
                 <Image
                   src="/images/QR.png"
-                  width={120}
-                  height={120}
+                  width={150}
+                  height={150}
                   alt="QR-code"
                 />
               </div>
