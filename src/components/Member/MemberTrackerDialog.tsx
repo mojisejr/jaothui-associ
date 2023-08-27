@@ -111,7 +111,7 @@ const MemberModalDialog = () => {
         >
           <div className="font-bold">{`${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`}</div>
           <div className="font-bold text-white">คุณ {user?.name}</div>
-          <div>ติดต่อสอบถามเพิ่มเติม xxxxxxxxx</div>
+          <div>ติดต่อสอบถามเพิ่มเติม 062-565-4989</div>
         </div>
       </Modal>
     </>
