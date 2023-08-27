@@ -26,7 +26,9 @@ const MemberSearchByNameDialog = ({
                 <tbody>
                   {users.map((user, index) => (
                     <tr key={index} className="hover">
-                      <td>{user.wallet}</td>
+                      <td>{`${user.wallet.slice(0, 5)}...${user.wallet.slice(
+                        38
+                      )}`}</td>
                       <td>{user.name}</td>
                       <td>{user.type ? "ตลอดชีพ" : "รายปี"}</td>
                     </tr>
