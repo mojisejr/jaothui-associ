@@ -4,6 +4,7 @@ import { api } from "~/utils/api";
 import MemberSearchByNameDialog from "./MemberSearchByNameDialog";
 import Loading from "../Shared/LoadingIndicator";
 import WalletOrId from "./WalletOrId";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const MemberListTable = () => {
   const [active, setActive] = useState<boolean>(false);
@@ -19,6 +20,8 @@ const MemberListTable = () => {
   //   isSuccess: searched,
   //   mutate: search,
   // } = api.user.getById.useMutation();
+
+  const { admin } = useIsAdmin();
 
   const {
     data: searchData,
@@ -104,6 +107,7 @@ const MemberListTable = () => {
                 <th className="px-2 py-3">wallet/Id</th>
                 <th className="px-2 py-3">name</th>
                 <th className="px-2 py-3">type</th>
+                {admin ? <th className="px-2 py-3">tel</th> : null}
               </thead>
               <tbody className="text-center">
                 {isLoading ? (
@@ -139,6 +143,7 @@ const MemberListTable = () => {
                                 </>
                               )}
                             </td>
+                            {admin ? <td>{user.tel}</td> : null}
                           </tr>
                         ))}
                       </>

@@ -1,12 +1,13 @@
 import Head from "next/head";
 import Navbar from "~/components/Nav";
-import Image from "next/image";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
+import MemberCard from "~/components/Shared/MemberCard";
+import Loading from "~/components/Shared/LoadingIndicator";
 
 const Card = () => {
   const { wallet, tokens, isConnected } = useBitkubNext();
@@ -47,51 +48,16 @@ const Card = () => {
       </Head>
       <Navbar />
       <div className="flex min-h-screen w-full items-center justify-center">
-        <div className="card card-compact w-96 rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-          <figure className="px-3 py-3">
-            <Image
-              className="rounded-xl"
-              src={admin ? "/images/Committee.jpg" : "/images/Member.jpg"}
-              width={350}
-              height={350}
-              alt="member-image"
-            />
-          </figure>
-          <div className="card-body">
-            <div className="flex items-center justify-between px-2 pb-2">
-              <div className="flex flex-col items-start gap-3">
-                <div>
-                  <div className="text-xl font-bold">
-                    {admin ? "COMMITTEE" : "MEMBER"}
-                  </div>
-                  <div className="text-sm font-bold leading-[0.6rem] text-gray-500">{`${
-                    wallet?.slice(0, 5) as string
-                  }...${wallet?.slice(38) as string}`}</div>
-                </div>
-                <div className="text-md font-bold">
-                  <span>TYPE: </span>{" "}
-                  {user?.payment[0]?.isLifeTime ? "ตลอดชีพ" : "รายปี"}{" "}
-                </div>
-
-                <div className="text-md font-bold">
-                  <div>COLLECTION:</div>
-                  <div>KWAITHAI ASSOCIATION</div>
-                </div>
-
-                <div className="text-md font-bold">{user?.name}</div>
-              </div>
-
-              <div>
-                <Image
-                  src="/images/QR.png"
-                  width={150}
-                  height={150}
-                  alt="QR-code"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        {loadingUser || loadingAdmin ? (
+          <Loading />
+        ) : (
+          <MemberCard
+            wallet={wallet as string}
+            name={user?.name as string}
+            admin={admin}
+            isLifeTime={user?.payment[0]?.isLifeTime as boolean}
+          />
+        )}
       </div>
     </>
   );

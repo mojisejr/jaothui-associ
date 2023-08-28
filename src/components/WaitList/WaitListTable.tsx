@@ -4,11 +4,13 @@ import { api } from "~/utils/api";
 import Loading from "../Shared/LoadingIndicator";
 // import MemberSearchByNameDialog from "../MemberList/MemberSearchByNameDialog";
 import WalletOrId from "../MemberList/WalletOrId";
+import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const WaitListTable = () => {
   const [active, setActive] = useState<boolean>(false);
   // const searchInputRef = useRef<HTMLInputElement>(null);
   const { data, isLoading } = api.user.getWaitForApprovementUsers.useQuery();
+  const { admin } = useIsAdmin();
   // const {
   //   data: searchData,
   //   isLoading: searching,
@@ -85,6 +87,7 @@ const WaitListTable = () => {
                 <th className="px-2 py-3">name</th>
                 <th className="px-2 py-3">type</th>
                 <th className="px-2 py-3">registered</th>
+                {admin ? <th className="px-2 py-3">tel</th> : null}
               </thead>
               <tbody className="text-center">
                 {isLoading ? (
@@ -123,6 +126,11 @@ const WaitListTable = () => {
                             <td className="px-1 py-2 font-bold text-red-400">
                               {user.daysPassed} of 15
                             </td>
+                            {admin ? (
+                              <td className="font-bol px-1 py-2">
+                                {user.tel == undefined ? "N/A" : user.tel}
+                              </td>
+                            ) : null}
                           </tr>
                         ))}
                       </>
