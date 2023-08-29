@@ -95,12 +95,13 @@ export const adminRouter = createTRPCRouter({
             active: true,
           },
           where: {
-            wallet: input.wallet,
+            wallet: input.target,
             approvedCount: {
               gte: 3,
             },
           },
         });
+
         if (activated.count > 0) {
           return activated;
         }
@@ -150,7 +151,7 @@ export const adminRouter = createTRPCRouter({
             active: false,
           },
           where: {
-            wallet: input.wallet,
+            wallet: input.target,
             rejectedCount: {
               gte: 3,
             },
@@ -234,7 +235,7 @@ export const adminRouter = createTRPCRouter({
             active: true,
           },
           where: {
-            wallet: input.wallet,
+            wallet: input.target,
             approvedCount: {
               gte: 3,
             },
