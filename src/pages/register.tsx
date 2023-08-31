@@ -289,7 +289,7 @@ const Register = () => {
                   </div>
                   <div className="form-control w-full max-w-xs p-2">
                     <label className="label">
-                      <span className="label-text">รหัสไปรษณี</span>
+                      <span className="label-text">รหัสไปรษณีย์</span>
                     </label>
                     <input
                       type="number"
