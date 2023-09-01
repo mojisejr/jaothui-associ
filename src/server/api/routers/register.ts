@@ -27,6 +27,7 @@ export const registerRouter = createTRPCRouter({
           address: input.address,
           province: input.province,
           email: input.email,
+          tel: input.tel,
           payment: {
             create: {
               wallet: input.wallet,
