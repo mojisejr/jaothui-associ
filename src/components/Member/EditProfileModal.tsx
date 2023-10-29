@@ -66,7 +66,6 @@ const EditProfileModal = () => {
       return;
     }
     setIsLoading(true);
-    const filename = inputRef.current?.value;
     const fileBolb = inputRef.current?.files![0];
     const extension = fileBolb?.name.split(".")[1];
 
@@ -130,7 +129,7 @@ const EditProfileModal = () => {
               <div className="flex gap-2">
                 <button
                   disabled={isLoading}
-                  onClick={void save}
+                  onClick={(e) => void save()}
                   className="rouneded-box btn-primary btn"
                 >
                   Save
@@ -141,7 +140,7 @@ const EditProfileModal = () => {
                     user?.avatar == null ||
                     user?.avatar == undefined
                   }
-                  onClick={void reset}
+                  onClick={() => void reset()}
                   className="btn-error rounded-box btn"
                 >
                   Reset
