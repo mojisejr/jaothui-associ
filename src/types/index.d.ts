@@ -24,5 +24,9 @@ declare global {
       showModal: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    edit_profile_dialog: {
+      showModal: () =>  void;
+      hasAttribute: (name: string) => boolean;
+    }
   }
 }

@@ -110,6 +110,7 @@ const Register = () => {
 
     if (error) {
       toast.error("File uploading failed!, try again!");
+      return;
     } else {
       createNewMember({
         accessToken: tokens?.access_token as string,

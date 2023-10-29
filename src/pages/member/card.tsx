@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { api } from "~/utils/api";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
-import MemberCard from "~/components/Shared/MemberCard";
+import MemberCard from "~/components/Member/MemberCard";
 import Loading from "~/components/Shared/LoadingIndicator";
 
 const Card = () => {
@@ -16,7 +16,11 @@ const Card = () => {
     wallet: wallet as string,
   });
 
-  const { data: user, isLoading: loadingUser } = api.user.get.useQuery({
+  const {
+    data: user,
+    isLoading: loadingUser,
+    refetch,
+  } = api.user.get.useQuery({
     wallet: wallet as string,
     accessToken: tokens?.access_token as string,
   });
@@ -24,6 +28,10 @@ const Card = () => {
   const { replace } = useRouter();
 
   const { admin, isSuccess, isLoading: loadingAdmin, isError } = useIsAdmin();
+
+  useEffect(() => {
+    void refetch();
+  }, []);
 
   useEffect(() => {
     if (!isConnected || !registered) {
@@ -47,13 +55,14 @@ const Card = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <div className="flex min-h-screen w-full items-center justify-center">
+      <div className="relative flex min-h-screen w-full items-center justify-center">
         {loadingUser || loadingAdmin ? (
           <Loading />
         ) : (
           <MemberCard
             wallet={wallet as string}
             name={user?.name as string}
+            avatar={user?.avatar as string}
             admin={admin}
             isLifeTime={user?.payment[0]?.isLifeTime as boolean}
           />

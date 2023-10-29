@@ -3,6 +3,7 @@ import { createTRPCRouter } from "../trpc";
 import { publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { getDaysPassedSincePaid } from "../utils/getDaysPassedSincePaid";
+import { warn } from "console";
 
 export const userRouter = createTRPCRouter({
   //@Dev: Get user count
@@ -146,4 +147,11 @@ export const userRouter = createTRPCRouter({
 
       return users;
     }),
+  updateAvatar: publicProcedure.input(z.object({
+    wallet: z.string(), 
+    filename: z.string().nullable()
+  })).mutation(async ({ctx, input}) => {
+    const updated = await ctx.prisma.user.update({ data: {avatar: input.filename! }, where: {wallet: input.wallet }});
+
+  }),
 });
