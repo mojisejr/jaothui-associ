@@ -46,10 +46,10 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
 
   return (
     <>
-      <div className="card card-compact relative w-96 rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+      <div className="card card-compact relative w-96 max-w-md rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
         <figure className="px-3 py-3">
           <img
-            className="rounded-xl"
+            className="h-[350px] w-[350px] overflow-hidden rounded-xl object-contain object-center"
             src={image}
             width={350}
             height={350}

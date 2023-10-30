@@ -1,4 +1,4 @@
-import React, { useState, useRef, SyntheticEvent, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Modal from "../Shared/Modal";
 import { toast } from "react-toastify";
 import { supabase } from "~/server/supabase";
@@ -6,6 +6,9 @@ import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import Loading from "../Shared/LoadingIndicator";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+
+import AvatarEditor from "react-avatar-editor";
+import { decode } from "base64-arraybuffer";
 
 interface InputTypes {
   image?: string;
@@ -27,7 +30,10 @@ const EditProfileModal = () => {
     accessToken: tokens!.access_token as string,
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const outputRef = useRef<AvatarEditor>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [src, setSrc] = useState<File>();
 
   const {
     isLoading: savingToDb,
@@ -60,34 +66,42 @@ const EditProfileModal = () => {
     }
   }, [savingToDb, savedToDb, saveToDbError]);
 
-  const save = async () => {
+  const select = () => {
     if (inputRef.current?.value == undefined || inputRef.current?.value == "") {
       toast.error("no file selected");
       return;
     }
-    setIsLoading(true);
     const fileBolb = inputRef.current?.files![0];
-    const extension = fileBolb?.name.split(".")[1];
 
     if (fileBolb!.size > 1000000) {
       toast.error("Cannot upload file that larger than 1 Mb");
+    } else {
+      setSrc(fileBolb);
+    }
+  };
+
+  const save = async () => {
+    setIsLoading(true);
+    const image = outputRef.current?.getImage().toDataURL();
+    const result = await fetch(image!);
+    const bolb = await result.blob();
+    const extension = src?.name.split(".")[1];
+
+    const { data, error } = await supabase.storage
+      .from("slipstorage/avatar")
+      .upload(`${wallet!}.${extension as string}`, bolb, {
+        contentType: "image/png",
+        cacheControl: "0",
+        upsert: true,
+      });
+
+    if (error) {
+      console.log(error);
+      toast.error("Upload file error, try again.");
       setIsLoading(false);
     } else {
-      const { data, error } = await supabase.storage
-        .from("slipstorage/avatar")
-        .upload(`${wallet!}.${extension as string}`, fileBolb!, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      if (error) {
-        console.log(error);
-        toast.error("Upload file error, try again.");
-        setIsLoading(false);
-      } else {
-        saveToDb({ wallet: wallet as string, filename: data.path });
-        console.log("uploaded avatar infomation: ", data);
-      }
+      saveToDb({ wallet: wallet as string, filename: data.path });
+      console.log("uploaded avatar infomation: ", data);
     }
   };
 
@@ -108,14 +122,27 @@ const EditProfileModal = () => {
       <>
         <div className="grid w-full grid-cols-1">
           <div className="grid-col-1 grid gap-2">
+            <div className="flex w-full items-center justify-center">
+              <AvatarEditor
+                ref={outputRef}
+                image={src!}
+                width={250}
+                height={250}
+                border={50}
+                color={[255, 255, 255, 0.6]}
+                scale={1.2}
+                rotate={0}
+              />
+            </div>
             <div className="form-control">
               <input
                 disabled={isLoading}
                 ref={inputRef}
-                className="mx-w-xs rouneded-box file-input-bordered file-input"
+                className="rouneded-box file-input-bordered file-input max-w-xs"
                 type="file"
                 name="avatar"
-                accept="image/png, image/jpg, image/jpeg"
+                accept="image/png"
+                onChange={() => select()}
                 required
               />
               <label className="label">
