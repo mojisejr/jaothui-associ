@@ -37,8 +37,9 @@ const Information = () => {
         >
           <HeaderTitle text="ข้อมูลสมาคม" />
           <div
-            className="flex flex-col gap-3
+            className="flex flex-row gap-3 py-10 px-2
           w768:flex-row
+          w768:py-0
           w768:gap-[4rem]"
           >
             <MemberCountBox />

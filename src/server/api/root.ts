@@ -4,6 +4,7 @@ import { userRouter } from "./routers/user";
 import { pedigreeRouter } from "./routers/pedigrees";
 import { adminRouter } from "./routers/admin";
 import { farmRouter } from "./routers/farm";
+import { eventRouter } from "./routers/event";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   pedigrees: pedigreeRouter,
   admin: adminRouter,
   farm: farmRouter,
+  event: eventRouter,
 });
 
 // export type definition of API

@@ -82,15 +82,16 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
 
             <div>
               <Image
+                className="relative"
                 src="/images/QR.png"
                 width={150}
                 height={150}
                 alt="QR-code"
               />
+              <MemberCardMenu />
             </div>
           </div>
         </div>
-        <MemberCardMenu />
       </div>
     </>
   );

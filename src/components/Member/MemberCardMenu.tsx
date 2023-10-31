@@ -1,4 +1,4 @@
-import { BsPersonPlusFill } from "react-icons/bs";
+import {  BsPencilFill } from "react-icons/bs";
 import EditProfileModal from "./EditProfileModal";
 
 const MemberCardMenu = () => {
@@ -7,9 +7,9 @@ const MemberCardMenu = () => {
 
   return (
   <>
-    <details className="dropdown-top dropdown-end dropdown  absolute -bottom-4 -right-4">
-      <summary className="btn-primary btn-md btn-circle btn m-1">
-        <BsPersonPlusFill size={24} />
+    <details className="dropdown-top dropdown-end dropdown  absolute top-[20rem] right-4">
+      <summary className="btn-primary btn-sm btn-circle btn m-1">
+        <BsPencilFill size={16} />
       </summary>
       <ul className="z-1 dropdown-content menu w-52 rounded-xl bg-secondary p-2 text-white shadow">
         <li>
