@@ -147,11 +147,17 @@ export const userRouter = createTRPCRouter({
 
       return users;
     }),
-  updateAvatar: publicProcedure.input(z.object({
-    wallet: z.string(), 
-    filename: z.string().nullable()
-  })).mutation(async ({ctx, input}) => {
-    const updated = await ctx.prisma.user.update({ data: {avatar: input.filename! }, where: {wallet: input.wallet }});
-
-  }),
+  updateAvatar: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        filename: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const updated = await ctx.prisma.user.update({
+        data: { avatar: input.filename! },
+        where: { wallet: input.wallet },
+      });
+    }),
 });

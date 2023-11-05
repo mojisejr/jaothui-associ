@@ -7,7 +7,7 @@ interface ModalProps {
 const Modal = ({ id, children }: ModalProps) => {
   return (
     <>
-      <dialog id={id} className="modal modal-middle"> 
+      <dialog id={id} className="modal modal-middle">
         <div className="modal-box">
           {children}
           <div className="modal-action">

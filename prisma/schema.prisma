@@ -31,6 +31,7 @@ model User {
   approvedCount Int       @default(0)
   createdAt     DateTime  @default(now())
   updateAt      DateTime  @updatedAt
+  Farm          Farm[]
 }
 
 model Farm {
@@ -44,6 +45,9 @@ model Farm {
   websiteUrl  String?
   facebook    String?
   twitter     String?
+  locationUrl String?
+  userId      Int?
+  user        User?   @relation(references: [id], fields: [userId])
 }
 
 model Payment {

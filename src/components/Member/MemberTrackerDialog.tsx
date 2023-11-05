@@ -45,12 +45,20 @@ const MemberModalDialog = () => {
             {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
           </div>
           {user?.active ? (
-            <Link
-              href="/member/card"
-              className="btn rounded-xl bg-[#55ff34] font-bold text-black"
-            >
-              บัตรสมาชิก
-            </Link>
+            <>
+              <Link
+                href="/member/card"
+                className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+              >
+                บัตรสมาชิก
+              </Link>
+              <Link
+                className="btn rounded-xl bg-[#55ff34] font-bold text-black"
+                href="/member/farm"
+              >
+                ฟาร์ม
+              </Link>
+            </>
           ) : null}
         </div>
       ) : (

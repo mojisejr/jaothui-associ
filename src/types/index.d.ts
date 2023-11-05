@@ -25,8 +25,13 @@ declare global {
       hasAttribute: (name: string) => boolean;
     };
     edit_profile_dialog: {
-      showModal: () =>  void;
+      showModal: () => void;
       hasAttribute: (name: string) => boolean;
-    }
+    };
+    edit_farm_dialog: {
+      showModal: () => void;
+      close: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
   }
 }
