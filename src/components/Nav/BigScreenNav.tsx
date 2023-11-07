@@ -65,6 +65,19 @@ const BigScreenNav = () => {
             <Link href="/wait-list">รายชื่อผู้สมัคร</Link>
           </li>
           <li>
+            {registered != undefined && registered && isConnected ? (
+              <Link
+                href={isConnected ? "/microchip" : "/"}
+                onClick={() => {
+                  if (!isConnected)
+                    window.please_connect_wallet_dialog.showModal();
+                }}
+              >
+                microchip
+              </Link>
+            ) : null}
+          </li>
+          <li>
             {registered && isAdmin ? (
               <Link href="/admin/dashboard">แดชบอร์ด</Link>
             ) : null}

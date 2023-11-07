@@ -12,42 +12,44 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  avatar        String?
-  name          String?
-  farmName      String?
-  wallet        String    @unique
-  address       String    @db.Text
-  province      String    @db.Text
-  lat           Float?
-  lon           Float?
-  role          String    @default("USER")
-  lineId        String?   @unique @db.Text
-  email         String?
-  tel           String?   @db.Text
-  payment       Payment[]
-  active        Boolean   @default(false)
-  approved      String[]  @default([])
-  approvedCount Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime  @updatedAt
-  Farm          Farm[]
+  id             Int              @id @default(autoincrement())
+  avatar         String?
+  name           String?
+  farmName       String?
+  wallet         String           @unique
+  address        String           @db.Text
+  province       String           @db.Text
+  lat            Float?
+  lon            Float?
+  role           String           @default("USER")
+  lineId         String?          @unique @db.Text
+  email          String?
+  tel            String?          @db.Text
+  payment        Payment[]
+  active         Boolean          @default(false)
+  approved       String[]         @default([])
+  approvedCount  Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updateAt       DateTime         @updatedAt
+  Farm           Farm[]
+  MicrochipOrder MicrochipOrder[]
 }
 
 model Farm {
-  id          Int     @id @default(autoincrement())
-  name        String  @db.Text
-  lat         Float
-  lon         Float
-  imageUrl    String? @default("/images/thuiLogo.png")
-  description String?
-  tel         String?
-  websiteUrl  String?
-  facebook    String?
-  twitter     String?
-  locationUrl String?
-  userId      Int?
-  user        User?   @relation(references: [id], fields: [userId])
+  id             Int              @id @default(autoincrement())
+  name           String           @db.Text
+  lat            Float
+  lon            Float
+  imageUrl       String?          @default("/images/thuiLogo.png")
+  description    String?
+  tel            String?
+  websiteUrl     String?
+  facebook       String?
+  twitter        String?
+  locationUrl    String?
+  userId         Int?
+  user           User?            @relation(references: [id], fields: [userId])
+  MicrochipOrder MicrochipOrder[]
 }
 
 model Payment {
@@ -87,4 +89,39 @@ model Advertisements {
   description String
   imageUrl    String?
   active      Boolean @default(true)
+}
+
+model Microchip {
+  id             Int             @id @default(autoincrement())
+  microchip      String          @unique
+  tokenId        String?         @unique
+  sold           Boolean         @default(false)
+  active         Boolean         @default(false)
+  MicrochipOrder MicrochipOrder?
+}
+
+model MicrochipOrder {
+  id              Int        @id @default(autoincrement())
+  microchipId     String?    @unique
+  microchip       Microchip? @relation(fields: [microchipId], references: [microchip])
+  wallet          String
+  user            User       @relation(fields: [wallet], references: [wallet])
+  farmId          Int?
+  farm            Farm?      @relation(fields: [farmId], references: [id])
+  shippingAddress String?
+  slipUrl         String?
+  note            String?
+  approver        String[]
+  approved        Boolean    @default(false)
+  canMint         Boolean    @default(false)
+  minted          Boolean    @default(false)
+  shipped         Boolean    @default(false)
+  buffaloName     String
+  buffaloOrigin   String
+  buffaloBirthday String
+  buffaloColor    String
+  buffaloSex      String
+  buffaloHeight   String
+  buffaloipfsUrl  String
+  timestamp       DateTime
 }

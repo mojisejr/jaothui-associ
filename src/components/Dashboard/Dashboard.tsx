@@ -8,14 +8,17 @@ import PaymentApproveCard from "./PaymentApproveCard";
 import MemberApprovementCard from "./MemberApprovmentCard";
 import Loading from "../Shared/LoadingIndicator";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
+import MicrochipManageTable from "./MicrochipManageTable";
 
 const ApprovementDashBoard = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const { wallet, tokens, isConnected } = useBitkubNext();
+
   // const { data: admin } = api.user.get.useQuery({
   //   wallet: wallet as string,
   //   accessToken: tokens?.access_token as string,
   // });
+
   const {
     data: waitForPaymentUsers,
     isLoading: loadingPayment,
@@ -34,11 +37,18 @@ const ApprovementDashBoard = () => {
     wallet: wallet as string,
   });
 
+  const { refetch: fetchMicrochips } =
+    api.admin.getNotCompleteMicrochip.useQuery({
+      accessToken: tokens?.access_token as string,
+      wallet: wallet as string,
+    });
+
   const { admin, isSuccess: adminOK } = useIsAdmin();
 
   useEffect(() => {
     void fetchwaitForPaymentUsers();
     void fetchWaitForActive();
+    void fetchMicrochips();
   }, []);
 
   useEffect(() => {
@@ -68,6 +78,7 @@ const ApprovementDashBoard = () => {
           className="grid grid-cols-1 gap-2 px-5 py-3
         w768:grid-cols-2"
         >
+          {/** Member Payment Approve Box */}
           <div className="max-h-[80vh] min-h-[50vh] overflow-y-auto bg-white ">
             <div className="flex justify-around">
               <ul className="flex min-w-[350px] max-w-[400px] flex-col justify-center gap-2 p-2">
@@ -105,6 +116,8 @@ const ApprovementDashBoard = () => {
               </ul>
             </div>
           </div>
+
+          {/** After 15 days passed approvement */}
           <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
             <div className="flex justify-around">
               <ul className="flex min-w-[350px] max-w-[400px] flex-col justify-center gap-2 p-2">
@@ -139,6 +152,18 @@ const ApprovementDashBoard = () => {
                 )}
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/** Order management */}
+        <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
+          <div className="grid grid-cols-1 gap-2 px-2">
+            <div className="flex items-center justify-between px-3 py-2">
+              <div className="text-lg font-bold">
+                ระบบจัดการ order microchip
+              </div>
+            </div>
+            <MicrochipManageTable />
           </div>
         </div>
       </div>
