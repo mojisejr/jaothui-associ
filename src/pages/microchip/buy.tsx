@@ -131,6 +131,9 @@ const BuyMicrochip = () => {
           <form className="max-w-xs py-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
               <label className="label font-bold">Farm</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               {farmLoading ? (
                 <Loading />
               ) : (
@@ -157,6 +160,9 @@ const BuyMicrochip = () => {
 
             <div className="form-control">
               <label className="label font-bold">Buffalo{"'"} name</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="input-bordered input max-w-xs"
@@ -169,6 +175,9 @@ const BuyMicrochip = () => {
 
             <div className="form-control">
               <label className="label">Color</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <select
                 disabled={buying || loading}
                 className="select-bordered select"
@@ -179,8 +188,12 @@ const BuyMicrochip = () => {
                 <option value="Albino">Albino</option>
               </select>
             </div>
+
             <div className="form-control">
               <label className="label">Gender</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <select
                 disabled={buying || loading}
                 className="select-bordered select"
@@ -193,6 +206,9 @@ const BuyMicrochip = () => {
             </div>
             <div className="form-control">
               <label className="label">Birthday</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="input-bordered input max-w-xs"
@@ -204,6 +220,9 @@ const BuyMicrochip = () => {
 
             <div className="form-control">
               <label className="label font-bold">Origin</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="input-bordered input max-w-xs"
@@ -215,6 +234,9 @@ const BuyMicrochip = () => {
 
             <div className="form-control">
               <label className="label font-bold">Height</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="input-bordered input max-w-xs"
@@ -227,6 +249,9 @@ const BuyMicrochip = () => {
 
             <div className="form-control">
               <label className="label font-bold">Buffalo Image</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="file-input input-bordered max-w-xs"
@@ -240,8 +265,20 @@ const BuyMicrochip = () => {
               </label>
             </div>
 
+            <div className="card my-2 bg-primary text-white shadow">
+              <div className="card-body">
+                <div className="card-title underline">ชำระเงินที่บัญชี</div>
+                <p className="font-bold text-error">429-160308-9</p>
+                <p>บัญชีธนาคารไทยพานิช</p>
+                <p>บริษัท เจ้าทุย จำกัด บัญชีเงินฝากออมทรัพย์</p>
+              </div>
+            </div>
+
             <div className="form-control">
               <label className="label font-bold">Payment Slip</label>
+              <label className="label-text-alt text-end text-error">
+                required
+              </label>
               <input
                 disabled={buying || loading}
                 className="file-input input-bordered max-w-xs"
@@ -251,7 +288,7 @@ const BuyMicrochip = () => {
                 {...register("paymentSlip", { required: true })}
               ></input>
               <label className="label-alt-text text-right text-error">
-                *only png available
+                **แนบสลิปที่นี่
               </label>
             </div>
 

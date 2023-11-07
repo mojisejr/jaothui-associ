@@ -5,6 +5,7 @@ export const addMicrochips = async (microchips: string[]) => {
   try {
     const output = await prisma.microchip.createMany({
       data: preparedData,
+      skipDuplicates: true,
     });
 
     if (output.count <= 0) {

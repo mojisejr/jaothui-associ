@@ -48,3 +48,53 @@ export async function registrationNotify({
     console.log("notification error: ", error);
   }
 }
+
+export async function microchipPaymentNotify({
+  wallet,
+  name,
+  microchip,
+  slipUrl,
+}: {
+  wallet: string;
+  name: string | null;
+  microchip: string;
+  slipUrl: string;
+}) {
+  try {
+    const token = process.env.line_microchip_payment as string;
+    const response = await axios.post(
+      process.env.line_uri as string,
+      /*การแจ้งเตือนสมัครสมาชิก✨️
+  Wallet :
+
+  ชื่อ : 
+
+  สถานะ : ตลอดชีพ
+
+  กรุณาตรวจสอบการโอนเงิน📍*/
+      qs.stringify({
+        message: `แจ้งเตือนออเดอร์ไมโครชิพ
+        Wallet: ${wallet}
+        
+        ชื่อควาย:  ${name ? name : "ไม่ระบุชื่อ"}
+        
+        เลขไมโครชิพ: ${microchip} 
+
+        slipUrl: ${slipUrl}
+        
+        กรุณาตรวจสอบชำระเงิน 📌
+        https://kwaithai.com`,
+      }),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ContentType: "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    console.log("notification response", response);
+    return true;
+  } catch (error) {
+    console.log("notification error: ", error);
+  }
+}

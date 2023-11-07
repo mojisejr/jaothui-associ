@@ -123,4 +123,5 @@ model MicrochipOrder {
   buffaloSex      String
   buffaloHeight   String
   buffaloipfsUrl  String
+  timestamp       DateTime
 }

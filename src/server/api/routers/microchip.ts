@@ -8,6 +8,8 @@ import {
 } from "../services/microchip";
 import { z } from "zod";
 import { getMicrochipOrderOf } from "../services/microchip/orders";
+import { microchipPaymentNotify } from "../services/line/notify";
+import { getMicrochipSlipUrl } from "~/server/supabase";
 
 // wallet,
 // farmId,
@@ -92,8 +94,9 @@ export const microchipRouter = createTRPCRouter({
             buffaloOrigin: input.buffaloOrigin ?? "thai",
             buffaloSex: input.buffaloSex,
             microchipId: microchip.microchip,
-            slipUrl: input.slipUrl,
+            slipUrl: input.slipUrl.trim(),
             shippingAddress: input.shippingAddress,
+            timestamp: new Date(),
           },
         });
 
@@ -103,6 +106,13 @@ export const microchipRouter = createTRPCRouter({
             message: "saving orders failed",
           });
         }
+
+        await microchipPaymentNotify({
+          wallet: input.wallet,
+          name: input.buffaloName,
+          microchip: microchip.microchip,
+          slipUrl: getMicrochipSlipUrl(input.slipUrl.trim()).data.publicUrl,
+        });
 
         //3. marked microchip as used
         const marked = await markMicrochipAsSold(microchip.id);
