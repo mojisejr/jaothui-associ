@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import sharp from "sharp";
 import { storeImageBlob } from "../services/ipfs/nftStorage";
 
