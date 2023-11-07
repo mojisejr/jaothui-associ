@@ -5,6 +5,7 @@ import { pedigreeRouter } from "./routers/pedigrees";
 import { adminRouter } from "./routers/admin";
 import { farmRouter } from "./routers/farm";
 import { eventRouter } from "./routers/event";
+import { microchipRouter } from "./routers/microchip";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   admin: adminRouter,
   farm: farmRouter,
   event: eventRouter,
+  microchip: microchipRouter,
 });
 
 // export type definition of API

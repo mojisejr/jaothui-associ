@@ -2,6 +2,13 @@ import { createTRPCRouter, adminProcedure } from "../trpc";
 import { z } from "zod";
 import { supabase } from "~/server/supabase";
 import { getDaysPassedSincePaid } from "../utils/getDaysPassedSincePaid";
+import { TRPCError } from "@trpc/server";
+import {
+  approveMicrochipPayment,
+  approveShipping,
+  getNotCompleteMicrochipOrders,
+} from "../services/microchip/orders";
+import { addMicrochips } from "../services/microchip";
 
 export const adminRouter = createTRPCRouter({
   getWaitForPaymentApproval: adminProcedure
@@ -16,7 +23,7 @@ export const adminRouter = createTRPCRouter({
         where: {
           active: false,
           approvedCount: {
-            lt: 3,
+            lt: 1,
           },
           NOT: {
             OR: [
@@ -75,7 +82,7 @@ export const adminRouter = createTRPCRouter({
           wallet: input.target,
           active: false,
           approvedCount: {
-            lt: 3,
+            lt: 1,
           },
           NOT: {
             approver: {
@@ -97,7 +104,7 @@ export const adminRouter = createTRPCRouter({
           where: {
             wallet: input.target,
             approvedCount: {
-              gte: 3,
+              gte: 1,
             },
           },
         });
@@ -131,7 +138,7 @@ export const adminRouter = createTRPCRouter({
           wallet: input.target,
           active: false,
           rejectedCount: {
-            lt: 3,
+            lt: 1,
           },
           NOT: {
             approver: {
@@ -153,7 +160,7 @@ export const adminRouter = createTRPCRouter({
           where: {
             wallet: input.target,
             rejectedCount: {
-              gte: 3,
+              gte: 1,
             },
           },
         });
@@ -219,7 +226,7 @@ export const adminRouter = createTRPCRouter({
         where: {
           wallet: input.target,
           approvedCount: {
-            lte: 3,
+            lte: 1,
           },
           NOT: {
             approved: {
@@ -237,7 +244,7 @@ export const adminRouter = createTRPCRouter({
           where: {
             wallet: input.target,
             approvedCount: {
-              gte: 3,
+              gte: 1,
             },
           },
         });
@@ -272,5 +279,100 @@ export const adminRouter = createTRPCRouter({
           },
         },
       });
+    }),
+  //microchip manager
+  getNotCompleteMicrochip: adminProcedure
+    .input(
+      z.object({
+        accessToken: z.string(),
+        wallet: z.string(),
+      })
+    )
+    .query(async ({ ctx }) => {
+      try {
+        const microchips = await getNotCompleteMicrochipOrders();
+        return microchips;
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "microchip loading failed",
+        });
+      }
+    }),
+  addMicrochips: adminProcedure
+    .input(
+      z.object({
+        accessToken: z.string(),
+        wallet: z.string(),
+        microchipIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const output = await addMicrochips(input.microchipIds);
+        if (output.count <= 0) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "microchip data insertion failed",
+          });
+        }
+        return output;
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "cannot add microchips, contact team",
+        });
+      }
+    }),
+  approveMicrochipPayment: adminProcedure
+    .input(
+      z.object({
+        accessToken: z.string(),
+        wallet: z.string(),
+        orderId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const approved = await approveMicrochipPayment(
+          input.orderId,
+          input.wallet
+        );
+        if (!approved) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "payment approval failed",
+          });
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "payment approval failed, contact team",
+        });
+      }
+    }),
+  confirmShipping: adminProcedure
+    .input(
+      z.object({
+        accessToken: z.string(),
+        wallet: z.string(),
+        orderId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const shipped = await approveShipping(input.orderId, input.wallet);
+        if (!shipped) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "shipping marking failed",
+          });
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "shipping marking failed, contact team",
+        });
+      }
     }),
 });
