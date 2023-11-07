@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 const MicrochipTable = () => {
   const { wallet } = useBitkubNext();
+
   const {
     data: microchips,
     isLoading,
