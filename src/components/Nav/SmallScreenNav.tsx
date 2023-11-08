@@ -86,6 +86,19 @@ const SmallScreenNav = () => {
             <li className="py-2 hover:bg-slate-200">
               <Link href="/wait-list">รายชื่อผู้สมัคร</Link>
             </li>
+            <li>
+              {registered != undefined && registered && isConnected ? (
+                <Link
+                  href={isConnected ? "/microchip" : "/"}
+                  onClick={() => {
+                    if (!isConnected)
+                      window.please_connect_wallet_dialog.showModal();
+                  }}
+                >
+                  microchip
+                </Link>
+              ) : null}
+            </li>
             {registered && isAdmin ? (
               <li className="py-2 hover:bg-slate-200">
                 <Link href="/admin/dashboard">แดชบอร์ด</Link>
