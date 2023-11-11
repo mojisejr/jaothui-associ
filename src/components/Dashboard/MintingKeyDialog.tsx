@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { api } from "~/utils/api";
 import { toast } from "react-toastify";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import Loading from "../Shared/LoadingIndicator";
 
 const MintingKeyDialog = ({ wallet }: { wallet: Address }) => {
   const { wallet: walletAddress } = useBitkubNext();
@@ -29,16 +30,21 @@ const MintingKeyDialog = ({ wallet }: { wallet: Address }) => {
   useEffect(() => {
     if (minted) {
       toast.success(`NFT is minted!, check bkcscan.com`);
-      void refetch();
       window.key_dialog.close();
     }
 
     if (mintingError) {
       toast.error("NFT minting error");
-      void refetch();
       window.key_dialog.close();
     }
+
+    void refetch();
   }, [minted, mintingError]);
+
+  useEffect(() => {
+    void refetch();
+  }, []);
+
   return (
     <Modal id="key_dialog">
       <div className="join w-full">
@@ -54,7 +60,13 @@ const MintingKeyDialog = ({ wallet }: { wallet: Address }) => {
           onClick={mint}
           className="btn-info join-item btn"
         >
-          Mint
+          {!minting ? (
+            "Mint"
+          ) : (
+            <div className="flex items-center gap-2">
+              <Loading /> Minting..
+            </div>
+          )}
         </button>
       </div>
     </Modal>

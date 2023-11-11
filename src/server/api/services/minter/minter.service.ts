@@ -12,7 +12,7 @@ export const getMintableWallet = async () => {
     });
     return mintable.data;
   } catch (error) {
-    console.log(error);
+    console.log("error", error);
     return undefined;
   }
 };
