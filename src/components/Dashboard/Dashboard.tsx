@@ -9,6 +9,7 @@ import MemberApprovementCard from "./MemberApprovmentCard";
 import Loading from "../Shared/LoadingIndicator";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import MicrochipManageTable from "./MicrochipManageTable";
+import MemberMintingTable from "./MemberMintingTable";
 
 const ApprovementDashBoard = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -121,7 +122,7 @@ const ApprovementDashBoard = () => {
           <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
             <div className="flex justify-around">
               <ul className="flex min-w-[350px] max-w-[400px] flex-col justify-center gap-2 p-2">
-                <div className="flex justify-between px-3 py-2 text-lg font-bold">
+                <div className="flex items-start px-3 py-2 text-lg font-bold">
                   <div>รอยืนยันหลัง 15 วัน</div>
                   <div>
                     {loadingActive ? (
@@ -153,17 +154,27 @@ const ApprovementDashBoard = () => {
               </ul>
             </div>
           </div>
-        </div>
 
-        {/** Order management */}
-        <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
-          <div className="grid grid-cols-1 gap-2 px-2">
-            <div className="flex items-center justify-between px-3 py-2">
-              <div className="text-lg font-bold">
-                ระบบจัดการ order microchip
+          {/** Order management */}
+          <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
+            <div className="grid grid-cols-1 gap-2 px-2">
+              <div className="flex items-center justify-between px-3 py-2">
+                <div className="text-lg font-bold">
+                  ระบบจัดการ order microchip
+                </div>
               </div>
+              <MicrochipManageTable />
             </div>
-            <MicrochipManageTable />
+          </div>
+
+          {/** Order management */}
+          <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
+            <div className="grid grid-cols-1 gap-2 px-2">
+              <div className="flex items-center justify-between px-3 py-2">
+                <div className="text-lg font-bold">Member NFT Minter</div>
+              </div>
+              <MemberMintingTable />
+            </div>
           </div>
         </div>
       </div>
