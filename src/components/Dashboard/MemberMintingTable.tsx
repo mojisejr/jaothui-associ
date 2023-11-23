@@ -45,7 +45,7 @@ const MemberMintingTable = () => {
             <Loading />
           ) : (
             <>
-              {mintables == undefined && mintables!.mintable.length <= 0 ? (
+              {mintables == undefined ? (
                 <div>No data</div>
               ) : (
                 <>

@@ -28,7 +28,9 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
 
   const handleSetImage = async () => {
     if (user!.avatar! == null || user!.avatar! == undefined) {
-      admin ? setImage("/images/Committee.jpg") : setImage("/image/Member.jpg");
+      admin
+        ? setImage("/images/Committee.jpg")
+        : setImage("/images/Member.jpg");
     } else {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       const { data } = await supabase.storage
@@ -39,7 +41,7 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
       } else {
         admin
           ? setImage("/images/Committee.jpg")
-          : setImage("/image/Member.jpg");
+          : setImage("/images/Member.jpg");
       }
     }
   };
