@@ -33,6 +33,25 @@ export const getAllMicrochips = async () => {
   }
 };
 
+export const checkIfHasMicrochip = async (microchipId: string) => {
+  try {
+    const microchip = await prisma.microchip.findUnique({
+      where: {
+        microchip: microchipId,
+      },
+    });
+
+    if (!microchip) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    throw new Error(
+      "low-level: cannot find any microchip avaliable in database"
+    );
+  }
+};
+
 // get one avaliable microchip
 export const getAvaliableMicrochip = async () => {
   try {
@@ -50,40 +69,40 @@ export const getAvaliableMicrochip = async () => {
   }
 };
 
-export const markMicrochipAsSold = async (id: number) => {
+export const markMicrochipAsSold = async (microchip: string) => {
   try {
     const marked = await prisma.microchip.update({
       data: {
         sold: true,
       },
       where: {
-        id,
+        microchip,
       },
     });
     if (!marked) {
-      throw new Error(`low-level: marked #${id.toString()} as sold failed`);
+      throw new Error(`low-level: marked #${microchip} as sold failed`);
     }
     return marked;
   } catch (error) {
-    throw new Error(`low-level: cannot mark #${id.toString()} as sold`);
+    throw new Error(`low-level: cannot mark #${microchip} as sold`);
   }
 };
 
-export const markMicrochipAsActive = async (id: number) => {
+export const markMicrochipAsActive = async (microdhipId: string) => {
   try {
     const marked = await prisma.microchip.update({
       data: {
         active: true,
       },
       where: {
-        id,
+        microchip: microdhipId,
       },
     });
     if (!marked) {
-      throw new Error(`low-level: marked #${id.toString()} as active failed`);
+      throw new Error(`low-level: marked #${microdhipId} as active failed`);
     }
     return marked;
   } catch (error) {
-    throw new Error(`low-level: cannot mark #${id.toString()} as active`);
+    throw new Error(`low-level: cannot mark #${microdhipId} as active`);
   }
 };

@@ -25,8 +25,8 @@ const MicrochipTable = () => {
     isError: activatingError,
   } = api.microchip.activate.useMutation();
 
-  const microchipActivate = (id: number) => {
-    activate({ id });
+  const microchipActivate = (microchip: string) => {
+    activate({ microchip });
   };
 
   console.log(microchips);
@@ -124,7 +124,7 @@ const MicrochipTable = () => {
                           !microchip.shipped
                         }
                         onClick={() =>
-                          microchipActivate(microchip.microchip!.id)
+                          microchipActivate(microchip.microchip!.microchip)
                         }
                         className="btn-primary btn-xs btn"
                       >

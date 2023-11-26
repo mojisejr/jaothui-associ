@@ -25,9 +25,20 @@ const Microchip = () => {
         <div className="grid grid-cols-1 px-10">
           <div className="place-self-end">
             {inventory == undefined || inventory.count <= 0 ? null : (
-              <Link href="/microchip/buy" className="btn-primary btn-xs btn">
-                <BiSolidMicrochip /> buy microchip
-              </Link>
+              <ul className="menu rounded-box menu-horizontal">
+                <li>
+                  <Link href="/microchip/buy?installHere=true">
+                    <BiSolidMicrochip />
+                    Buy & Install
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/microchip/buy?installHere=false">
+                    <BiSolidMicrochip />
+                    Buy Online
+                  </Link>
+                </li>
+              </ul>
             )}
           </div>
           <div className="overflow-auto">
