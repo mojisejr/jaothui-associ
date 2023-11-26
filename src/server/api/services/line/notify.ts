@@ -42,7 +42,7 @@ export async function registrationNotify({
         },
       }
     );
-    console.log("notification response", response);
+    // console.log("notification response", response);
     return true;
   } catch (error) {
     console.log("notification error: ", error);
@@ -92,7 +92,7 @@ export async function microchipPaymentNotify({
         },
       }
     );
-    console.log("notification response", response);
+    // console.log("notification response", response);
     return true;
   } catch (error) {
     console.log("notification error: ", error);

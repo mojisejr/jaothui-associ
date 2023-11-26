@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
+  checkIfHasMicrochip,
   getAllMicrochips,
   getAvaliableMicrochip,
   markMicrochipAsActive,
@@ -53,11 +54,10 @@ export const microchipRouter = createTRPCRouter({
         });
       }
     }),
-  buy: publicProcedure
+  buyOnline: publicProcedure
     .input(
       z.object({
         wallet: z.string(),
-        farmId: z.number(),
         shippingAddress: z.string(),
         slipUrl: z.string(),
         buffaloName: z.string(),
@@ -85,7 +85,6 @@ export const microchipRouter = createTRPCRouter({
         const created = await ctx.prisma.microchipOrder.create({
           data: {
             wallet: input.wallet,
-            farmId: input.farmId,
             buffaloName: input.buffaloName,
             buffaloBirthday: input.buffaloBirthday,
             buffaloColor: input.buffaloColor,
@@ -115,7 +114,7 @@ export const microchipRouter = createTRPCRouter({
         });
 
         //3. marked microchip as used
-        const marked = await markMicrochipAsSold(microchip.id);
+        const marked = await markMicrochipAsSold(microchip.microchip);
 
         if (!marked) {
           //delete added data if it failed to avoid the confilt
@@ -136,19 +135,106 @@ export const microchipRouter = createTRPCRouter({
         });
       }
     }),
-  activate: publicProcedure
+
+  buyAndInstallHere: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        wallet: z.string(),
+        slipUrl: z.string(),
+        buffaloName: z.string(),
+        buffaloBirthday: z.string(),
+        buffaloColor: z.string(),
+        buffaloSex: z.string(),
+        buffaloHeight: z.number().nullable(),
+        buffaloIpfsUrl: z.string(),
+        buffaloOrigin: z.string().nullable(),
+        microchipId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const marked = await markMicrochipAsActive(input.id);
+        //1. get avaliable microchip
+        // const microchip = await getAvaliableMicrochip();
+        const canInstall = await checkIfHasMicrochip(input.microchipId);
+
+        if (!canInstall) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Microchip is not in stock, Please contact team",
+          });
+        }
+
+        //2. save to database
+        const created = await ctx.prisma.microchipOrder.create({
+          data: {
+            wallet: input.wallet,
+            shippingAddress: "on-site",
+            approved: true,
+            shipped: true,
+            buffaloName: input.buffaloName,
+            buffaloBirthday: input.buffaloBirthday,
+            buffaloColor: input.buffaloColor,
+            buffaloHeight: input.buffaloHeight?.toString() ?? "0",
+            buffaloipfsUrl: input.buffaloIpfsUrl,
+            buffaloOrigin: input.buffaloOrigin ?? "thai",
+            buffaloSex: input.buffaloSex,
+            microchipId: input.microchipId,
+            slipUrl: input.slipUrl.trim(),
+            timestamp: new Date(),
+          },
+        });
+
+        if (!created) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "saving orders failed",
+          });
+        }
+
+        await microchipPaymentNotify({
+          wallet: input.wallet,
+          name: input.buffaloName,
+          microchip: input.microchipId,
+          slipUrl: getMicrochipSlipUrl(input.slipUrl.trim()).data.publicUrl,
+        });
+
+        //3. marked microchip as used and installed on site
+        const marked = await markMicrochipAsSold(input.microchipId);
+        const installed = await markMicrochipAsActive(input.microchipId);
+
+        if (!marked || !installed) {
+          //delete added data if it failed to avoid the confilt
+          await ctx.prisma.microchipOrder.delete({
+            where: {
+              id: created.id,
+            },
+          });
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "marking as sold failed",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "buying processing failed, contact team",
+        });
+      }
+    }),
+  activate: publicProcedure
+    .input(
+      z.object({
+        microchip: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const marked = await markMicrochipAsActive(input.microchip);
         if (!marked) {
           throw new TRPCError({
             code: "BAD_REQUEST",
-            message: `cannot activite #${input.id.toString()}`,
+            message: `cannot activite #${input.microchip}`,
           });
         }
       } catch (error) {
