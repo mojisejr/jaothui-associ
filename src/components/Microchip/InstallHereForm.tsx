@@ -125,145 +125,118 @@ const BuyMicrochipAndInstallHere = () => {
     <Layout>
       <div className="mt-[120px] h-[80vh] w-full overflow-auto">
         <div className="flex flex-col items-center gap-3">
-          <div className="text-xl font-bold">
-            Microchip & Buffalo Registration
-          </div>
-          <form className="max-w-xs py-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="text-2xl font-bold">สั่งซื้อและติดตั้ง microchip</div>
+          <form
+            className="grid max-w-xs grid-cols-1 gap-2 py-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="form-control">
-              <label className="label font-bold">Owner Name</label>
+              <label className="label font-bold">ชื่อเจ้าของ</label>
               <input
                 readOnly={true}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
                 value={user?.name ?? "loading.."}
               ></input>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Buffalo{"'"} name</label>
+              <label className="label font-bold">ข้อมูลควาย</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
-                placeholder="buffalo's name"
+                placeholder="ชื่อควาย"
                 required
                 {...register("name", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label">Color</label>
               <select
                 disabled={buying || loading}
-                className="select-bordered select"
+                className="select-bordered select select-sm rounded-full"
                 required
                 {...register("color", { required: true })}
               >
+                <option selected disabled>
+                  สีผิว
+                </option>
                 <option value="Black">Black</option>
                 <option value="Albino">Albino</option>
               </select>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label">Gender</label>
               <select
                 disabled={buying || loading}
-                className="select-bordered select"
+                className="select-bordered select select-sm rounded-full"
                 required
                 {...register("sex", { required: true })}
               >
+                <option selected disabled>
+                  เพศ
+                </option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
             <div className="form-control">
-              <label className="label">Birthday</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="date"
+                placeholder="วัน/เดือน/ปี เกิด"
                 required
                 {...register("birthday", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Origin</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
-                placeholder="eg. thai"
+                placeholder="แหล่งกำเนิด  (ตัวอย่าง. thai)"
                 {...register("origin")}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Height</label>
-              <label className="label-alt-text text-right">cm</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
+                placeholder="ส่วนสูง (เซนติเมตร)"
                 type="text"
-                placeholder="167"
                 {...register("height", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Buffalo Image</label>
-              <label className="label-alt-text text-right text-red-500">
-                *only png available
-              </label>
+              <label className="label font-bold">ภาพควาย</label>
               <input
                 disabled={buying || loading}
-                className="file-input input-bordered max-w-xs"
+                className="file-input input-bordered file-input-sm max-w-xs rounded-full"
                 type="file"
-                accept="image/png"
+                accept="image/png, image/jpg, image/jpeg"
                 required
                 {...register("buffaloImage", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
               <label className="label font-bold">Microchip ID</label>
-              <label className="label-alt-text text-right text-red-500">
-                *installing microchip ID
-              </label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
+                placeholder="หมายเลข microchip"
                 required
                 {...register("microchipId", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
-            <div className="card my-2 rounded-xl bg-primary text-white shadow">
+            <div className="card my-2 rounded-xl bg-slate-200 shadow">
               <div className="card-body">
                 <div className="card-title underline">ชำระเงินที่บัญชี</div>
                 <p className="font-bold underline">429-160308-9</p>
@@ -273,10 +246,10 @@ const BuyMicrochipAndInstallHere = () => {
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Payment Slip</label>
+              <label className="label font-bold">แนบสลิปโอน</label>
               <input
                 disabled={buying || loading}
-                className="file-input input-bordered max-w-xs"
+                className="file-input input-bordered file-input-sm max-w-xs rounded-full"
                 type="file"
                 accept="image/png, image/jpg, image/jpeg"
                 required
@@ -293,7 +266,7 @@ const BuyMicrochipAndInstallHere = () => {
               <button
                 disabled={buying || loading}
                 type="submit"
-                className="btn-primary btn"
+                className="btn-primary btn rounded-full"
               >
                 {buying || loading ? (
                   <div className="flex items-center gap-2">

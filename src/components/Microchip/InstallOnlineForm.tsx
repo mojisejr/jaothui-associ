@@ -158,236 +158,190 @@ const BuyMicrochipOnline = () => {
           <div className="text-xl font-bold">
             Microchip & Buffalo Registration
           </div>
-          <form className="max-w-xs py-6" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="grid max-w-xs grid-cols-1 gap-2 py-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="form-control">
-              <label className="label font-bold">Owner Name</label>
+              <label className="label font-bold">ชื่อเจ้าของ</label>
               <input
                 readOnly={true}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
                 value={user?.name ?? "loading.."}
               ></input>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Buffalo{"'"} name</label>
+              <label className="label font-bold">ข้อมูลควาย</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
-                placeholder="buffalo's name"
+                placeholder="ชื่อควาย"
                 required
                 {...register("name", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label">Color</label>
               <select
                 disabled={buying || loading}
-                className="select-bordered select"
+                className="select-bordered select select-sm rounded-full"
                 required
                 {...register("color", { required: true })}
               >
+                <option selected disabled>
+                  สีผิว
+                </option>
                 <option value="Black">Black</option>
                 <option value="Albino">Albino</option>
               </select>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label">Gender</label>
               <select
                 disabled={buying || loading}
-                className="select-bordered select"
+                className="select-bordered select select-sm rounded-full"
                 required
                 {...register("sex", { required: true })}
               >
+                <option selected disabled>
+                  เพศ
+                </option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
             <div className="form-control">
-              <label className="label">Birthday</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="date"
+                placeholder="วัน/เดือน/ปี เกิด"
                 required
                 {...register("birthday", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Origin</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
-                placeholder="eg. thai"
+                placeholder="แหล่งกำเนิด (ตัวอย่าง. thai)"
                 {...register("origin")}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Height</label>
-              <label className="label-alt-text text-right">cm</label>
               <input
                 disabled={buying || loading}
-                className="input-bordered input max-w-xs"
+                className="input-bordered input input-sm max-w-xs rounded-full"
                 type="text"
-                placeholder="167"
+                placeholder="ส่วนสูง (เซนติเมตร)"
                 {...register("height", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Buffalo Image</label>
-              <label className="label-alt-text text-right text-red-500">
-                *only png available
-              </label>
               <input
                 disabled={buying || loading}
-                className="file-input input-bordered max-w-xs"
+                className="file-input input-bordered file-input-sm max-w-xs rounded-full"
                 type="file"
                 accept="image/png, image/jpeg, image/jpg"
                 required
                 {...register("buffaloImage", { required: true })}
               ></input>
-              <label className="label">
-                <span className="label-text-alt text-red-500">*required</span>
-              </label>
             </div>
 
-            {/** Address Selecor form */}
-            <div className="input-group-md">
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">บ้านเลขที่</span>
-                </label>
-                <input
-                  type="text"
-                  disabled={buying || loading}
-                  {...register("address", { required: true })}
-                  className="input-bordered input w-full max-w-xs"
-                />
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">จังหวัด</span>
-                </label>
-                <select
-                  className="select-bordered select"
-                  required
-                  disabled={buying || loading}
-                  {...register("province", { required: true })}
-                >
-                  <option disabled selected>
-                    เลือก
-                  </option>
-                  {getProvinces().map((p, index) => (
-                    <option key={index} value={p}>
-                      {p}
+            <div className="form-group">
+              <label className="label font-bold">ที่อยู่</label>
+              <div className="grid grid-cols-1 gap-2">
+                <div className="form-control w-full max-w-xs">
+                  <input
+                    type="text"
+                    disabled={buying || loading}
+                    {...register("address", { required: true })}
+                    placeholder={"บ้านเลขที่"}
+                    className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <select
+                    className="select-bordered  select select-sm rounded-full"
+                    required
+                    disabled={buying || loading}
+                    {...register("province", { required: true })}
+                  >
+                    <option disabled selected>
+                      จังหวัด
                     </option>
-                  ))}
-                </select>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">อำเภอ</span>
-                </label>
-                <select
-                  className="select-bordered select"
-                  required
-                  disabled={buying || loading}
-                  {...register("amphoe", { required: true })}
-                >
-                  <option disabled selected>
-                    เลือก
-                  </option>
-                  {getAmphoeFromProvince(province!).map((p, index) => (
-                    <option key={index} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">ตำบล</span>
-                </label>
-                <select
-                  className="select-bordered select"
-                  required
-                  disabled={buying || loading}
-                  {...register("district", { required: true })}
-                >
-                  <option disabled selected>
-                    เลือก
-                  </option>
-                  {getDistrictsFromAmphoe(province!, amphoe!).map(
-                    (p, index) => (
+                    {getProvinces().map((p, index) => (
                       <option key={index} value={p}>
                         {p}
                       </option>
-                    )
-                  )}
-                </select>
-                <label className="label">
-                  <span className="label-text-alt text-red-500">*required</span>
-                </label>
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">รหัสไปรษณีย์</span>
-                </label>
-                <input
-                  type="number"
-                  required
-                  {...register("zipcode", { required: true })}
-                  className="input-bordered input w-full max-w-xs"
-                />
-              </div>
-              <div className="form-control w-full max-w-xs p-2">
-                <label className="label">
-                  <span className="label-text">โทร.</span>
-                </label>
-                <input
-                  type="string"
-                  required
-                  {...register("tel", { required: true })}
-                  className="input-bordered input w-full max-w-xs"
-                />
+                    ))}
+                  </select>
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <select
+                    className="select-bordered  select select-sm rounded-full"
+                    required
+                    disabled={buying || loading}
+                    {...register("amphoe", { required: true })}
+                  >
+                    <option disabled selected>
+                      อำเภอ
+                    </option>
+                    {getAmphoeFromProvince(province!).map((p, index) => (
+                      <option key={index} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <select
+                    className="select-bordered  select select-sm rounded-full"
+                    required
+                    disabled={buying || loading}
+                    {...register("district", { required: true })}
+                  >
+                    <option disabled selected>
+                      ตำบล
+                    </option>
+                    {getDistrictsFromAmphoe(province!, amphoe!).map(
+                      (p, index) => (
+                        <option key={index} value={p}>
+                          {p}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <input
+                    type="number"
+                    required
+                    placeholder="รหัสไปรษณีย์"
+                    {...register("zipcode", { required: true })}
+                    className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <input
+                    type="text"
+                    required
+                    placeholder="โทรศัพท์"
+                    {...register("tel", { required: true })}
+                    className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="card my-2 rounded-xl bg-primary text-white shadow">
+            <div className="card my-2 rounded-xl bg-slate-200  shadow">
               <div className="card-body">
                 <div className="card-title underline">ชำระเงินที่บัญชี</div>
                 <p className="font-bold underline">429-160308-9</p>
@@ -397,10 +351,10 @@ const BuyMicrochipOnline = () => {
             </div>
 
             <div className="form-control">
-              <label className="label font-bold">Payment Slip</label>
+              <label className="label font-bold">แนบสลิปโอน</label>
               <input
                 disabled={buying || loading}
-                className="file-input input-bordered max-w-xs"
+                className="file-input input-bordered file-input-sm max-w-xs rounded-full"
                 type="file"
                 accept="image/png, image/jpg, image/jpeg"
                 required
@@ -417,7 +371,7 @@ const BuyMicrochipOnline = () => {
               <button
                 disabled={buying || loading}
                 type="submit"
-                className="btn-primary btn"
+                className="btn-primary btn rounded-full"
               >
                 {buying || loading ? (
                   <div className="flex items-center gap-2">
