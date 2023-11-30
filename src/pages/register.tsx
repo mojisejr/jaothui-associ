@@ -130,170 +130,130 @@ const Register = () => {
             <>
               <div className="flex flex-col items-center w768:mt-[80px] w1440:mt-[150px]">
                 <div
-                  style={{ fontFamily: "Kanit" }}
-                  className="mb-2 text-[2rem] w768:text-[3rem]"
-                >
-                  สมัครสมาชิก
-                </div>
-                <div
                   className={`w-full ${
                     registering ? "bg-[#eee]" : "bg-white"
                   } text-black`}
                 >
                   <form
-                    className="flex flex-col gap-3 p-10 shadow-lg"
+                    className="grid grid-cols-1 gap-2 bg-opacity-25 p-10 shadow-lg"
                     onSubmit={handleSubmit(onSubmit)}
                   >
+                    <div
+                      style={{ fontFamily: "Kanit" }}
+                      className="mb-2 text-center text-[2rem] w768:text-[3rem]"
+                    >
+                      สมัครสมาชิก
+                    </div>
                     <div className="form-control w-full max-w-xs">
-                      <label className="label">
-                        <span className="label-text">ชื่อ - นามสกุล</span>
-                      </label>
                       <input
                         type="text"
                         required
+                        placeholder="ชื่อ นามสกุล"
                         disabled={registering}
                         {...register("name", { required: true })}
-                        className="input-bordered input w-full max-w-xs"
+                        className="input-bordered  input input-sm w-full max-w-xs rounded-full"
                       />
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
                     </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">เบอร์โทรศัพท์</span>
-                      </label>
+                    <div className="form-control w-full max-w-xs">
                       <input
                         type="text"
                         disabled={registering}
+                        placeholder="เบอร์โทรศัพท์"
                         required
                         {...register("tel", { required: true })}
-                        className="input-bordered input w-full max-w-xs"
+                        className="input-bordered  input input-sm w-full max-w-xs rounded-full"
                       />
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
                     </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">อีเมล(ถ้ามี)</span>
-                      </label>
+                    <div className="form-control w-full max-w-xs">
                       <input
                         type="email"
                         disabled={registering}
+                        placeholder="อีเมลล์ (ถ้ามี)"
                         {...register("email", { required: false })}
-                        className="input-bordered input w-full max-w-xs"
+                        className="input-bordered  input input-sm w-full max-w-xs rounded-full"
                       />
                     </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">บ้านเลขที่</span>
-                      </label>
-                      <input
-                        type="text"
-                        disabled={registering}
-                        {...register("address", { required: true })}
-                        className="input-bordered input w-full max-w-xs"
-                      />
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
-                    </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">จังหวัด</span>
-                      </label>
-                      <select
-                        className="select-bordered select"
-                        required
-                        disabled={registering}
-                        {...register("province", { required: true })}
-                      >
-                        <option disabled selected>
-                          เลือก
-                        </option>
-                        {getProvinces().map((p, index) => (
-                          <option key={index} value={p}>
-                            {p}
-                          </option>
-                        ))}
-                      </select>
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
-                    </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">อำเภอ</span>
-                      </label>
-                      <select
-                        className="select-bordered select"
-                        required
-                        disabled={registering}
-                        {...register("amphoe", { required: true })}
-                      >
-                        <option disabled selected>
-                          เลือก
-                        </option>
-                        {getAmphoeFromProvince(province!).map((p, index) => (
-                          <option key={index} value={p}>
-                            {p}
-                          </option>
-                        ))}
-                      </select>
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
-                    </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">ตำบล</span>
-                      </label>
-                      <select
-                        className="select-bordered select"
-                        required
-                        disabled={registering}
-                        {...register("district", { required: true })}
-                      >
-                        <option disabled selected>
-                          เลือก
-                        </option>
-                        {getDistrictsFromAmphoe(province!, amphoe!).map(
-                          (p, index) => (
-                            <option key={index} value={p}>
-                              {p}
+
+                    <div className="form-group ">
+                      <label className="label">ที่อยู่</label>
+                      <div className="grid grid-cols-1 gap-2">
+                        <div className="form-control w-full max-w-xs">
+                          <input
+                            type="text"
+                            disabled={registering}
+                            {...register("address", { required: true })}
+                            placeholder={"บ้านเลขที่"}
+                            className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                          />
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                          <select
+                            className="select-bordered  select select-sm rounded-full"
+                            required
+                            disabled={registering}
+                            {...register("province", { required: true })}
+                          >
+                            <option disabled selected>
+                              จังหวัด
                             </option>
-                          )
-                        )}
-                      </select>
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
+                            {getProvinces().map((p, index) => (
+                              <option key={index} value={p}>
+                                {p}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                          <select
+                            className="select-bordered  select select-sm rounded-full"
+                            required
+                            disabled={registering}
+                            {...register("amphoe", { required: true })}
+                          >
+                            <option disabled selected>
+                              อำเภอ
+                            </option>
+                            {getAmphoeFromProvince(province!).map(
+                              (p, index) => (
+                                <option key={index} value={p}>
+                                  {p}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                          <select
+                            className="select-bordered  select select-sm rounded-full"
+                            required
+                            disabled={registering}
+                            {...register("district", { required: true })}
+                          >
+                            <option disabled selected>
+                              ตำบล
+                            </option>
+                            {getDistrictsFromAmphoe(province!, amphoe!).map(
+                              (p, index) => (
+                                <option key={index} value={p}>
+                                  {p}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                          <input
+                            type="number"
+                            required
+                            placeholder="รหัสไปรษณีย์"
+                            {...register("zipcode", { required: true })}
+                            className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">รหัสไปรษณีย์</span>
-                      </label>
-                      <input
-                        type="number"
-                        required
-                        {...register("zipcode", { required: true })}
-                        className="input-bordered input w-full max-w-xs"
-                      />
-                    </div>
-                    <div className="form-control w-full max-w-xs p-2">
+
+                    <div className="form-control w-full max-w-xs">
                       <label className="label">
                         <span className="label-text">Bitkub Next</span>
                       </label>
@@ -303,34 +263,26 @@ const Register = () => {
                         disabled={true}
                         value={wallet}
                         {...register("wallet", { value: wallet })}
-                        className="input-bordered input w-full max-w-xs"
+                        className="input-bordered  input input-sm w-full max-w-xs rounded-full"
                       />
                     </div>
-                    <div className="form-control w-full max-w-xs p-2">
-                      <label className="label">
-                        <span className="label-text">ตัวเลือกสมาชิก</span>
-                      </label>
+                    <div className="form-control w-full max-w-xs">
                       <select
-                        className="select-bordered select"
+                        className="select-bordered  select select-sm rounded-full"
                         required
                         disabled={registering}
                         {...register("payment", { required: true })}
                       >
                         <option disabled selected>
-                          เลือก
+                          รูปแบบสมาชิก
                         </option>
                         <option value="1">รายปี 100 บาท</option>
                         <option value="2">ตลอดชีพ 600 บาท</option>
                       </select>
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
                     </div>
                     <div>
                       <div>หมายเลขบัญชีสมาคม</div>
-                      <div className="bg-slate-200 p-2">
+                      <div className="rounded-xl bg-slate-200 p-4">
                         <div>ธนาคารกรุงศรีอยุธยา</div>
                         <div>
                           เลขที่บัญชี{" "}
@@ -341,7 +293,7 @@ const Register = () => {
                     </div>
                     <div className="form-control w-full max-w-xs">
                       <label className="label">
-                        <span className="label-text">แนบสลิป</span>
+                        <span className="label-text font-bold">แนบสลิป</span>
                       </label>
                       <input
                         type="file"
@@ -349,13 +301,8 @@ const Register = () => {
                         disabled={registering}
                         required
                         {...register("file", { required: true })}
-                        className="file-input-bordered file-input w-full max-w-xs"
+                        className="file-input-bordered file-input file-input-sm w-full max-w-xs rounded-full"
                       />
-                      <label className="label">
-                        <span className="label-text-alt text-red-500">
-                          *required
-                        </span>
-                      </label>
                     </div>
                     <button className="btn" type="submit">
                       {registering ? (
