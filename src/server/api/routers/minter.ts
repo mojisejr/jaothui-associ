@@ -8,9 +8,9 @@ export const minterRouter = createTRPCRouter({
   getMintable: publicProcedure.query(async () => {
     try {
       const mintable = await getMintableWallet();
-      if (mintable!.mintable.length <= 0) {
-        throw new TRPCError({ code: "BAD_REQUEST" });
-      }
+      // if (mintable!.mintable.length <= 0) {
+      //   throw new TRPCError({ code: "BAD_REQUEST" });
+      // }
       return mintable;
     } catch (error) {
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });

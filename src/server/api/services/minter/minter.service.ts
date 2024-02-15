@@ -5,11 +5,14 @@ const url = process.env.minter_url as string;
 
 export const getMemberByMemberId = async (memberId: string) => {
   try {
-    const member = await axios.get<any>(`${url}/member/${memberId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.bkey!}`,
-      },
-    });
+    const member = await axios.get<{ wallet: string; name: string }>(
+      `${url}/member/${memberId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.bkey!}`,
+        },
+      }
+    );
     return member.data;
   } catch (error) {
     console.log("error", error);
@@ -24,7 +27,7 @@ export const updateWallet = async (
 ) => {
   if (!wallet.startsWith("0x")) return;
   try {
-    const walletData = await axios.post<any>(
+    const walletData = await axios.post<{ wallet: string }>(
       `${url}/member/updateWallet`,
       {
         memberId,
@@ -47,13 +50,12 @@ export const updateWallet = async (
 
 export const getMintableWallet = async () => {
   try {
-    return undefined;
-    // const mintable = await axios.get<Mintable>(`${url}/member/mintable`, {
-    //   headers: {
-    //     Authorization: `Bearer ${process.env.bkey!}`,
-    //   },
-    // });
-    // return mintable.data;
+    const mintable = await axios.get<Mintable>(`${url}/member/mintable`, {
+      headers: {
+        Authorization: `Bearer ${process.env.bkey!}`,
+      },
+    });
+    return mintable.data;
   } catch (error) {
     console.log("error", error);
     return undefined;

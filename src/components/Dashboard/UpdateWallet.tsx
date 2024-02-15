@@ -15,12 +15,12 @@ const UpdateWallet = () => {
   const memberIdRef = useRef<HTMLInputElement>(null);
   const walletRef = useRef<HTMLInputElement>(null);
   const keyRef = useRef<HTMLInputElement>(null);
-  const memberIdSearch = async () => {
+  const memberIdSearch = () => {
     const id = memberIdRef.current?.value;
     getMember({ memberId: id! });
   };
 
-  const walletUpdate = async () => {
+  const walletUpdate = () => {
     const id = memberIdRef.current?.value;
     const wallet = walletRef.current?.value;
     const password = keyRef.current?.value;
@@ -46,7 +46,10 @@ const UpdateWallet = () => {
             placeholder="memberId แบบเดิม eg. H00x"
             className="input-bordered input input-xs max-w-xs"
           />
-          <button onClick={memberIdSearch} className="btn-primary btn-xs btn">
+          <button
+            onClick={() => void memberIdSearch()}
+            className="btn-primary btn-xs btn"
+          >
             ค้นหา
           </button>
         </div>
@@ -73,7 +76,7 @@ const UpdateWallet = () => {
                   className="input-bordered input input-xs max-w-xs"
                 />
                 <button
-                  onClick={walletUpdate}
+                  onClick={() => void walletUpdate()}
                   className="btn-primary btn-xs btn"
                 >
                   บันทึก
