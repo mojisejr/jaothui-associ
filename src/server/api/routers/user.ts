@@ -4,8 +4,30 @@ import { publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { getDaysPassedSincePaid } from "../utils/getDaysPassedSincePaid";
 import { warn } from "console";
+import {
+  getMemberByMemberId,
+  updateWallet,
+} from "../services/minter/minter.service";
 
 export const userRouter = createTRPCRouter({
+  //@dev: get user memberId
+  getMemberId: publicProcedure
+    .input(
+      z.object({
+        memberId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await getMemberByMemberId(input.memberId);
+    }),
+  //@dev: update memberId to wallet
+  updateWallet: publicProcedure
+    .input(
+      z.object({ memberId: z.string(), wallet: z.string(), key: z.string() })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await updateWallet(input.memberId, input.wallet, input.key);
+    }),
   //@Dev: Get user count
   userCount: publicProcedure.query(async ({ ctx }) => {
     const count = await ctx.prisma.user.count();
