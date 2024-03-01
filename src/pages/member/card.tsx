@@ -50,21 +50,19 @@ const Card = () => {
 
   return (
     <>
-      <Layout>
-        <div className="relative flex min-h-screen w-full items-center justify-center">
-          {loadingUser || loadingAdmin ? (
-            <Loading />
-          ) : (
-            <MemberCard
-              wallet={wallet as string}
-              name={user?.name as string}
-              avatar={user?.avatar as string}
-              admin={admin}
-              isLifeTime={user?.payment[0]?.isLifeTime as boolean}
-            />
-          )}
-        </div>
-      </Layout>
+      <div className="relative flex min-h-screen w-full items-center justify-center">
+        {loadingUser || loadingAdmin ? (
+          <Loading />
+        ) : (
+          <MemberCard
+            wallet={wallet as string}
+            name={user?.name as string}
+            avatar={user?.avatar as string}
+            admin={admin}
+            isLifeTime={user?.payment[0]?.isLifeTime as boolean}
+          />
+        )}
+      </div>
     </>
   );
 };

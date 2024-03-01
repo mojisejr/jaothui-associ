@@ -55,6 +55,7 @@ export const getMintableWallet = async () => {
         Authorization: `Bearer ${process.env.bkey!}`,
       },
     });
+
     return mintable.data;
   } catch (error) {
     console.log("error", error);

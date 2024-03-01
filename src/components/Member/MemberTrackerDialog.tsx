@@ -35,9 +35,9 @@ const MemberModalDialog = () => {
   return (
     <>
       {!userLoading ? (
-        <div className="flex gap-3">
+        <>
           <div
-            className={`btn rounded-xl ${
+            className={`btn rounded-md ${
               user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
             } font-bold text-black`}
             onClick={() => window.member_dialog.showModal()}
@@ -46,7 +46,7 @@ const MemberModalDialog = () => {
           </div>
           {user?.active ? (
             <>
-              <Link
+              {/* <Link
                 href="/member/card"
                 className="btn rounded-xl bg-[#55ff34] font-bold text-black"
               >
@@ -57,10 +57,10 @@ const MemberModalDialog = () => {
                 href="/member/farm"
               >
                 ฟาร์ม
-              </Link>
+              </Link> */}
             </>
           ) : null}
-        </div>
+        </>
       ) : (
         <Loading />
       )}

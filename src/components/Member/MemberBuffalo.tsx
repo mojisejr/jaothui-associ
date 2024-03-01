@@ -3,7 +3,7 @@ import { FaCow } from "react-icons/fa6";
 
 function MemberBuffaloCard() {
   return (
-    <div className="flex min-w-[180px] max-w-[300px] flex-col items-center justify-center gap-2 rounded-md bg-white py-2 text-black">
+    <div className="flex min-w-[180px] max-w-[300px] flex-col items-center justify-center gap-2 rounded-md border-[1px] border-primary bg-white py-2 text-black hover:shadow-xl">
       <div className="flex flex-col items-center justify-center">
         <FaCow size={60} />
         <span>จำนวนควาย</span>

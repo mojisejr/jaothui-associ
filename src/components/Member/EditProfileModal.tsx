@@ -73,8 +73,8 @@ const EditProfileModal = () => {
     }
     const fileBolb = inputRef.current?.files![0];
 
-    if (fileBolb!.size > 1000000) {
-      toast.error("Cannot upload file that larger than 1 Mb");
+    if (fileBolb!.size > 3000000) {
+      toast.error("Cannot upload file that larger than 3 Mb");
     } else {
       setSrc(fileBolb);
     }
@@ -147,7 +147,7 @@ const EditProfileModal = () => {
               />
               <label className="label">
                 <span className="label-text-alt"></span>
-                <span className="label-text-alt">less than 1 Mb</span>
+                <span className="label-text-alt">less than 3 Mb</span>
               </label>
             </div>
             {isLoading ? (
