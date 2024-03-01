@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import Footer from "~/components/Information/Footer";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { Layout } from "~/components/Shared/Layout";
+import InformationGridV2 from "~/components/Member/InformatinoGridV2";
 
 const Member = () => {
   const { wallet, tokens, isConnected } = useBitkubNext();

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { BsPersonPlusFill } from "react-icons/bs";
 import MemberCardMenu from "./MemberCardMenu";
 import { useEffect, useState } from "react";
 import { supabase } from "~/server/supabase";

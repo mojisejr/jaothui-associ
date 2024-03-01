@@ -3,7 +3,7 @@ import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 
 function MemberPedigreeCard() {
   return (
-    <div className="flex min-w-[180px] max-w-[300px] flex-col items-center justify-center gap-2 rounded-md bg-white px-2 py-2 text-black">
+    <div className="flex min-w-[180px] max-w-[300px] flex-col items-center justify-center gap-2 rounded-md border-[1px] border-primary bg-white px-2 py-2 text-black hover:shadow-xl">
       <div className="flex flex-col items-center justify-center">
         <HiOutlineClipboardDocumentList size={60} />
         <span>ควายที่มีใบรับรอง</span>

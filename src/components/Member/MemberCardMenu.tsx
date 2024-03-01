@@ -1,6 +1,7 @@
 import { BsPencilFill } from "react-icons/bs";
 import EditProfileModal from "./EditProfileModal";
 import AddFarmModal from "./AddFarmModal";
+import Link from "next/link";
 
 const MemberCardMenu = () => {
   return (
@@ -15,16 +16,19 @@ const MemberCardMenu = () => {
               onClick={() => window.edit_profile_dialog.showModal()}
               className="hover:text-base-200 hover:underline"
             >
-              Edit Picture
+              แก้ไขรูปภาพ
             </button>
           </li>
           <li>
-            <button
+            {/* <button
               onClick={() => window.edit_farm_dialog.showModal()}
               className="hover:text-base-200 hover:underline"
             >
-              Add Farm
-            </button>
+              เพิ่มฟาร์ม
+            </button> */}
+          </li>
+          <li>
+            <Link href="/member/card">ดูบัตร</Link>
           </li>
         </ul>
       </details>

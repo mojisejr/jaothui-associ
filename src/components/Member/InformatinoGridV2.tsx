@@ -15,9 +15,19 @@ function InformationGridV2() {
 
   return (
     <>
+      <div className="py-2">
+        <MicrochipSearch />
+      </div>
+      <div>
+        <div className="my-2 flex flex-col gap-3 w768:flex-row">
+          <MemberBuffaloCard />
+          <MemberPedigreeCard />
+        </div>
+      </div>
       <div className="grid min-w-[320px] grid-cols-1">
         <div className="flex flex-col gap-2">
-          <div className="text-xl">
+          <MemberModalDialog />
+          {/* <div className="text-xl">
             <span className="font-bold">wallet: </span>
             {wallet != undefined
               ? `${wallet?.slice(0, 6)}...${wallet?.slice(38)}`
@@ -26,19 +36,7 @@ function InformationGridV2() {
           <div className="text-xl">
             <span className="font-bold">email:</span>{" "}
             {user ? user?.email : "N/A"}
-          </div>
-          <div className="flex">
-            <MemberModalDialog />
-          </div>
-        </div>
-      </div>
-      <div className="py-2">
-        <MicrochipSearch />
-      </div>
-      <div>
-        <div className="my-2 flex flex-col gap-3 w768:flex-row">
-          <MemberBuffaloCard />
-          <MemberPedigreeCard />
+          </div> */}
         </div>
       </div>
     </>
