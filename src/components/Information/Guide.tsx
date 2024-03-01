@@ -1,3 +1,4 @@
+import YouTube from "react-youtube";
 const Guide = () => {
   return (
     <>
@@ -15,18 +16,30 @@ const Guide = () => {
           w1024:flex-row"
           >
             <div className="flex flex-col items-center gap-2">
-              <div className="h-[200px] min-w-[250px] bg-black"></div>
+              <YouTube
+                videoId="h5XWQWDSF9A"
+                opts={{
+                  height: "200",
+                  width: "300",
+                  playerVars: {
+                    autoplay: 1,
+                  },
+                }}
+              />
               <div style={{ fontFamily: "Kanit" }}>วิธีสมัครสมาชิกสมาคม</div>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <div className="h-[200px] min-w-[250px]  bg-black"></div>
-              <div style={{ fontFamily: "Kanit" }}>วิธีการขึ้นทะเบียนควาย</div>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-[200px] min-w-[250px]  bg-black"></div>
-              <div style={{ fontFamily: "Kanit" }}>
-                วิธีการขอใบรับรองพันธุ์ประวัติ
-              </div>
+              <YouTube
+                videoId="Es8ulDG9VzU"
+                opts={{
+                  height: "200",
+                  width: "300",
+                  playerVars: {
+                    autoplay: 1,
+                  },
+                }}
+              />
+              <div style={{ fontFamily: "Kanit" }}>วิธีอัพเดดบัตรสมาชิก</div>
             </div>
           </div>
         </div>

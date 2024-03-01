@@ -37,10 +37,10 @@ const Information = () => {
         >
           <HeaderTitle text="ข้อมูลสมาคม" />
           <div
-            className="flex flex-row gap-3 py-10 px-2
+            className="flex flex-row gap-3 px-2 py-10
           w768:flex-row
-          w768:py-0
-          w768:gap-[4rem]"
+          w768:gap-[4rem]
+          w768:py-0"
           >
             <MemberCountBox />
             <PedigreeCountBox />
@@ -49,7 +49,7 @@ const Information = () => {
           <MemberSearch />
           <About />
           <Guide />
-          <Advertisement />
+          {/* <Advertisement />
           <div className="flex flex-col items-center gap-2">
             <div
               className="px-1 py-2 text-[2rem] text-white"
@@ -58,7 +58,7 @@ const Information = () => {
               Buffalo Map
             </div>
             <Dynamap />
-          </div>
+          </div> */}
           <Footer />
         </div>
       </div>
