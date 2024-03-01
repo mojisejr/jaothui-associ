@@ -19,7 +19,7 @@ function InformationGridV2() {
         <MicrochipSearch />
       </div>
       <div>
-        <div className="my-2 flex flex-col gap-3 w768:flex-row">
+        <div className="my-2 flex flex-col items-center justify-center gap-3 w768:flex-row">
           <MemberBuffaloCard />
           <MemberPedigreeCard />
         </div>
