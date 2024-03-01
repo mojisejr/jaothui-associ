@@ -54,7 +54,7 @@ const EditProfileModal = () => {
         query: {
           title: "Success!",
           content: "Your Profile image is updated.",
-          backPath: "/member/card",
+          backPath: "/member",
         },
       });
       setIsLoading(false);
@@ -129,7 +129,7 @@ const EditProfileModal = () => {
                 width={250}
                 height={250}
                 border={50}
-                color={[255, 255, 255, 0.6]}
+                color={[0, 0, 0, 0.2]}
                 scale={1.2}
                 rotate={0}
               />
