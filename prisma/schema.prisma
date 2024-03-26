@@ -12,27 +12,28 @@ datasource db {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  avatar         String?
-  name           String?
-  farmName       String?
-  wallet         String           @unique
-  address        String           @db.Text
-  province       String           @db.Text
-  lat            Float?
-  lon            Float?
-  role           String           @default("USER")
-  lineId         String?          @unique @db.Text
-  email          String?
-  tel            String?          @db.Text
-  payment        Payment[]
-  active         Boolean          @default(false)
-  approved       String[]         @default([])
-  approvedCount  Int              @default(0)
-  createdAt      DateTime         @default(now())
-  updateAt       DateTime         @updatedAt
-  Farm           Farm[]
-  MicrochipOrder MicrochipOrder[]
+  id                  Int                  @id @default(autoincrement())
+  avatar              String?
+  name                String?
+  farmName            String?
+  wallet              String               @unique
+  address             String               @db.Text
+  province            String               @db.Text
+  lat                 Float?
+  lon                 Float?
+  role                String               @default("USER")
+  lineId              String?              @unique @db.Text
+  email               String?
+  tel                 String?              @db.Text
+  payment             Payment[]
+  active              Boolean              @default(false)
+  approved            String[]             @default([])
+  approvedCount       Int                  @default(0)
+  createdAt           DateTime             @default(now())
+  updateAt            DateTime             @updatedAt
+  Farm                Farm[]
+  MicrochipOrder      MicrochipOrder[]
+  CertificateApprover CertificateApprover?
 }
 
 model Farm {
@@ -124,4 +125,17 @@ model MicrochipOrder {
   buffaloHeight   String
   buffaloipfsUrl  String
   timestamp       DateTime
+}
+
+model Certificate {
+  microchip String                @id @unique
+  approvers CertificateApprover[]
+  isActive  Boolean               @default(false)
+}
+
+model CertificateApprover {
+  wallet       String        @id @unique
+  signatureUrl String?
+  user         User          @relation(fields: [wallet], references: [wallet])
+  certificates Certificate[]
 }
