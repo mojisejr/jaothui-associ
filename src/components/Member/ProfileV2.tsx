@@ -49,7 +49,7 @@ const ProfileV2 = () => {
           {loadingUser || loadingAdmin ? (
             <Loading />
           ) : (
-            <div className="grid grid-cols-1  gap-2">
+            <div className="grid grid-cols-1 gap-2">
               <ProfileHeader
                 wallet={wallet as string}
                 name={user?.name as string}
@@ -57,7 +57,7 @@ const ProfileV2 = () => {
                 admin={admin}
                 isLifeTime={user?.payment[0]?.isLifeTime as boolean}
               />
-              <div className="my-2 max-w-md px-2">
+              <div className="max-w-md px-2">
                 <MicrochipSearch />
               </div>
               <ProfileMenu />
