@@ -34,7 +34,7 @@ const ProfileV2 = () => {
   return (
     <>
       <div
-        className="block max-h-full min-h-[700px] bg-cover  py-3 text-primary sm:flex  sm:justify-center
+        className="max-h-full min-h-[700px] bg-cover  py-3 text-primary sm:flex  sm:justify-center
       w768:mt-[70px]
       w1024:mt-[100px]
       w1440:mt-[150px]"
@@ -44,12 +44,12 @@ const ProfileV2 = () => {
       w1024:pt-[50px]
       w1440:pt-[100px]"
       > */}
-        <div className="flex max-w-[900px] flex-col">
-          {/* <InformationGridV2 /> */}
-          {loadingUser || loadingAdmin ? (
-            <Loading />
-          ) : (
-            <div className="grid grid-cols-1 gap-2">
+        {/* <InformationGridV2 /> */}
+        {loadingUser || loadingAdmin ? (
+          <Loading />
+        ) : (
+          <div>
+            <div className="grid grid-cols-1 gap-4">
               <ProfileHeader
                 wallet={wallet as string}
                 name={user?.name as string}
@@ -62,8 +62,8 @@ const ProfileV2 = () => {
               </div>
               <ProfileMenu />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
