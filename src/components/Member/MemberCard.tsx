@@ -89,7 +89,7 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
                 height={150}
                 alt="QR-code"
               />
-              <MemberCardMenu />
+              {/* <MemberCardMenu /> */}
             </div>
           </div>
         </div>

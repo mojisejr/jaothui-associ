@@ -1,6 +1,3 @@
-import Head from "next/head";
-import Profile from "~/components/Member/Profile";
-import Navbar from "~/components/Nav";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -8,7 +5,7 @@ import { api } from "~/utils/api";
 import Footer from "~/components/Information/Footer";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { Layout } from "~/components/Shared/Layout";
-import InformationGridV2 from "~/components/Member/InformatinoGridV2";
+import ProfileV2 from "~/components/Member/ProfileV2";
 
 const Member = () => {
   const { wallet, tokens, isConnected } = useBitkubNext();
@@ -39,7 +36,7 @@ const Member = () => {
   return (
     <>
       <Layout>
-        <Profile />
+        <ProfileV2 />
         <Footer />
       </Layout>
     </>

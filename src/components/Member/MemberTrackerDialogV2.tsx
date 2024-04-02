@@ -9,10 +9,11 @@ import { api } from "~/utils/api";
 import { FaWpforms } from "react-icons/fa6";
 import { FaSearchDollar } from "react-icons/fa";
 import { MdFactCheck, MdOutlineApproval } from "react-icons/md";
-import Link from "next/link";
 import Loading from "../Shared/LoadingIndicator";
+import { FaCheck } from "react-icons/fa";
+import { TbProgressCheck } from "react-icons/tb";
 
-const MemberModalDialog = () => {
+const MemberModalDialogV2 = () => {
   const { wallet, tokens } = useBitkubNext();
   const { data: user, isLoading: userLoading } = api.user.get.useQuery({
     accessToken: tokens?.access_token as string,
@@ -37,12 +38,22 @@ const MemberModalDialog = () => {
       {!userLoading ? (
         <>
           <div
-            className={`btn rounded-md ${
+            className={`badge-xl badge rounded-xl ${
               user?.active ? "bg-[#55ff34]" : "bg-[#fe0]"
-            } font-bold text-black`}
+            } text-black`}
             onClick={() => window.member_dialog.showModal()}
           >
-            {user?.active ? "อนุมัติ" : "ตรวจสอบการอนุมัติ"}
+            {user?.active ? (
+              <div className="flex items-center gap-1">
+                <FaCheck />
+                อนุมัติ
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <TbProgressCheck />
+                ตรวจสอบการอนุมัติ
+              </div>
+            )}
           </div>
           {user?.active ? (
             <>
@@ -126,4 +137,4 @@ const MemberModalDialog = () => {
   );
 };
 
-export default MemberModalDialog;
+export default MemberModalDialogV2;
