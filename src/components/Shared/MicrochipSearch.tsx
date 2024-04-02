@@ -12,15 +12,15 @@ function MicrochipSearch() {
   }
 
   return (
-    <div className="z-10 flex gap-3 rounded-full border-2 border-black bg-white pr-3">
+    <div className="z-10 flex gap-3 rounded-full border-[1px] border-slate-500 bg-white p-1 pr-3">
       <input
         type="text"
         placeholder="MICROCHIP ID..."
         maxLength={15}
-        className="input w-full max-w-[420px] rounded-full text-black focus:outline-none"
+        className="input input-sm w-full max-w-[420px] rounded-full text-black focus:outline-none"
         ref={searchInput}
       ></input>
-      <button className="text-black" onClick={handleSearch}>
+      <button className="text-slate-700" onClick={handleSearch}>
         <ImSearch size={30} />
       </button>
     </div>

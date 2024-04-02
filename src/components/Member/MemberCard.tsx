@@ -26,7 +26,7 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
   }, [user]);
 
   const handleSetImage = async () => {
-    if (user!.avatar! == null || user!.avatar! == undefined) {
+    if (user!.avatar == null || user!.avatar == undefined) {
       admin
         ? setImage("/images/Committee.jpg")
         : setImage("/images/Member.jpg");
@@ -89,7 +89,7 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
                 height={150}
                 alt="QR-code"
               />
-              <MemberCardMenu />
+              {/* <MemberCardMenu /> */}
             </div>
           </div>
         </div>

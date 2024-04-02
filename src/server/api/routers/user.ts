@@ -67,7 +67,6 @@ export const userRouter = createTRPCRouter({
           payment: true,
         },
       });
-
       if (user != null) {
         return user;
       } else {
@@ -177,8 +176,60 @@ export const userRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const updated = await ctx.prisma.user.update({
+      await ctx.prisma.user.update({
         data: { avatar: input.filename! },
+        where: { wallet: input.wallet },
+      });
+    }),
+  updateName: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        data: { name: input.name },
+        where: { wallet: input.wallet },
+      });
+    }),
+  updateAddr: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        addr: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        data: { address: input.addr },
+        where: { wallet: input.wallet },
+      });
+    }),
+  updateTel: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        tel: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        data: { tel: input.tel },
+        where: { wallet: input.wallet },
+      });
+    }),
+  updateEmail: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        data: { email: input.email },
         where: { wallet: input.wallet },
       });
     }),

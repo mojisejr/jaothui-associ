@@ -7,6 +7,7 @@ import { farmRouter } from "./routers/farm";
 import { eventRouter } from "./routers/event";
 import { microchipRouter } from "./routers/microchip";
 import { minterRouter } from "./routers/minter";
+import { certificationRouter } from "./routers/certificate";
 
 /**
  * This is the primary router for your server.
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   event: eventRouter,
   microchip: microchipRouter,
   minter: minterRouter,
+  certification: certificationRouter,
 });
 
 // export type definition of API
