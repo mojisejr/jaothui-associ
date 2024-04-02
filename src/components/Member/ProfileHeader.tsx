@@ -47,7 +47,7 @@ const ProfileHeader = ({ admin, isLifeTime, name }: ProfileHeaderProps) => {
   };
 
   return (
-    <div className="bg-base-200 px-3 py-2">
+    <div className="max-h-[200px] bg-base-200 px-3 py-2">
       <div className="flex items-center gap-4">
         <div className="avatar relative">
           <div className="w-24 rounded-full">
