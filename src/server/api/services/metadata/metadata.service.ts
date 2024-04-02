@@ -81,9 +81,9 @@ export const canApprove = async (approver: string, microchip: string) => {
   if (metadata == null) return true;
 
   const hasPermanent =
-    metadata?.approvers.filter((a) => a.wallet == permanentAddress).length! > 0;
+    metadata.approvers.filter((a) => a.wallet == permanentAddress).length > 0;
 
-  if (metadata?.approvers === undefined) return false;
+  if (metadata.approvers === undefined) return false;
 
   if (hasPermanent && metadata.approvers.length <= 3) {
     return true;

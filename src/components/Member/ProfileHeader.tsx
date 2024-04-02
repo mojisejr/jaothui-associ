@@ -27,7 +27,7 @@ const ProfileHeader = ({ admin, isLifeTime, name }: ProfileHeaderProps) => {
   }, [user]);
 
   const handleSetImage = async () => {
-    if (user!.avatar! == null || user!.avatar! == undefined) {
+    if (user!.avatar == null || user!.avatar == undefined) {
       admin
         ? setImage("/images/Committee.jpg")
         : setImage("/images/Member.jpg");

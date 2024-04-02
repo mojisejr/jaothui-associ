@@ -52,7 +52,7 @@ const CertificateApprovementTable = () => {
   useEffect(() => {
     setCurrentData(metadata!);
     if (approved) {
-      refetch();
+      void refetch();
       toast.success("Approved เรียบร้อยแล้ว");
     }
   }, [currentData, setCurrentData, metadata, approved]);
@@ -91,8 +91,8 @@ const CertificateApprovementTable = () => {
               {loadingMetadata ? (
                 <Loading />
               ) : (
-                currentData?.map((m) => (
-                  <tr>
+                currentData?.map((m, index) => (
+                  <tr key={index}>
                     <td>{m.microchip}</td>
                     <td>{m.name}</td>
                     <td>

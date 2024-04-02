@@ -47,13 +47,13 @@ const MemberInfoPage = () => {
   useEffect(() => {
     if (nameEdited || addrEdited || telEdited || emailEdited) {
       toast.success("แก้ไข้ข้อมูลส่วนตัวสำเร็จ!");
-      refetch();
+      void refetch();
       setEditing(false);
     }
 
     if (nameEditError || addrEditError || telEditError || emailEditError) {
       toast.error("แก้ไข้ไม่สำเร็จ!");
-      refetch();
+      void refetch();
       setEditing(false);
     }
   }, [
@@ -77,7 +77,7 @@ const MemberInfoPage = () => {
 
   const handleSetImage = async () => {
     if (!user) return;
-    if (user!.avatar! == null || user!.avatar! == undefined) {
+    if (user.avatar == null || user.avatar == undefined) {
       admin
         ? setImage("/images/Committee.jpg")
         : setImage("/images/Member.jpg");
@@ -85,7 +85,7 @@ const MemberInfoPage = () => {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       const { data } = await supabase.storage
         .from("slipstorage/avatar")
-        .getPublicUrl(`${user!.avatar}`);
+        .getPublicUrl(`${user.avatar}`);
       if (data != undefined) {
         setImage(data.publicUrl);
       } else {
@@ -96,7 +96,7 @@ const MemberInfoPage = () => {
     }
   };
 
-  async function handleEditName(ref: RefObject<HTMLInputElement>) {
+  function handleEditName(ref: RefObject<HTMLInputElement>) {
     if (
       ref.current?.value == "" ||
       ref.current?.value == undefined ||
@@ -109,7 +109,7 @@ const MemberInfoPage = () => {
       ref.current.value = "";
     }
   }
-  async function handleEditAddress(ref: RefObject<HTMLInputElement>) {
+  function handleEditAddress(ref: RefObject<HTMLInputElement>) {
     if (
       ref.current?.value == "" ||
       ref.current?.value == undefined ||
@@ -122,7 +122,7 @@ const MemberInfoPage = () => {
       ref.current.value = "";
     }
   }
-  async function handleEditEmail(ref: RefObject<HTMLInputElement>) {
+  function handleEditEmail(ref: RefObject<HTMLInputElement>) {
     if (
       ref.current?.value == "" ||
       ref.current?.value == undefined ||
@@ -135,7 +135,7 @@ const MemberInfoPage = () => {
       ref.current.value = "";
     }
   }
-  async function handleEditTel(ref: RefObject<HTMLInputElement>) {
+  function handleEditTel(ref: RefObject<HTMLInputElement>) {
     if (
       ref.current?.value == "" ||
       ref.current?.value == undefined ||
@@ -170,8 +170,8 @@ const MemberInfoPage = () => {
             <div className="join-vertical join w-full w768:max-w-sm">
               <UserInfoAccordianItem
                 title="ชื่อ"
-                content={user!.name ?? "ไม่มีข้อมูล"}
-                placeholder={user!.name ?? "ไม่มีข้อมูล"}
+                content={user.name ?? "ไม่มีข้อมูล"}
+                placeholder={user.name ?? "ไม่มีข้อมูล"}
                 action={handleEditName}
                 loading={editing}
                 disabled={editing}
@@ -179,8 +179,8 @@ const MemberInfoPage = () => {
               />
               <UserInfoAccordianItem
                 title="ที่อยู่"
-                content={user!.address ?? "ไม่มีข้อมูล"}
-                placeholder={user!.address ?? "ไม่มีข้อมูล"}
+                content={user.address ?? "ไม่มีข้อมูล"}
+                placeholder={user.address ?? "ไม่มีข้อมูล"}
                 action={handleEditAddress}
                 loading={editing}
                 disabled={editing}
@@ -188,8 +188,8 @@ const MemberInfoPage = () => {
               />
               <UserInfoAccordianItem
                 title="โทรศัพท์"
-                content={user!.tel ?? "ไม่มีข้อมูล"}
-                placeholder={user!.tel ?? "ไม่มีข้อมูล"}
+                content={user.tel ?? "ไม่มีข้อมูล"}
+                placeholder={user.tel ?? "ไม่มีข้อมูล"}
                 action={handleEditTel}
                 loading={editing}
                 disabled={editing}
@@ -197,8 +197,8 @@ const MemberInfoPage = () => {
               />
               <UserInfoAccordianItem
                 title="อีเมล"
-                content={user!.email ?? "ไม่มีข้อมูล"}
-                placeholder={user!.email ?? "ไม่มีข้อมูล"}
+                content={user.email ?? "ไม่มีข้อมูล"}
+                placeholder={user.email ?? "ไม่มีข้อมูล"}
                 action={handleEditEmail}
                 loading={editing}
                 disabled={editing}
@@ -207,11 +207,11 @@ const MemberInfoPage = () => {
               <UserInfoAccordianItem
                 title="Bitkub next"
                 content={
-                  `${wallet?.slice(0, 6)}...${wallet?.slice(38)}` ??
-                  "ไม่มีข้อมูล"
+                  wallet
+                    ? `${wallet?.slice(0, 6)}...${wallet?.slice(38)}`
+                    : "N/A"
                 }
                 placeholder="ไม่สามารถแก้ไขได้"
-                action={() => {}}
                 loading={false}
                 disabled={true}
                 buttonName="-"
@@ -233,7 +233,7 @@ interface UserInfoAccordianItemProps {
   content: string;
   placeholder: string;
   buttonName: string;
-  action: any;
+  action?: (ref: RefObject<HTMLInputElement>) => void;
   disabled: boolean;
   loading: boolean;
 }
@@ -268,7 +268,7 @@ function UserInfoAccordianItem({
           </div>
           <button
             disabled={disabled}
-            onClick={() => action(ref)}
+            onClick={action ? () => action(ref) : undefined}
             className="btn-primary btn-outline btn-sm btn"
           >
             {loading ? <Loading /> : buttonName}

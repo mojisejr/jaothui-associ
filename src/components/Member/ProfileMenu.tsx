@@ -17,7 +17,7 @@ const ProfileMenu = () => {
 
   function handleSignOut() {
     signOut();
-    replace("/");
+    void replace("/");
   }
 
   useEffect(() => {
