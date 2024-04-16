@@ -34,6 +34,7 @@ model User {
   Farm                Farm[]
   MicrochipOrder      MicrochipOrder[]
   CertificateApprover CertificateApprover?
+  Certificate         Certificate[]
 }
 
 model Farm {
@@ -132,7 +133,10 @@ model Certificate {
   no        Int                   @default(autoincrement())
   approvers CertificateApprover[]
   isActive  Boolean               @default(false)
+  bornAt    String?               @default("N/A")
+  user      User                  @relation(fields: [wallet], references: [wallet])
   updatedAt DateTime              @updatedAt
+  wallet    String
 }
 
 model CertificateApprover {

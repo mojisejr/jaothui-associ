@@ -38,5 +38,10 @@ declare global {
       close: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    certificate_approve_dialog: {
+      showModal: () => void;
+      close: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
   }
 }

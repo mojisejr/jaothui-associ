@@ -4,8 +4,17 @@ import Loading from "~/components/Shared/LoadingIndicator";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { MappedMetadata } from "~/interfaces/Metadata";
 import { api } from "~/utils/api";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CertificateApprovementDialog from "./CertificateApprovementDialog";
+
+type ApproveType = {
+  bornAt: string;
+  owner: string;
+};
 
 const CertificateApprovementTable = () => {
+  const [currentMicrochip, setCurrentMicrochip] = useState<string>();
+  const [hasApproveData, setHasApprovementData] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<MappedMetadata[]>([]);
   const { wallet } = useBitkubNext();
   const { data: isApprover } = api.certification.isApprover.useQuery({
@@ -18,11 +27,8 @@ const CertificateApprovementTable = () => {
   } = api.certification.getAllMetadata.useQuery({
     wallet: wallet as string,
   });
-  const {
-    mutate: approve,
-    isLoading: approving,
-    isSuccess: approved,
-  } = api.certification.approve.useMutation();
+
+  const { isSuccess: approved } = api.certification.approve.useMutation();
 
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -38,49 +44,63 @@ const CertificateApprovementTable = () => {
 
     if (isNumberic) {
       const byMicrochip = metadata?.find((m) => m.microchip == value);
-      setCurrentData([byMicrochip!]);
+      if (!byMicrochip) {
+        setCurrentData([]);
+        return;
+      }
+
+      setCurrentData([byMicrochip]);
     } else {
       const byName = metadata?.find((m) => m.name.includes(value as string));
-      setCurrentData([byName!]);
+      if (!byName) {
+        setCurrentData([]);
+        return;
+      }
+      setCurrentData([byName]);
     }
   }
 
-  function handleApprove(wallet: string, microchip: string) {
-    approve({ wallet, microchip });
+  function handleApprovement(microchip: string, hasApprovementData: boolean) {
+    setCurrentMicrochip(microchip);
+    setHasApprovementData(hasApprovementData);
+    window.certificate_approve_dialog.showModal();
   }
 
   useEffect(() => {
-    setCurrentData(metadata!);
     if (approved) {
       void refetch();
-      toast.success("Approved เรียบร้อยแล้ว");
+      setCurrentData(metadata!);
     }
   }, [currentData, setCurrentData, metadata, approved]);
 
+  useEffect(() => {
+    setCurrentData(metadata!);
+  }, [metadata]);
+
   return (
     <div>
+      <div className="flex p-2">
+        <label className="text-label label"></label>
+        <input
+          onChange={() => {
+            if (searchRef.current?.value == "") {
+              setCurrentData(metadata!);
+            }
+          }}
+          ref={searchRef}
+          placeholder="microchip or name"
+          className="input-bordered input input-xs max-w-[200px]"
+          type="text"
+        ></input>
+        <button
+          onClick={() => handleSearch()}
+          className="btn-primary btn-xs btn"
+        >
+          search
+        </button>
+      </div>
       {isApprover ? (
         <div className="max-h-[400px] overflow-auto">
-          <div className="flex p-2">
-            <label className="text-label label"></label>
-            <input
-              onChange={() => {
-                if (searchRef.current?.value == "") {
-                  setCurrentData(metadata!);
-                }
-              }}
-              ref={searchRef}
-              placeholder="microchip or name"
-              className="input-bordered input input-xs max-w-[200px]"
-              type="text"
-            ></input>
-            <button
-              onClick={() => handleSearch()}
-              className="btn-primary btn-xs btn"
-            >
-              search
-            </button>
-          </div>
           <table className="table">
             <thead>
               <th>microchip</th>
@@ -98,12 +118,11 @@ const CertificateApprovementTable = () => {
                     <td>
                       <button
                         onClick={() =>
-                          handleApprove(wallet as string, m.microchip)
+                          handleApprovement(m.microchip, m.hasApprovementData)
                         }
-                        disabled={approving}
                         className="disabled:bg-tranparent btn-primary btn-xs btn"
                       >
-                        {approving ? <Loading /> : "approve"}
+                        Approve
                       </button>
                     </td>
                   </tr>
@@ -115,6 +134,10 @@ const CertificateApprovementTable = () => {
       ) : (
         <div>สำหรับผู้จัดการระบบ certificate เท่านั้น</div>
       )}
+      <CertificateApprovementDialog
+        microchip={currentMicrochip!}
+        hasApproveData={hasApproveData}
+      />
     </div>
   );
 };

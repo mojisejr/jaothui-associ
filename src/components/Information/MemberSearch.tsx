@@ -1,5 +1,4 @@
 import { ImSearch } from "react-icons/im";
-import MemberSearchDialog from "../MemberList/MemberSearchDialog";
 import { api } from "~/utils/api";
 import { useEffect, useRef } from "react";
 import Loading from "../Shared/LoadingIndicator";

@@ -1,6 +1,4 @@
 import { api } from "~/utils/api";
-import InformationGridV2 from "./InformatinoGridV2";
-import MemberCard from "./MemberCard";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useEffect } from "react";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
@@ -10,11 +8,7 @@ import ProfileMenu from "./ProfileMenu";
 import MicrochipSearch from "../Shared/MicrochipSearch";
 
 const ProfileV2 = () => {
-  const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: registered } = api.user.isRegistered.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
+  const { wallet, tokens } = useBitkubNext();
 
   const {
     data: user,
@@ -25,7 +19,7 @@ const ProfileV2 = () => {
     accessToken: tokens?.access_token as string,
   });
 
-  const { admin, isSuccess, isLoading: loadingAdmin, isError } = useIsAdmin();
+  const { admin, isLoading: loadingAdmin } = useIsAdmin();
 
   useEffect(() => {
     void refetch();

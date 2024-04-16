@@ -17,7 +17,7 @@ interface ProfileHeaderProps {
 const ProfileHeader = ({ admin, isLifeTime, name }: ProfileHeaderProps) => {
   const [image, setImage] = useState<string>("/images/Member.jpg");
   const { wallet, tokens } = useBitkubNext();
-  const { data: user, isLoading } = api.user.get.useQuery({
+  const { data: user } = api.user.get.useQuery({
     wallet: wallet as string,
     accessToken: tokens?.access_token as string,
   });
