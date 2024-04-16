@@ -52,6 +52,25 @@ export const userRouter = createTRPCRouter({
         return false;
       }
     }),
+  getPublicCard: publicProcedure
+    .input(z.object({ wallet: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: { wallet: input.wallet },
+        include: {
+          payment: true,
+        },
+      });
+
+      const cardData = {
+        wallet: user?.wallet,
+        name: user?.name,
+        avatar: user?.avatar,
+        isLifeTime: user?.payment[0]?.isLifeTime,
+      };
+
+      return cardData;
+    }),
   //@Dev: get user by wallet
   get: publicProcedure
     .input(
