@@ -188,7 +188,8 @@ const ApprovementDashBoard = () => {
               <UpdateWallet />
             </div>
           </div>
-          {/** Update wallet management */}
+
+          {/** Certificate Approvement */}
           <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
             <div className="grid grid-cols-1 gap-2 px-2">
               <div className="flex items-center justify-between px-3 py-2">

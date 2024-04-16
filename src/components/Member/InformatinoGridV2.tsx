@@ -1,18 +1,10 @@
 import React from "react";
-import { api } from "../../utils/api";
-import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import MicrochipSearch from "../Shared/MicrochipSearch";
 import MemberBuffaloCard from "./MemberBuffalo";
 import MemberPedigreeCard from "./MemberPedigree";
 import MemberModalDialog from "./MemberTrackerDialog";
 
 function InformationGridV2() {
-  const { wallet, tokens } = useBitkubNext();
-  const { data: user } = api.user.get.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
-
   return (
     <>
       <div className="py-2">

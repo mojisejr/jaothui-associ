@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { AiFillFacebook, AiFillTwitterCircle } from "react-icons/ai";
-import { SiDiscord } from "react-icons/si";
 import { motion } from "framer-motion";
 
 const Footer = () => {

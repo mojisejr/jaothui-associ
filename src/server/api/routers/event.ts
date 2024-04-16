@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { getAllEvents } from "../services/sanity/event.service";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { ErrorInfo } from "react";
 
 export const eventRouter = createTRPCRouter({
   getEvents: publicProcedure.query(async () => {

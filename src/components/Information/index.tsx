@@ -5,7 +5,6 @@ import MemberCountBox from "./MemberCountBox";
 import MemberSearch from "./MemberSearch";
 import PedigreeCountBox from "./PedigreeCountBox";
 import Guide from "./Guide";
-import Advertisement from "./Ads";
 import Footer from "./Footer";
 
 import dynamic from "next/dynamic";

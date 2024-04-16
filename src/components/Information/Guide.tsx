@@ -22,7 +22,7 @@ const Guide = () => {
                   height: "200",
                   width: "300",
                   playerVars: {
-                    autoplay: 1,
+                    autoplay: 0,
                   },
                 }}
               />
@@ -35,7 +35,7 @@ const Guide = () => {
                   height: "200",
                   width: "300",
                   playerVars: {
-                    autoplay: 1,
+                    autoplay: 0,
                   },
                 }}
               />

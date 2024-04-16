@@ -8,7 +8,6 @@ import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 
 import AvatarEditor from "react-avatar-editor";
-import { decode } from "base64-arraybuffer";
 
 interface InputTypes {
   image?: string;

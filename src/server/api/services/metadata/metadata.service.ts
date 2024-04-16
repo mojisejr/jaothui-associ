@@ -14,6 +14,9 @@ export const getCertificationInfoOf = async (metadata: ParsedMetadata) => {
     name: metadata.name,
     approvers: certificateData?.approvers ?? [],
     isActive: certificateData?.isActive ?? false,
+    hasApprovementData:
+      certificateData?.bornAt == undefined ||
+      certificateData.wallet == undefined,
   };
 };
 
@@ -94,7 +97,48 @@ export const canApprove = async (approver: string, microchip: string) => {
   }
 };
 
-export const approve = async (approver: string, microchip: string) => {
+export const approveWithoutData = async (
+  approver: string,
+  microchip: string
+) => {
+  const approveValid = await canApprove(approver, microchip);
+  const approvedValid = await isApproved(approver, microchip);
+  if (!approveValid || approvedValid) return;
+
+  const approved = await prisma.certificate.update({
+    where: {
+      microchip,
+    },
+    data: {
+      approvers: {
+        connect: {
+          wallet: approver,
+        },
+      },
+    },
+    include: {
+      approvers: true,
+    },
+  });
+
+  if (approved.approvers.length == 3) {
+    await prisma.certificate.update({
+      where: { microchip },
+      data: {
+        isActive: true,
+      },
+    });
+  }
+
+  return approved;
+};
+
+export const approve = async (
+  approver: string,
+  microchip: string,
+  owner: string,
+  bornAt: string
+) => {
   try {
     const approveValid = await canApprove(approver, microchip);
     const approvedValid = await isApproved(approver, microchip);
@@ -105,6 +149,8 @@ export const approve = async (approver: string, microchip: string) => {
       },
       create: {
         microchip,
+        bornAt,
+        wallet: owner,
         approvers: {
           connect: {
             wallet: approver,

@@ -1,50 +1,17 @@
-// import { GrSearch } from "react-icons/gr";
 import { useState, useEffect, useRef } from "react";
 import { api } from "~/utils/api";
 import Loading from "../Shared/LoadingIndicator";
-// import MemberSearchByNameDialog from "../MemberList/MemberSearchByNameDialog";
 import WalletOrId from "../MemberList/WalletOrId";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 
 const WaitListTable = () => {
   const [active, setActive] = useState<boolean>(false);
-  // const searchInputRef = useRef<HTMLInputElement>(null);
   const { data, isLoading } = api.user.getWaitForApprovementUsers.useQuery();
   const { admin } = useIsAdmin();
-  // const {
-  //   data: searchData,
-  //   isLoading: searching,
-  //   isSuccess: searched,
-  //   mutate: search,
-  // } = api.user.getById.useMutation();
-
-  // const {
-  //   data: searchData,
-  //   isLoading: searching,
-  //   isSuccess: searched,
-  //   mutate: search,
-  // } = api.user.getUsersByName.useMutation();
 
   useEffect(() => {
     setActive(true);
   }, []);
-
-  // useEffect(() => {
-  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  //   if (searched && !window.search_by_name_dialog.hasAttribute("Open")) {
-  //     window.search_by_name_dialog.showModal();
-  //   }
-  // }, [searched]);
-
-  // function handleSearch() {
-  //   if (!searchInputRef.current?.value) {
-  //     return;
-  //   } else {
-  //     search({
-  //       name: searchInputRef.current?.value,
-  //     });
-  //   }
-  // }
 
   return (
     <div className="grid min-h-screen w-full grid-cols-5">
@@ -62,22 +29,6 @@ const WaitListTable = () => {
               ผู้สมัครที่ได้รับอนุมัติชำระเงินแล้ว รอ 15 วัน
             </h3>
           </div>
-
-          {/* <div className="flex items-center gap-2">
-            <span className="hidden text-xl font-bold">ค้นหา</span>
-            <div className="flex gap-2">
-              <input
-                ref={searchInputRef}
-                className="rounded-md bg-gray-200 px-2 py-2"
-                type="text"
-                placeholder="name or member Id"
-                disabled={searching}
-              ></input>
-              <button type="submit" onClick={handleSearch} disabled={searching}>
-                {searching ? <Loading /> : <GrSearch size={30} />}
-              </button>
-            </div>
-          </div> */}
         </div>
         <div className="h-[75vh] overflow-auto">
           {active ? (
@@ -147,17 +98,6 @@ const WaitListTable = () => {
         </div>
       </div>
       <div className="col-span-1"></div>
-      {/* <MemberSearchByNameDialog
-        users={
-          searchData != undefined
-            ? searchData?.map((s) => ({
-                name: s.name as string,
-                wallet: s.wallet,
-                type: s.payment[0]?.isLifeTime as boolean,
-              }))
-            : []
-        }
-      /> */}
     </div>
   );
 };

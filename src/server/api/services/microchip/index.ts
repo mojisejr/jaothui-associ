@@ -60,7 +60,7 @@ export const getAvaliableMicrochip = async () => {
         sold: false,
       },
     });
-    console.log(microchip);
+    // console.log(microchip);
     return microchip;
   } catch (error) {
     throw new Error(

@@ -4,6 +4,7 @@ import { Metadata } from "~/interfaces/Metadata";
 import { parseMetadataForCertificate } from "../utils/parseMetadataForCertificate";
 import {
   approve,
+  approveWithoutData,
   filterCertificateByApprover,
   getCertificationInfo,
   isApprover,
@@ -26,6 +27,7 @@ export const certificationRouter = createTRPCRouter({
         input.wallet,
         mappedMetadata
       );
+
       return filteredMetadata;
     }),
   isApprover: publicProcedure
@@ -34,8 +36,26 @@ export const certificationRouter = createTRPCRouter({
       return await isApprover(input.wallet);
     }),
   approve: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        microchip: z.string(),
+        owner: z.string(),
+        bornAt: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return await approve(
+        input.wallet,
+        input.microchip,
+        input.owner,
+        input.bornAt
+      );
+    }),
+
+  approveNoData: publicProcedure
     .input(z.object({ wallet: z.string(), microchip: z.string() }))
     .mutation(async ({ input }) => {
-      return await approve(input.wallet, input.microchip);
+      return await approveWithoutData(input.wallet, input.microchip);
     }),
 });

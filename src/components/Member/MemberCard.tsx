@@ -1,9 +1,9 @@
 import Image from "next/image";
-import MemberCardMenu from "./MemberCardMenu";
 import { useEffect, useState } from "react";
 import { supabase } from "~/server/supabase";
 import { api } from "~/utils/api";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
+import QrCodeGenerator from "./QrCodeGenerator";
 
 interface MemberCardProps {
   admin: boolean;
@@ -13,7 +13,13 @@ interface MemberCardProps {
   avatar: string;
 }
 
-const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
+const MemberCard = ({
+  admin,
+  isLifeTime,
+  name,
+  wallet: outsideWallet,
+  avatar: outsideAvatar,
+}: MemberCardProps) => {
   const [image, setImage] = useState<string>("/images/Member.jpg");
   const { wallet, tokens } = useBitkubNext();
   const { data: user } = api.user.get.useQuery({
@@ -23,16 +29,27 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
 
   useEffect(() => {
     void handleSetImage();
-  }, [user]);
+  }, [user, outsideAvatar, outsideWallet]);
 
-  const handleSetImage = async () => {
-    if (user!.avatar == null || user!.avatar == undefined) {
+  const handleSetImage = () => {
+    if (user == undefined && outsideAvatar !== undefined) {
+      const { data } = supabase.storage
+        .from("slipstorage/avatar")
+        .getPublicUrl(`${outsideAvatar}`);
+      if (data != undefined) {
+        setImage(data.publicUrl);
+      } else {
+        admin
+          ? setImage("/images/Committee.jpg")
+          : setImage("/images/Member.jpg");
+      }
+    } else if (user!.avatar == null || user!.avatar == undefined) {
       admin
         ? setImage("/images/Committee.jpg")
         : setImage("/images/Member.jpg");
     } else {
       // eslint-disable-next-line @typescript-eslint/await-thenable
-      const { data } = await supabase.storage
+      const { data } = supabase.storage
         .from("slipstorage/avatar")
         .getPublicUrl(`${user!.avatar}`);
       if (data != undefined) {
@@ -64,10 +81,17 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
                 <div className="text-xl font-bold">
                   {admin ? "COMMITTEE" : "MEMBER"}
                 </div>
-                <div className="text-sm font-bold leading-[0.6rem] text-gray-500">{`${wallet!.slice(
-                  0,
-                  5
-                )}...${wallet!.slice(38)}`}</div>
+                {wallet ? (
+                  <div className="text-sm font-bold leading-[0.6rem] text-gray-500">{`${wallet.slice(
+                    0,
+                    5
+                  )}...${wallet.slice(38)}`}</div>
+                ) : (
+                  <div className="text-sm font-bold leading-[0.6rem] text-gray-500">{`${outsideWallet.slice(
+                    0,
+                    5
+                  )}...${outsideWallet.slice(38)}`}</div>
+                )}
               </div>
               <div className="text-md font-bold">
                 <span>TYPE: </span> {isLifeTime ? "ตลอดชีพ" : "รายปี"}{" "}
@@ -82,13 +106,16 @@ const MemberCard = ({ admin, isLifeTime, name }: MemberCardProps) => {
             </div>
 
             <div>
-              <Image
+              <QrCodeGenerator
+                value={`https://kwaithai.com/member/${wallet!}`}
+              />
+              {/* <Image
                 className="relative"
                 src="/images/QR.png"
                 width={150}
                 height={150}
                 alt="QR-code"
-              />
+              /> */}
               {/* <MemberCardMenu /> */}
             </div>
           </div>

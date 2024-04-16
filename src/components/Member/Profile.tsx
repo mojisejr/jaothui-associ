@@ -7,12 +7,7 @@ import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import Loading from "../Shared/LoadingIndicator";
 
 const Profile = () => {
-  const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: registered } = api.user.isRegistered.useQuery({
-    accessToken: tokens?.access_token as string,
-    wallet: wallet as string,
-  });
-
+  const { wallet, tokens } = useBitkubNext();
   const {
     data: user,
     isLoading: loadingUser,

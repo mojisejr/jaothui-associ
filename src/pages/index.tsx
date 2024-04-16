@@ -4,6 +4,7 @@ import Information from "~/components/Information";
 import AlertMessageDialog from "~/components/Shared/AlertMessageDialog";
 import { Layout } from "~/components/Shared/Layout";
 import PleaseConnectWalletDialog from "~/components/Shared/PleaseConnectWalletDialog";
+import QrCodeGenerator from "~/components/Member/QrCodeGenerator";
 
 export default function Home() {
   return (

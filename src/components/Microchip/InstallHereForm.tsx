@@ -26,7 +26,7 @@ const BuyMicrochipAndInstallHere = () => {
   const { replace } = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { wallet, tokens, isConnected } = useBitkubNext();
-  const { data: user, isLoading: loadingUser } = api.user.get.useQuery({
+  const { data: user } = api.user.get.useQuery({
     wallet: wallet as string,
     accessToken: tokens?.access_token as string,
   });

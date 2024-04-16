@@ -29,4 +29,5 @@ export interface MappedMetadata {
   name: string;
   approvers?: { wallet: string; signatureUrl: string | null }[];
   isActive: boolean;
+  hasApprovementData: boolean;
 }
