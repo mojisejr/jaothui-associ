@@ -1,9 +1,11 @@
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "~/server/supabase";
 import { api } from "~/utils/api";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import QrCodeGenerator from "./QrCodeGenerator";
+import html2canvas from "html2canvas";
+import { HiDocumentDownload } from "react-icons/hi";
+import Image from "next/image";
 
 interface MemberCardProps {
   admin: boolean;
@@ -20,6 +22,7 @@ const MemberCard = ({
   wallet: outsideWallet,
   avatar: outsideAvatar,
 }: MemberCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
   const [image, setImage] = useState<string>("/images/Member.jpg");
   const { wallet, tokens } = useBitkubNext();
   const { data: user } = api.user.get.useQuery({
@@ -62,18 +65,34 @@ const MemberCard = ({
     }
   };
 
+  const handleDownload = async () => {
+    console.log(cardRef);
+    if (!cardRef) return;
+    const canvas = await html2canvas(cardRef.current!);
+    const data = canvas.toDataURL("image/png");
+    //vertual link element created
+    const link = document.createElement("a");
+
+    link.href = data;
+    link.download = `kwaithai-member-${new Date().getTime()}.png`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
-      <div className="card card-compact relative w-96 max-w-md rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-        <figure className="px-3 py-3">
-          <img
-            className="h-[350px] w-[350px] overflow-hidden rounded-xl object-contain object-center"
-            src={image}
-            width={350}
-            height={350}
-            alt="member-image"
-          />
-        </figure>
+      <div
+        ref={cardRef}
+        className="card card-compact relative w-96 max-w-md rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+      >
+        <div className="flex w-full items-center justify-center">
+          <figure className="relative h-[350px] w-[350px] overflow-hidden rounded-xl px-3 py-3">
+            <Image src={image} fill alt="member-image" />
+          </figure>
+        </div>
+
         <div className="card-body">
           <div className="flex items-center justify-between px-2 pb-2">
             <div className="flex flex-col items-start gap-3">
@@ -109,17 +128,17 @@ const MemberCard = ({
               <QrCodeGenerator
                 value={`https://kwaithai.com/member/${wallet!}`}
               />
-              {/* <Image
-                className="relative"
-                src="/images/QR.png"
-                width={150}
-                height={150}
-                alt="QR-code"
-              /> */}
-              {/* <MemberCardMenu /> */}
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex w-full justify-center py-5">
+        <button
+          onClick={() => void handleDownload()}
+          className="btn-circle btn ring ring-gray-400 hover:btn-primary hover:ring-green-400"
+        >
+          <HiDocumentDownload size={24} />
+        </button>
       </div>
     </>
   );

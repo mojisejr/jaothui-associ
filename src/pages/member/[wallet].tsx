@@ -1,13 +1,10 @@
-import Head from "next/head";
-import Navbar from "~/components/Nav";
-import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
-import Unauthurized from "~/components/Shared/Unauthorized";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import MemberCard from "~/components/Member/MemberCard";
 import Loading from "~/components/Shared/LoadingIndicator";
+import Image from "next/image";
 
 const PublicMemberCard = () => {
   const { query } = useRouter();
@@ -29,13 +26,29 @@ const PublicMemberCard = () => {
         {data == undefined ? (
           <Loading />
         ) : (
-          <MemberCard
-            wallet={data.wallet!}
-            name={data.name!}
-            avatar={data.avatar!}
-            admin={admin}
-            isLifeTime={data.isLifeTime!}
-          />
+          <div>
+            <div className="flex items-center gap-4 py-2">
+              <div className="w-24">
+                <Image
+                  src="/images/logo.png"
+                  alt="logo"
+                  width={150}
+                  height={150}
+                />
+              </div>
+              <div>
+                <h1 className="font-bold">สมาคมอนุรักษ์​ และ พัฒนาควายไทย</h1>
+                <p>บัตรประจำตัวสมาชิก</p>
+              </div>
+            </div>
+            <MemberCard
+              wallet={data.wallet!}
+              name={data.name!}
+              avatar={data.avatar!}
+              admin={admin}
+              isLifeTime={data.isLifeTime!}
+            />
+          </div>
         )}
       </div>
     </>
