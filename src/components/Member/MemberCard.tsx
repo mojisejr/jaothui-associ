@@ -82,7 +82,7 @@ const MemberCard = ({
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <div
         ref={cardRef}
         className="card card-compact relative w-96 max-w-md rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
@@ -132,7 +132,7 @@ const MemberCard = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-center py-5">
+      <div className="flex w-full justify-center">
         <button
           onClick={() => void handleDownload()}
           className="btn-circle btn ring ring-gray-400 hover:btn-primary hover:ring-green-400"
@@ -140,7 +140,7 @@ const MemberCard = ({
           <HiDocumentDownload size={24} />
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
