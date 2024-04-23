@@ -85,15 +85,24 @@ const MemberCard = ({
     <div className="flex flex-col gap-5">
       <div
         ref={cardRef}
-        className="card card-compact relative w-96 max-w-md rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+        className="card card-compact relative w-96 max-w-md overflow-hidden rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
       >
+        <div className="flex items-center justify-center gap-4 bg-slate-50 py-3">
+          <div className="w-14">
+            <Image src="/images/logo.png" alt="logo" width={150} height={150} />
+          </div>
+          <div>
+            <h1 className="font-bold">สมาคมอนุรักษ์​ และ พัฒนาควายไทย</h1>
+            <p>บัตรประจำตัวสมาชิก</p>
+          </div>
+        </div>
         <div className="flex w-full items-center justify-center">
           <figure className="relative h-[350px] w-[350px] overflow-hidden rounded-xl px-3 py-3">
             <Image src={image} fill alt="member-image" />
           </figure>
         </div>
 
-        <div className="card-body">
+        <div className="card-body bg-slate-50">
           <div className="flex items-center justify-between px-2 pb-2">
             <div className="flex flex-col items-start gap-3">
               <div>

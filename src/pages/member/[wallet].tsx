@@ -27,20 +27,6 @@ const PublicMemberCard = () => {
           <Loading />
         ) : (
           <div>
-            <div className="flex items-center gap-4 py-2">
-              <div className="w-24">
-                <Image
-                  src="/images/logo.png"
-                  alt="logo"
-                  width={150}
-                  height={150}
-                />
-              </div>
-              <div>
-                <h1 className="font-bold">สมาคมอนุรักษ์​ และ พัฒนาควายไทย</h1>
-                <p>บัตรประจำตัวสมาชิก</p>
-              </div>
-            </div>
             <MemberCard
               wallet={data.wallet!}
               name={data.name!}
