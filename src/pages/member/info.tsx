@@ -3,6 +3,7 @@ import { RiEdit2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import EditProfileModal from "~/components/Member/EditProfileModal";
+import MemberNameEdit from "~/components/Member/MemberNameEdit";
 import UserInfoAccordianItem from "~/components/Member/UserInfoAccordianItem";
 import { Layout } from "~/components/Shared/Layout";
 import Loading from "~/components/Shared/LoadingIndicator";
@@ -21,6 +22,10 @@ const MemberInfoPage = () => {
   } = api.user.get.useQuery({
     wallet: wallet as string,
     accessToken: tokens?.access_token as string,
+  });
+
+  const { data: canUpdateName } = api.user.isCanUpdateName.useQuery({
+    wallet: wallet!,
   });
 
   //@dev: Editors
@@ -97,17 +102,31 @@ const MemberInfoPage = () => {
     }
   };
 
-  function handleEditName(ref: RefObject<HTMLInputElement>) {
+  function handleEditName(
+    refPrefix: RefObject<HTMLSelectElement>,
+    refName: RefObject<HTMLInputElement>,
+    refLastName: RefObject<HTMLInputElement>
+  ) {
+    if (canUpdateName == false) return;
     if (
-      ref.current?.value == "" ||
-      ref.current?.value == undefined ||
-      ref.current?.value == null
+      refName.current?.value == "" ||
+      refName.current?.value == undefined ||
+      refName.current?.value == null ||
+      refLastName.current?.value == "" ||
+      refLastName.current?.value == undefined ||
+      refLastName.current?.value == null ||
+      refPrefix.current?.value == "" ||
+      refPrefix.current?.value == undefined ||
+      refPrefix.current?.value == null
     ) {
       setEditing(false);
     } else {
       setEditing(true);
-      editName({ wallet: wallet as string, name: ref.current?.value });
-      ref.current.value = "";
+      const fullName = `${refPrefix.current?.value} ${refName.current?.value} ${refLastName.current?.value}`;
+      editName({ wallet: wallet as string, name: fullName });
+      refName.current?.value == "";
+      refLastName.current?.value == "";
+      refPrefix.current?.value == "";
     }
   }
   function handleEditAddress(ref: RefObject<HTMLInputElement>) {
@@ -173,13 +192,13 @@ const MemberInfoPage = () => {
           </div>
           <div className="flex w-full items-center justify-center py-2">
             <div className="join-vertical join w-full w768:max-w-sm">
-              <UserInfoAccordianItem
+              <MemberNameEdit
                 title="ชื่อ"
                 content={user.name ?? "ไม่มีข้อมูล"}
                 placeholder={user.name ?? "ไม่มีข้อมูล"}
                 action={handleEditName}
                 loading={editing}
-                disabled={editing}
+                disabled={editing || canUpdateName! == false}
                 buttonName="แก้ไข"
               />
               <UserInfoAccordianItem

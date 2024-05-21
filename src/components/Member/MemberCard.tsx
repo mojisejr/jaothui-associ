@@ -6,6 +6,8 @@ import QrCodeGenerator from "./QrCodeGenerator";
 import html2canvas from "html2canvas";
 import { HiDocumentDownload } from "react-icons/hi";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 interface MemberCardProps {
   admin: boolean;
@@ -22,6 +24,7 @@ const MemberCard = ({
   wallet: outsideWallet,
   avatar: outsideAvatar,
 }: MemberCardProps) => {
+  const { back } = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [image, setImage] = useState<string>("/images/Member.jpg");
   const { wallet, tokens } = useBitkubNext();
@@ -141,7 +144,13 @@ const MemberCard = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-center">
+      <div className="mb-4 flex w-full justify-between px-10">
+        <button
+          onClick={() => back()}
+          className="btn-circle btn ring ring-gray-400 hover:btn-primary hover:ring-green-400"
+        >
+          <IoMdArrowRoundBack size={24} />
+        </button>
         <button
           onClick={() => void handleDownload()}
           className="btn-circle btn ring ring-gray-400 hover:btn-primary hover:ring-green-400"

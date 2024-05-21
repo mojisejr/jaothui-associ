@@ -8,6 +8,10 @@ import {
   getMemberByMemberId,
   updateWallet,
 } from "../services/minter/minter.service";
+import {
+  canEdit,
+  createUserProfileManagement,
+} from "../services/sanity/event.service";
 
 export const userRouter = createTRPCRouter({
   //@dev: get user memberId
@@ -185,7 +189,7 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      return users;
+      return users.filter((user) => user.active && user.approvedCount >= 1);
     }),
   updateAvatar: publicProcedure
     .input(
@@ -208,10 +212,22 @@ export const userRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const editable = await canEdit(input.wallet);
+      if (!editable) return;
       await ctx.prisma.user.update({
         data: { name: input.name },
         where: { wallet: input.wallet },
       });
+      await createUserProfileManagement(input.wallet, input.name);
+    }),
+  isCanUpdateName: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await canEdit(input.wallet);
     }),
   updateAddr: publicProcedure
     .input(
