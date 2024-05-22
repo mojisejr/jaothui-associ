@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { api } from "~/utils/api";
+import AlertMessageDialog from "../Shared/AlertMessageDialog";
 
 const UpdateWallet = () => {
+  const [alertTitle, setAlertTitle] = useState<string>("No Title");
+  const [alertMessage, setAlertMessage] = useState<string>("No Message");
   const { data: memberData, mutate: getMember } =
     api.user.getMemberId.useMutation();
 
@@ -10,6 +13,8 @@ const UpdateWallet = () => {
     data: updatedWallet,
     mutate: updateWallet,
     isSuccess: walletUpdated,
+    isError: walletUpdateError,
+    error,
   } = api.user.updateWallet.useMutation();
 
   const memberIdRef = useRef<HTMLInputElement>(null);
@@ -33,8 +38,20 @@ const UpdateWallet = () => {
   useEffect(() => {
     if (walletUpdated) {
       toast.success("wallet update เสร็จสิ้น");
+      handleAlertMessage("Wallet Update", "Update Wallet สำเร็จ");
     }
-  }, [walletUpdated]);
+
+    if (walletUpdateError) {
+      toast.error("wallet update ไม่สำเร็จ");
+      handleAlertMessage("Wallet Update", "Update Wallet ไม่สำเร็จ");
+    }
+  }, [walletUpdated, walletUpdateError]);
+
+  const handleAlertMessage = (title: string, message: string) => {
+    setAlertMessage(title);
+    setAlertTitle(message);
+    window.alert_message_dialog.showModal();
+  };
 
   return (
     <div className="px-3">
@@ -88,6 +105,7 @@ const UpdateWallet = () => {
       ) : (
         <div>ไม่เจอ</div>
       )}
+      <AlertMessageDialog title={alertTitle} message={alertMessage} />
     </div>
   );
 };
