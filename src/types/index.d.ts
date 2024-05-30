@@ -43,5 +43,10 @@ declare global {
       close: () => void;
       hasAttribute: (name: string) => boolean;
     };
+    loading_dialog: {
+      showModal: () => void;
+      close: () => void;
+      hasAttribute: (name: string) => boolean;
+    };
   }
 }

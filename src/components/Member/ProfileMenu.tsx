@@ -1,6 +1,9 @@
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
-import { FaChevronRight } from "react-icons/fa";
-import { FaRegAddressCard } from "react-icons/fa";
+import {
+  FaChevronRight,
+  FaRegAddressCard,
+  FaFileSignature,
+} from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
 import { HiOutlineChip } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
@@ -67,6 +70,16 @@ const ProfileMenu = () => {
         <div className="flex items-center gap-1">
           <HiOutlineChip size={18} />
           ไมโครชิพ
+        </div>
+        <FaChevronRight size={18} />
+      </Link>
+      <Link
+        href="/member/pedigree"
+        className="flex items-center justify-between border-b-2 border-slate-200  px-3 py-2"
+      >
+        <div className="flex items-center gap-1">
+          <FaFileSignature size={18} />
+          ใบพันธุ์ประวัติ
         </div>
         <FaChevronRight size={18} />
       </Link>

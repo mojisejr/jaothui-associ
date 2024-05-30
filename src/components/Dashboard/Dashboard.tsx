@@ -11,7 +11,7 @@ import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import MicrochipManageTable from "./MicrochipManageTable";
 import MemberMintingTable from "./MemberMintingTable";
 import UpdateWallet from "./UpdateWallet";
-import CertificateApprovementTable from "./CertificateApprovement/CertificateApprovementTable";
+import CertificationApproveTable from "./CertificationApproveTable";
 
 const ApprovementDashBoard = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -170,14 +170,14 @@ const ApprovementDashBoard = () => {
           </div>
 
           {/** NFT MINTER management */}
-          <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
+          {/* <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
             <div className="grid grid-cols-1 gap-2 px-2">
               <div className="flex items-center justify-between px-3 py-2">
                 <div className="text-lg font-bold">Member NFT Minter</div>
               </div>
               <MemberMintingTable />
             </div>
-          </div>
+          </div> */}
 
           {/** Update wallet management */}
           <div className="max-h-[80vh]  min-h-[50vh] overflow-y-auto bg-white">
@@ -195,7 +195,7 @@ const ApprovementDashBoard = () => {
               <div className="flex items-center justify-between px-3 py-2">
                 <div className="text-lg font-bold">Certificate Approvement</div>
               </div>
-              <CertificateApprovementTable />
+              <CertificationApproveTable />
             </div>
           </div>
         </div>

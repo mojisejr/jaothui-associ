@@ -1,9 +1,7 @@
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import FarmMenu from "~/components/Farm/FarmMenu";
 import FarmTable from "~/components/Farm/FarmTable";
-import Navbar from "~/components/Nav";
 import { Layout } from "~/components/Shared/Layout";
 import Unauthurized from "~/components/Shared/Unauthorized";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
