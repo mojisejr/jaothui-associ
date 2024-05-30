@@ -4,15 +4,12 @@ import { api } from "~/utils/api";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import MemberCard from "~/components/Member/MemberCard";
 import Loading from "~/components/Shared/LoadingIndicator";
-import Image from "next/image";
 
 const PublicMemberCard = () => {
   const { query } = useRouter();
-  const { data, isLoading, isError, refetch } = api.user.getPublicCard.useQuery(
-    {
-      wallet: query.wallet as string,
-    }
-  );
+  const { data, refetch } = api.user.getPublicCard.useQuery({
+    wallet: query.wallet as string,
+  });
 
   useEffect(() => {
     void refetch();

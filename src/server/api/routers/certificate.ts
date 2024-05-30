@@ -1,61 +1,74 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { getAllMetadata } from "../services/blockchain/Metadata/read";
-import { Metadata } from "~/interfaces/Metadata";
-import { parseMetadataForCertificate } from "../utils/parseMetadataForCertificate";
 import {
   approve,
-  approveWithoutData,
-  filterCertificateByApprover,
-  getCertificationInfo,
+  getCertificationOf,
+  getWaitForApprovementRequests,
   isApprover,
+  saveRequestForPed,
 } from "../services/metadata/metadata.service";
 import { z } from "zod";
+import { getMetadataByMicrochip } from "../services/blockchain/Metadata/read";
 
 export const certificationRouter = createTRPCRouter({
-  getAllMetadata: publicProcedure
-    .input(z.object({ wallet: z.string() }))
+  saveRequestForPed: publicProcedure
+    .input(
+      z.object({
+        wallet: z.string(),
+        buffaloId: z.string(),
+        ownerName: z.string(),
+        bornAt: z.string(),
+        momId: z.string().optional(),
+        dadId: z.string().optional(),
+        mGrandmaId: z.string().optional(),
+        mGrandpaId: z.string().optional(),
+        dGrandmaId: z.string().optional(),
+        dGrandpaId: z.string().optional(),
+        slipUrl: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await saveRequestForPed(input);
+    }),
+  getWaitForApprove: publicProcedure
+    .input(z.object({ approver: z.string(), approverPosition: z.number() }))
     .query(async ({ input }) => {
-      if (!(await isApprover(input.wallet))) return [];
-      //get all metadata
-      const metadata = (await getAllMetadata()) as Metadata[];
-      //parsed metadata to get some out of all column
-      const parsedMetadata = parseMetadataForCertificate(metadata);
-      //mapped on-chain and off-chain data
-      const mappedMetadata = await getCertificationInfo(parsedMetadata);
-      //filter out activated by connecting approver
-      const filteredMetadata = filterCertificateByApprover(
-        input.wallet,
-        mappedMetadata
+      return await getWaitForApprovementRequests(
+        input.approver,
+        input.approverPosition
       );
-
-      return filteredMetadata;
+    }),
+  getMetadataByMicrochip: publicProcedure
+    .input(z.object({ microchip: z.string() }))
+    .query(async ({ input }) => {
+      return await getMetadataByMicrochip(input.microchip);
     }),
   isApprover: publicProcedure
-    .input(z.object({ wallet: z.string() }))
+    .input(
+      z.object({
+        wallet: z.string(),
+      })
+    )
     .query(async ({ input }) => {
       return await isApprover(input.wallet);
     }),
   approve: publicProcedure
     .input(
       z.object({
-        wallet: z.string(),
+        approverWallet: z.string(),
+        approverPosition: z.number(),
         microchip: z.string(),
-        owner: z.string(),
-        bornAt: z.string(),
       })
     )
     .mutation(async ({ input }) => {
       return await approve(
-        input.wallet,
-        input.microchip,
-        input.owner,
-        input.bornAt
+        input.approverWallet,
+        input.approverPosition,
+        input.microchip
       );
     }),
-
-  approveNoData: publicProcedure
-    .input(z.object({ wallet: z.string(), microchip: z.string() }))
-    .mutation(async ({ input }) => {
-      return await approveWithoutData(input.wallet, input.microchip);
+  getCert: publicProcedure
+    .input(z.object({ microchip: z.string() }))
+    .query(async ({ input }) => {
+      return await getCertificationOf(input.microchip);
     }),
 });
