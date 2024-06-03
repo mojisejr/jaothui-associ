@@ -2,7 +2,7 @@ import Image from "next/image";
 import { api } from "~/utils/api";
 import { parseThaiDate } from "~/server/api/utils/parseThaiDate";
 import { QRCodeSVG } from "qrcode.react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CertificateProps {
   microchip: string;
@@ -19,15 +19,39 @@ const CertificateMobile = ({
   bornAt,
   owner,
 }: CertificateProps) => {
+  const [birthdate, setBirthdate] = useState<{
+    date: string;
+    thaiMonth: string;
+    thaiMonth2: string;
+    thaiYear: string;
+    thaiYear2: string;
+  }>();
   const certificateRef = useRef<HTMLDivElement>(null);
   const { data: metadata, isLoading } =
     api.certification.getMetadataByMicrochip.useQuery({
       microchip,
     });
 
-  const { data: cert } = api.certification.getCert.useQuery({ microchip });
+  const {
+    data: cert,
+    isLoading: certLoading,
+    isSuccess: certLoaded,
+  } = api.certification.getCert.useQuery({ microchip });
 
-  const birthdate = parseThaiDate(metadata!.birthdate * 1000);
+  useEffect(() => {
+    if (certLoaded) {
+      const parsed = parseThaiDate(metadata!.birthdate * 1000);
+      setBirthdate(
+        parsed as {
+          date: string;
+          thaiMonth: string;
+          thaiMonth2: string;
+          thaiYear: string;
+          thaiYear2: string;
+        }
+      );
+    }
+  }, [cert, certLoaded]);
 
   //   async function handleDownloadImage() {
   //     if (!certificateRef) return;
@@ -43,7 +67,7 @@ const CertificateMobile = ({
   //     document.body.removeChild(link);
   //   }
 
-  if (isLoading) {
+  if (isLoading || certLoading) {
     return (
       <div className="container flex min-h-[600px]  w-[1000px] items-center justify-center bg-gradient-to-br from-[#EEEEEE] via-[#EEEDEB] to-[#EEEEEE] p-8 shadow-xl">
         <div className="flex items-center gap-2">
@@ -133,19 +157,19 @@ const CertificateMobile = ({
           <div className="col-span-2 text-[8px]">
             เกิดวันที่{" "}
             <span className="text-[8px] font-semibold">
-              {birthdate.date ?? "N/A"}
+              {birthdate!.date ?? "N/A"}
             </span>
           </div>
           <div className="col-span-2 text-[8px]">
             เดือน{" "}
             <span className="text-[8px] font-semibold">
-              {birthdate.thaiMonth ?? "N/A"}
+              {birthdate!.thaiMonth ?? "N/A"}
             </span>
           </div>
           <div className="col-span-2 text-[8px]">
             พ.ศ.{" "}
             <span className="text-[8px] font-semibold">
-              {birthdate.thaiYear ?? "N/A"}
+              {birthdate!.thaiYear ?? "N/A"}
             </span>
           </div>
           <div className="col-span-2 text-[8px]">
