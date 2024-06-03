@@ -344,7 +344,9 @@ const PedigreeRequestForm = () => {
                 <div className="my-2">
                   <div className="text-xl font-bold">แบบฟอร์มเพิ่มข้อมูล</div>
                   <form
-                    onSubmit={(e) => onSubmit(e)}
+                    onSubmit={(e) => {
+                      void onSubmit(e);
+                    }}
                     className="grid grid-cols-1 gap-2"
                   >
                     <div className="form-control">
