@@ -26,13 +26,13 @@ export const useSearchByMicrochip = () => {
     }
   }, [isSuccess, isError]);
 
-  const searchByMicrochip = (microchip: string) => {
+  const searchByMicrochip = (microchip: string, type: number) => {
     setCurrentMicrochip(microchip);
     if (!microchip) {
       toast.error("need to provide microchip Id");
       return;
     }
-    search({ microchip });
+    search({ microchip, type });
   };
 
   return {
