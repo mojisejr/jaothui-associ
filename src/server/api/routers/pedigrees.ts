@@ -16,12 +16,12 @@ export const pedigreeRouter = createTRPCRouter({
       return await getMetadataByMicrochip(input.microchip);
     }),
   getByMicrochipForPedigreeRequest: publicProcedure
-    .input(z.object({ microchip: z.string() }))
+    .input(z.object({ microchip: z.string(), type: z.number() }))
     .mutation(async ({ input }) => {
       const data = await getMetadataByMicrochip(input.microchip);
       const hasRequest = await isApproved(input.microchip);
 
-      if (hasRequest && data != undefined) {
+      if (hasRequest && data != undefined && input.type == 0) {
         return {
           message: `${data.name} ส่งคำร้องเรียบร้อยแล้ว`,
           isApproved: true,

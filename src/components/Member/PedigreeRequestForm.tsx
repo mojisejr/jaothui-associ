@@ -114,7 +114,7 @@ const PedigreeRequestForm = () => {
   const handleSearch = (type: number, value: string) => {
     setSerching(type);
     if (value == undefined || value == "") return;
-    searchByMicrochip(value);
+    searchByMicrochip(value, type);
   };
 
   const {
