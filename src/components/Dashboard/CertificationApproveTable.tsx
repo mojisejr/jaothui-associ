@@ -9,7 +9,6 @@ import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useRouter } from "next/router";
 
 const CertificationApproveTable = () => {
-  const [ready, setReady] = useState<boolean>(false);
   const { wallet, tokens } = useBitkubNext();
   const { replace } = useRouter();
 
@@ -49,14 +48,6 @@ const CertificationApproveTable = () => {
           backPath: "/admin/dashboard",
         },
       });
-    }
-
-    if (approving) {
-      window.loading_dialog.showModal();
-    }
-
-    if (approveError) {
-      window.loading_dialog.close();
     }
   }, [approved, approving, approveError]);
 
