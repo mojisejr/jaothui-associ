@@ -98,3 +98,40 @@ export async function microchipPaymentNotify({
     console.log("notification error: ", error);
   }
 }
+
+export async function certificationApprovementNotify({
+  microchip,
+  buffaloName,
+  ownerName,
+  approverName,
+}: {
+  microchip: string;
+  buffaloName: string;
+  ownerName?: string;
+  approverName?: string;
+}) {
+  try {
+    const token = process.env.line_certification_approvment as string;
+    const response = await axios.post(
+      process.env.line_uri as string,
+      qs.stringify({
+        message: `แจ้งเตือนอนุมัติคำร้องของ
+        ✅ เจ้าของควาย: ${ownerName}  
+        ✅ ชื่อควาย:  ${buffaloName}
+        ✅ เลขไมโครชิพ: ${microchip} 
+
+        📝 ผู้อนุมัติ ${approverName}
+        `,
+      }),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ContentType: "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.log("notification error: ", error);
+  }
+}
