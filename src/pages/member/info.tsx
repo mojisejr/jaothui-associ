@@ -3,6 +3,7 @@ import { RiEdit2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { useIsAdmin } from "~/blockchain/MemberNFT/read";
 import EditProfileModal from "~/components/Member/EditProfileModal";
+import MemberAddressEdit from "~/components/Member/MemberAddressEdit";
 import MemberNameEdit from "~/components/Member/MemberNameEdit";
 import UserInfoAccordianItem from "~/components/Member/UserInfoAccordianItem";
 import { Layout } from "~/components/Shared/Layout";
@@ -129,18 +130,10 @@ const MemberInfoPage = () => {
       refPrefix.current?.value == "";
     }
   }
-  function handleEditAddress(ref: RefObject<HTMLInputElement>) {
-    if (
-      ref.current?.value == "" ||
-      ref.current?.value == undefined ||
-      ref.current?.value == null
-    ) {
-      setEditing(false);
-    } else {
-      setEditing(true);
-      editAddr({ wallet: wallet as string, addr: ref.current?.value });
-      ref.current.value = "";
-    }
+  function handleEditAddress(address: string, reset: () => void) {
+    setEditing(true);
+    editAddr({ wallet: wallet as string, addr: address });
+    reset();
   }
   function handleEditEmail(ref: RefObject<HTMLInputElement>) {
     if (
@@ -201,7 +194,7 @@ const MemberInfoPage = () => {
                 disabled={editing || canUpdateName! == false}
                 buttonName="แก้ไข"
               />
-              <UserInfoAccordianItem
+              <MemberAddressEdit
                 title="ที่อยู่"
                 content={user.address ?? "ไม่มีข้อมูล"}
                 placeholder={user.address ?? "ไม่มีข้อมูล"}
@@ -210,6 +203,15 @@ const MemberInfoPage = () => {
                 disabled={editing}
                 buttonName="แก้ไข"
               />
+              {/* <UserInfoAccordianItem
+                title="ที่อยู่"
+                content={user.address ?? "ไม่มีข้อมูล"}
+                placeholder={user.address ?? "ไม่มีข้อมูล"}
+                action={handleEditAddress}
+                loading={editing}
+                disabled={editing}
+                buttonName="แก้ไข"
+              /> */}
               <UserInfoAccordianItem
                 title="โทรศัพท์"
                 content={user.tel ?? "ไม่มีข้อมูล"}
