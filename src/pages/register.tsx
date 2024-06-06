@@ -17,6 +17,7 @@ import Loading from "~/components/Shared/LoadingIndicator";
 import { Layout } from "~/components/Shared/Layout";
 
 type Inputs = {
+  prefix: string;
   name: string;
   tel: string;
   address: string;
@@ -114,6 +115,7 @@ const Register = () => {
       createNewMember({
         accessToken: tokens?.access_token as string,
         ...data,
+        name: `${data.prefix} ${data.name}`,
         email: data.email as string,
         address: `${data.address} ${data.district} ${data.amphoe} ${data.province} ${data.zipcode}`,
         slipUrl: result.path,
@@ -144,16 +146,30 @@ const Register = () => {
                     >
                       สมัครสมาชิก
                     </div>
-                    <div className="form-control w-full max-w-xs">
-                      <input
-                        type="text"
-                        required
-                        placeholder="ชื่อ นามสกุล"
-                        disabled={registering}
-                        {...register("name", { required: true })}
-                        className="input-bordered  input input-sm w-full max-w-xs rounded-full"
-                      />
+                    <div className="form-group flex items-center gap-2">
+                      <div className="form-control max-w-xs">
+                        <select
+                          disabled={registering}
+                          {...register("prefix", { required: true })}
+                          className="select-bordered select select-sm max-w-xs rounded-full"
+                        >
+                          <option value="นาย">นาย</option>
+                          <option value="นาง">นาง</option>
+                          <option value="นางสาว">นางสาว</option>
+                        </select>
+                      </div>
+                      <div className="form-control w-full max-w-xs">
+                        <input
+                          type="text"
+                          required
+                          placeholder="ชื่อ นามสกุล"
+                          disabled={registering}
+                          {...register("name", { required: true })}
+                          className="input-bordered  input input-sm w-full max-w-xs rounded-full"
+                        />
+                      </div>
                     </div>
+
                     <div className="form-control w-full max-w-xs">
                       <input
                         type="text"
@@ -304,9 +320,13 @@ const Register = () => {
                         className="file-input-bordered file-input file-input-sm w-full max-w-xs rounded-full"
                       />
                     </div>
-                    <button className="btn" type="submit">
+                    <button
+                      disabled={registering}
+                      className="btn-primary btn"
+                      type="submit"
+                    >
                       {registering ? (
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
                           <Loading />
                           <span>กำลังบันทึก..</span>
                         </div>
