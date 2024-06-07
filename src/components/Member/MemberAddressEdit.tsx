@@ -20,7 +20,7 @@ interface MemberAddressEditProps {
   content: string;
   placeholder: string;
   buttonName: string;
-  action: (address: string, reset: () => void) => void;
+  action: (address: string, province: string, reset: () => void) => void;
   disabled: boolean;
   loading: boolean;
 }
@@ -65,7 +65,7 @@ export default function MemberAddressEdit({
     const zipcode = data.zipcode == undefined ? "" : data.zipcode;
     const inputAddress = `${address} ${data.district} ${data.amphoe} ${data.province} ${zipcode}`;
 
-    action(inputAddress, reset);
+    action(inputAddress, data.province, reset);
   });
 
   return (

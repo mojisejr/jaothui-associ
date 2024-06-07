@@ -90,6 +90,7 @@ export const userRouter = createTRPCRouter({
           payment: true,
         },
       });
+
       if (user != null) {
         return user;
       } else {
@@ -234,11 +235,12 @@ export const userRouter = createTRPCRouter({
       z.object({
         wallet: z.string(),
         addr: z.string(),
+        province: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.user.update({
-        data: { address: input.addr },
+        data: { address: input.addr, province: input.province },
         where: { wallet: input.wallet },
       });
     }),

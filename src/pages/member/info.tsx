@@ -130,9 +130,13 @@ const MemberInfoPage = () => {
       refPrefix.current?.value == "";
     }
   }
-  function handleEditAddress(address: string, reset: () => void) {
+  function handleEditAddress(
+    address: string,
+    province: string,
+    reset: () => void
+  ) {
     setEditing(true);
-    editAddr({ wallet: wallet as string, addr: address });
+    editAddr({ wallet: wallet as string, addr: address, province });
     reset();
   }
   function handleEditEmail(ref: RefObject<HTMLInputElement>) {
