@@ -91,9 +91,9 @@ const MemberCard = ({
         className="card card-compact relative w-96 max-w-md overflow-hidden rounded-xl bg-base-100 text-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
       >
         <div className="flex items-center justify-center gap-4 bg-slate-50 py-3">
-          <div className="w-14">
-            <Image src="/images/logo.png" alt="logo" width={150} height={150} />
-          </div>
+          <figure className="relative h-[50px] w-[50px]">
+            <Image src="/images/logo.png" alt="logo" fill />
+          </figure>
           <div>
             <h1 className="font-bold">สมาคมอนุรักษ์​ และ พัฒนาควายไทย</h1>
             <p>บัตรประจำตัวสมาชิก</p>
