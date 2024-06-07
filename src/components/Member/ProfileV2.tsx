@@ -23,7 +23,7 @@ const ProfileV2 = () => {
 
   useEffect(() => {
     void refetch();
-  }, []);
+  }, [wallet]);
 
   return (
     <>
@@ -40,7 +40,9 @@ const ProfileV2 = () => {
       > */}
         {/* <InformationGridV2 /> */}
         {loadingUser || loadingAdmin ? (
-          <Loading />
+          <div className="mt-10 flex justify-center">
+            <Loading />
+          </div>
         ) : (
           <div>
             <div className="grid grid-cols-1 gap-4">
