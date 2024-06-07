@@ -39,7 +39,7 @@ const ProfileV2 = () => {
       w1440:pt-[100px]"
       > */}
         {/* <InformationGridV2 /> */}
-        {loadingUser || loadingAdmin ? (
+        {loadingUser ? (
           <div className="mt-10 flex justify-center">
             <Loading />
           </div>
