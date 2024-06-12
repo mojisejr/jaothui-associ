@@ -96,6 +96,13 @@ export const isApprover = async (wallet: string) => {
   } as MetadataApprover;
 };
 
+export const unapprove = async (microchip: string) => {
+  const result = await prisma.certificate.delete({
+    where: { microchip },
+  });
+  return result;
+};
+
 export const approve = async (
   approverWallet: string,
   approverPosition: number,

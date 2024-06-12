@@ -5,6 +5,7 @@ import {
   getWaitForApprovementRequests,
   isApprover,
   saveRequestForPed,
+  unapprove,
 } from "../services/metadata/metadata.service";
 import { z } from "zod";
 import { getMetadataByMicrochip } from "../services/blockchain/Metadata/read";
@@ -65,6 +66,15 @@ export const certificationRouter = createTRPCRouter({
         input.approverPosition,
         input.microchip
       );
+    }),
+  unapprove: publicProcedure
+    .input(
+      z.object({
+        microchip: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return await unapprove(input.microchip);
     }),
   getCert: publicProcedure
     .input(z.object({ microchip: z.string() }))

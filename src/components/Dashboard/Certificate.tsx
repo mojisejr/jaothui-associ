@@ -27,10 +27,13 @@ const CertificateMobile = ({
     thaiYear2: string;
   }>();
   const certificateRef = useRef<HTMLDivElement>(null);
-  const { data: metadata, isLoading } =
-    api.certification.getMetadataByMicrochip.useQuery({
-      microchip,
-    });
+  const {
+    data: metadata,
+    isLoading,
+    isSuccess: metadataLoaded,
+  } = api.certification.getMetadataByMicrochip.useQuery({
+    microchip,
+  });
 
   const {
     data: cert,
@@ -39,7 +42,7 @@ const CertificateMobile = ({
   } = api.certification.getCert.useQuery({ microchip });
 
   useEffect(() => {
-    if (certLoaded) {
+    if (certLoaded || metadataLoaded) {
       const parsed = parseThaiDate(metadata!.birthdate * 1000);
       setBirthdate(
         parsed as {
@@ -51,7 +54,7 @@ const CertificateMobile = ({
         }
       );
     }
-  }, [cert, certLoaded]);
+  }, [cert, certLoaded, metadata, metadataLoaded]);
 
   //   async function handleDownloadImage() {
   //     if (!certificateRef) return;
@@ -80,24 +83,10 @@ const CertificateMobile = ({
 
   return (
     <div className=" relative shadow-xl">
-      {/* {!certificateRef === undefined ? null : (
-        <button
-          onClick={() => handleDownloadImage()}
-          className="btn-primary btn-sm btn-circle btn absolute -bottom-3 right-0 z-[10] shadow"
-        >
-          <MdDownload size={24} className="text-[#ffffff]" />
-        </button>
-      )} */}
       <div
         ref={certificateRef}
         className="container relative min-h-[250px] max-w-[425px]  bg-gradient-to-br bg-gradient-to-br from-[#EEEEEE] via-[#EEEDEB] to-[#EEEEEE] p-2"
       >
-        {/* <div className="example absolute rotate-[-45deg] font-bold opacity-30 top-[50%] left-[50%] text-[50px]">
-        เอกสารตัวอย่าง
-      </div>
-      <div className="example absolute rotate-[-45deg] font-bold opacity-30 top-[30%] left-[20%] text-[50px]">
-        เอกสารตัวอย่าง
-      </div> */}
         <img
           className="absolute bottom-[15%] right-[15%] w-32 opacity-20"
           src="/images/logo-gray.png"
@@ -156,21 +145,33 @@ const CertificateMobile = ({
           {/** line 2 */}
           <div className="col-span-2 text-[8px]">
             เกิดวันที่{" "}
-            <span className="text-[8px] font-semibold">
-              {birthdate!.date ?? "N/A"}
-            </span>
+            {birthdate ? (
+              <span className="text-[8px] font-semibold">
+                {birthdate.date ?? "N/A"}
+              </span>
+            ) : (
+              "N/A"
+            )}
           </div>
           <div className="col-span-2 text-[8px]">
             เดือน{" "}
-            <span className="text-[8px] font-semibold">
-              {birthdate!.thaiMonth ?? "N/A"}
-            </span>
+            {birthdate ? (
+              <span className="text-[8px] font-semibold">
+                {birthdate.thaiMonth ?? "N/A"}
+              </span>
+            ) : (
+              "N/A"
+            )}
           </div>
           <div className="col-span-2 text-[8px]">
             พ.ศ.{" "}
-            <span className="text-[8px] font-semibold">
-              {birthdate!.thaiYear ?? "N/A"}
-            </span>
+            {birthdate ? (
+              <span className="text-[8px] font-semibold">
+                {birthdate.thaiYear ?? "N/A"}
+              </span>
+            ) : (
+              "N/A"
+            )}
           </div>
           <div className="col-span-2 text-[8px]">
             ควายไทยสี{" "}
