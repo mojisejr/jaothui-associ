@@ -30,12 +30,24 @@ const CertificationApproveTable = () => {
     isSuccess: approved,
   } = api.certification.approve.useMutation();
 
+  const {
+    mutate: unapprove,
+    isLoading: unapproving,
+    isError: unapproveError,
+    isSuccess: unapproved,
+  } = api.certification.unapprove.useMutation();
+
   const handleApprovement = (
     approverWallet: string,
     approverPosition: number,
     microchip: string
   ) => {
     approve({ approverPosition, approverWallet, microchip });
+  };
+
+  const handleUnApprovment = (microchip: string) => {
+    // approve({ approverPosition, approverWallet, microchip });
+    unapprove({ microchip });
   };
 
   useEffect(() => {
@@ -50,6 +62,19 @@ const CertificationApproveTable = () => {
       });
     }
   }, [approved, approving, approveError]);
+
+  useEffect(() => {
+    if (unapproved) {
+      void replace({
+        pathname: "/success",
+        query: {
+          title: "Removed!",
+          content: "ลบข้อมูลเรียบร้อยแล้ว",
+          backPath: "/admin/dashboard",
+        },
+      });
+    }
+  }, [unapproved, unapproving, unapproveError]);
 
   if (approver == undefined || window == undefined)
     return <div className="p-2">เฉพาะผู้มีสิทธิ์อนุมัติ</div>;
@@ -76,7 +101,7 @@ const CertificationApproveTable = () => {
                   </Link>
                 </td>
                 <td
-                // onClick={() => window.certificate_approve_dialog.showModal()}
+                  onClick={() => window.certificate_approve_dialog.showModal()}
                 >
                   {req.microchip}
                 </td>
@@ -95,8 +120,15 @@ const CertificationApproveTable = () => {
                   >
                     {approving ? "กำลังอนุมัติ.." : "อนุมัติ"}
                   </button>
+                  <button
+                    disabled={unapproving}
+                    onClick={() => handleUnApprovment(req.microchip)}
+                    className="btn-primary btn-sm disabled:bg-slate-200"
+                  >
+                    {unapproving ? "กำลังยกเลิก.." : "ยกเลิก"}
+                  </button>
                 </td>
-                {/* <CertificationDetailDialog request={req} approver={approver} /> */}
+                <CertificationDetailDialog request={req} approver={approver} />
                 <LoadingDialog message="กำลังอนุมัติ" />
               </tr>
             ))}
