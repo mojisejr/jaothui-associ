@@ -289,11 +289,12 @@ const Register = () => {
                         disabled={registering}
                         {...register("payment", { required: true })}
                       >
-                        <option disabled selected>
+                        {/* <option disabled selected>
                           รูปแบบสมาชิก
+                        </option> */}
+                        <option value="2" selected>
+                          ตลอดชีพ 600 บาท
                         </option>
-                        <option value="1">รายปี 100 บาท</option>
-                        <option value="2">ตลอดชีพ 600 บาท</option>
                       </select>
                     </div>
                     <div>
