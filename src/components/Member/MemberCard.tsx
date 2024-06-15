@@ -15,6 +15,7 @@ interface MemberCardProps {
   isLifeTime: boolean;
   name: string;
   avatar: string;
+  isPublic: boolean;
 }
 
 const MemberCard = ({
@@ -23,6 +24,7 @@ const MemberCard = ({
   name,
   wallet: outsideWallet,
   avatar: outsideAvatar,
+  isPublic,
 }: MemberCardProps) => {
   const { back } = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -38,10 +40,11 @@ const MemberCard = ({
   }, [user, outsideAvatar, outsideWallet]);
 
   const handleSetImage = () => {
-    if (user == undefined && outsideAvatar !== undefined) {
+    if (user == undefined && outsideAvatar !== undefined && isPublic) {
       const { data } = supabase.storage
         .from("slipstorage/avatar")
         .getPublicUrl(`${outsideAvatar}`);
+
       if (data != undefined) {
         setImage(data.publicUrl);
       } else {
@@ -53,7 +56,7 @@ const MemberCard = ({
       admin
         ? setImage("/images/Committee.jpg")
         : setImage("/images/Member.jpg");
-    } else {
+    } else if (!isPublic) {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       const { data } = supabase.storage
         .from("slipstorage/avatar")
@@ -69,7 +72,6 @@ const MemberCard = ({
   };
 
   const handleDownload = async () => {
-    console.log(cardRef);
     if (!cardRef) return;
     const canvas = await html2canvas(cardRef.current!);
     const data = canvas.toDataURL("image/png");
