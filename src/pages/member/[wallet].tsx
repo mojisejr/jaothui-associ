@@ -30,6 +30,7 @@ const PublicMemberCard = () => {
               avatar={data.avatar!}
               admin={admin}
               isLifeTime={data.isLifeTime!}
+              isPublic={true}
             />
           </div>
         )}

@@ -48,6 +48,7 @@ const Profile = () => {
                 avatar={user?.avatar as string}
                 admin={admin}
                 isLifeTime={user?.payment[0]?.isLifeTime as boolean}
+                isPublic={false}
               />
               <InformationGridV2 />
             </div>
