@@ -106,7 +106,7 @@ const CertificationApproveTable = () => {
                   {req.microchip}
                 </td>
                 <td className="hidden md:block">{req.ownerName}</td>
-                <td>
+                <td className="flex flex-col gap-2">
                   <button
                     disabled={approving}
                     onClick={() =>
