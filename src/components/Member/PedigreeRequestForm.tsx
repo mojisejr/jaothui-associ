@@ -589,7 +589,7 @@ const PedigreeRequestForm = () => {
 
                     <div className="border-2  p-2">
                       <div className="text-xl font-bold text-red-600">
-                        ค่าธรรมเนียม 300 บาท
+                        ค่าธรรมเนียม 200 บาท
                       </div>
                       <div>กรุณาโอนเงินมาที่หัญชีสมาคม ตามข้อมูลด้านล่าง</div>
                       <div className="rounded-xl bg-slate-200 p-4">
