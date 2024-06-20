@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { api } from "~/utils/api";
-import LoadingDialog from "../Shared/LoadingModal";
 import Loading from "../Shared/LoadingIndicator";
 import { GrDocumentImage } from "react-icons/gr";
 import Link from "next/link";
-import CertificationDetailDialog from "./CertificationDetailDialog";
 import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useRouter } from "next/router";
 
@@ -24,44 +22,16 @@ const CertificationApproveTable = () => {
     });
 
   const {
-    mutate: approve,
-    isLoading: approving,
-    isError: approveError,
-    isSuccess: approved,
-  } = api.certification.approve.useMutation();
-
-  const {
     mutate: unapprove,
     isLoading: unapproving,
     isError: unapproveError,
     isSuccess: unapproved,
   } = api.certification.unapprove.useMutation();
 
-  const handleApprovement = (
-    approverWallet: string,
-    approverPosition: number,
-    microchip: string
-  ) => {
-    approve({ approverPosition, approverWallet, microchip });
-  };
-
   const handleUnApprovment = (microchip: string) => {
     // approve({ approverPosition, approverWallet, microchip });
     unapprove({ microchip });
   };
-
-  useEffect(() => {
-    if (approved) {
-      void replace({
-        pathname: "/success",
-        query: {
-          title: "Approved!",
-          content: "อนุมัติเรียบร้อย",
-          backPath: "/admin/dashboard",
-        },
-      });
-    }
-  }, [approved, approving, approveError]);
 
   useEffect(() => {
     if (unapproved) {
@@ -100,36 +70,27 @@ const CertificationApproveTable = () => {
                     <span>slip</span>
                   </Link>
                 </td>
-                <td
-                  onClick={() => window.certificate_approve_dialog.showModal()}
-                >
-                  {req.microchip}
-                </td>
+                <td>{req.microchip}</td>
                 <td className="hidden md:block">{req.ownerName}</td>
                 <td className="flex flex-col gap-2">
-                  <button
-                    disabled={approving}
-                    onClick={() =>
-                      handleApprovement(
-                        approver.wallet,
-                        approver.position,
-                        req.microchip
-                      )
-                    }
-                    className="btn-primary btn-sm disabled:bg-slate-200"
+                  <Link
+                    className="btn-primary btn-sm btn disabled:bg-slate-200"
+                    href={`/admin/certificate/preview/${req.microchip}?bornAt=${
+                      req.bornAt ?? "N/A"
+                    }&no=${req.no}&ownerName=${
+                      req.ownerName
+                    }&year=${req.updatedAt.getFullYear()}`}
                   >
-                    {approving ? "กำลังอนุมัติ.." : "อนุมัติ"}
-                  </button>
+                    อนุมัติ
+                  </Link>
                   <button
                     disabled={unapproving}
                     onClick={() => handleUnApprovment(req.microchip)}
-                    className="btn-primary btn-sm disabled:bg-slate-200"
+                    className="btn-primary btn-sm btn disabled:bg-slate-200"
                   >
                     {unapproving ? "กำลังยกเลิก.." : "ยกเลิก"}
                   </button>
                 </td>
-                <CertificationDetailDialog request={req} approver={approver} />
-                <LoadingDialog message="กำลังอนุมัติ" />
               </tr>
             ))}
           </tbody>

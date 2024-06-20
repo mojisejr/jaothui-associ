@@ -275,8 +275,8 @@ const CertificateMobile = ({
               <figure className="w-16">
                 <Image
                   src={
-                    cert?.approvers.find((approver) => approver.position == 0)
-                      ?.signatureUrl as string
+                    (cert?.approvers.find((approver) => approver.position == 0)
+                      ?.signatureUrl as string) ?? "/images/logo-gray.png"
                   }
                   height={200}
                   width={200}
@@ -284,8 +284,8 @@ const CertificateMobile = ({
                 />
               </figure>
               <span className="font-semibold">{`(${
-                cert?.approvers.find((approver) => approver.position == 0)?.user
-                  .name as string
+                (cert?.approvers.find((approver) => approver.position == 0)
+                  ?.user.name as string) ?? "ไม่มีข้อมูล"
               })`}</span>
               <span>
                 {
@@ -298,8 +298,8 @@ const CertificateMobile = ({
               <figure className="w-16">
                 <Image
                   src={
-                    cert?.approvers.find((approver) => approver.position == 1)
-                      ?.signatureUrl as string
+                    (cert?.approvers.find((approver) => approver.position == 1)
+                      ?.signatureUrl as string) ?? "/images/logo-gray.png"
                   }
                   height={200}
                   width={200}
@@ -307,8 +307,8 @@ const CertificateMobile = ({
                 />
               </figure>
               <span className="font-semibold">{`(${
-                cert?.approvers.find((approver) => approver.position == 1)?.user
-                  .name as string
+                (cert?.approvers.find((approver) => approver.position == 1)
+                  ?.user.name as string) ?? "ไม่มีข้อมูล"
               })`}</span>
               <span>
                 {
@@ -321,8 +321,8 @@ const CertificateMobile = ({
               <figure className="w-16">
                 <Image
                   src={
-                    cert?.approvers.find((approver) => approver.position == 2)
-                      ?.signatureUrl as string
+                    (cert?.approvers.find((approver) => approver.position == 2)
+                      ?.signatureUrl as string) ?? "/images/logo-gray.png"
                   }
                   height={200}
                   width={200}
@@ -330,8 +330,8 @@ const CertificateMobile = ({
                 />
               </figure>
               <span className="font-semibold">{`(${
-                cert?.approvers.find((approver) => approver.position == 2)?.user
-                  .name as string
+                (cert?.approvers.find((approver) => approver.position == 2)
+                  ?.user.name as string) ?? "ไม่มีข้อมูล"
               })`}</span>
               <span>
                 {
