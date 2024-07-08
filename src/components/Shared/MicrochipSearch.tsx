@@ -6,8 +6,14 @@ function MicrochipSearch() {
   const searchInput = useRef<HTMLInputElement>(null);
 
   function handleSearch() {
-    if (window !== undefined) {
+    const startedWithNumber = /^[0-9]/.test(searchInput.current!.value.trim());
+
+    if (window !== undefined && startedWithNumber) {
       window.open(`https://jaothui.com/cert/${searchInput.current!.value}`);
+    } else {
+      window.open(
+        `https://jaothui.com/cert/search?q=${searchInput.current!.value}`
+      );
     }
   }
 
