@@ -13,10 +13,6 @@ export default function Home() {
         <Hero />
         <Information />
         <PleaseConnectWalletDialog />
-        <AlertMessageDialog
-          title={"ประกาศ!"}
-          message={"เปิดให้สมัครสมาชิก 26 สิงหาคม นี้ !"}
-        />
       </Layout>
     </>
   );

@@ -2,6 +2,7 @@ import { useBitkubNext } from "~/contexts/bitkubNextContext";
 import { useEffect } from "react";
 import { api } from "../../utils/api";
 import { toast } from "react-toastify";
+import { IoMdCheckmark } from "react-icons/io";
 
 interface MemberApprovementProps {
   name?: string;
@@ -14,7 +15,7 @@ function MemberApprovementCard({
   wallet,
   dayPassed,
 }: MemberApprovementProps) {
-  const waitDays = 15;
+  const waitDays = 0;
   const { tokens, wallet: bitkubWallet } = useBitkubNext();
 
   const { refetch: fetchWaitForActive } =
@@ -72,7 +73,8 @@ function MemberApprovementCard({
     <li className="flex w-full  items-center justify-between gap-2 rounded-xl bg-gray-100 px-2 py-3 shadow-md hover:bg-green-50">
       <div className="flex items-center justify-center rounded-xl border-r-[1px] bg-green-300 p-2">
         <p className="text-xl font-bold">
-          {!dayPassed ? 0 : dayPassed}/{waitDays}
+          <IoMdCheckmark size={28} />
+          {/* {!dayPassed ? 0 : dayPassed}/{waitDays} */}
         </p>
       </div>
       <div>
@@ -85,7 +87,8 @@ function MemberApprovementCard({
       </div>
       <div className="flex flex-col items-center justify-center gap-3">
         <button
-          disabled={isRejecting || isApproving || dayPassed! < waitDays}
+          // disabled={isRejecting || isApproving || dayPassed! < waitDays}
+          disabled={isRejecting || isApproving}
           onClick={handleApprovment}
           className="rounded-lg bg-gray-200 px-2 py-1 hover:bg-green-400 disabled:text-gray-50 disabled:hover:bg-gray-200"
         >
@@ -93,7 +96,7 @@ function MemberApprovementCard({
         </button>
         <button
           onClick={handleRejection}
-          disabled={isRejecting || isApproving || dayPassed! < waitDays}
+          disabled={isRejecting || isApproving}
           className="rounded-lg bg-gray-200 px-2 py-1 hover:bg-red-400 hover:text-white disabled:text-gray-50 disabled:hover:bg-gray-200"
         >
           {isApproving ? "โปรดรอ" : "ไม่อนุมัติ"}
