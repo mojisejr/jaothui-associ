@@ -125,7 +125,7 @@ const ApprovementDashBoard = () => {
             <div className="flex justify-around">
               <ul className="flex min-w-[350px] max-w-[400px] flex-col justify-center gap-2 p-2">
                 <div className="flex items-start px-3 py-2 text-lg font-bold">
-                  <div>รอยืนยันหลัง 15 วัน</div>
+                  <div>ยืนยันสถานะสมาชิก</div>
                   <div>
                     {loadingActive ? (
                       <Loading />
