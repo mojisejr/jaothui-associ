@@ -11,6 +11,8 @@ import { z } from "zod";
 import { getMicrochipOrderOf } from "../services/microchip/orders";
 import { microchipPaymentNotify } from "../services/line/notify";
 import { getMicrochipSlipUrl } from "~/server/supabase";
+import { getAllMetadata } from "../services/blockchain/Metadata/read";
+import { Metadata } from "~/interfaces/Metadata";
 
 // wallet,
 // farmId,
@@ -25,7 +27,11 @@ import { getMicrochipSlipUrl } from "~/server/supabase";
 // buffaloIpfsUrl: ipfs,
 
 export const microchipRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx, input }) => {
+  getAllMetadata: publicProcedure.query(async () => {
+    return await getAllMetadata();
+  }),
+
+  getAll: publicProcedure.query(async () => {
     try {
       const microchips = await getAllMicrochips();
       return { microchips, count: microchips.length };

@@ -3,11 +3,11 @@ import { metadataAbi, metadataAddress } from "./abi";
 import { Metadata, MetadataForPedRequest } from "~/interfaces/Metadata";
 
 export async function getAllMetadata() {
-  const pedigrees = await publicClient.readContract({
+  const pedigrees = (await publicClient.readContract({
     address: metadataAddress,
     abi: metadataAbi,
     functionName: "getAllMetadata",
-  });
+  })) as Metadata[];
 
   return pedigrees;
 }
