@@ -6,8 +6,11 @@ import AlertMessageDialog from "../Shared/AlertMessageDialog";
 const UpdateWallet = () => {
   const [alertTitle, setAlertTitle] = useState<string>("No Title");
   const [alertMessage, setAlertMessage] = useState<string>("No Message");
-  const { data: memberData, mutate: getMember } =
-    api.user.getMemberId.useMutation();
+  const {
+    data: memberData,
+    mutate: getMember,
+    isLoading: loadingMember,
+  } = api.user.getMemberId.useMutation();
 
   const {
     data: updatedWallet,
@@ -64,10 +67,11 @@ const UpdateWallet = () => {
             className="input-bordered input input-xs max-w-xs"
           />
           <button
+            disabled={loadingMember}
             onClick={() => void memberIdSearch()}
             className="btn-primary btn-xs btn"
           >
-            ค้นหา
+            {!loadingMember ? "ค้นหา" : "กำลังค้นหา.."}
           </button>
         </div>
       </div>
@@ -103,7 +107,7 @@ const UpdateWallet = () => {
           </div>
         </div>
       ) : (
-        <div>ไม่เจอ</div>
+        <div>{loadingMember ? "กำลังค้นหา..." : "ไม่เจอ"}</div>
       )}
       <AlertMessageDialog title={alertTitle} message={alertMessage} />
     </div>
