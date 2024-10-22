@@ -44,9 +44,11 @@ const PedigreeRequestForm = () => {
     window.loading_dialog.showModal();
     const inputData = {
       ...data,
-      ownerName: `${data.prefix} ${data.ownerName}`,
+      ownerName:
+        data.ownerName == "" ? "-" : `${data.prefix} ${data.ownerName}`,
       wallet: wallet! as string,
       buffaloId: buffaloSearch?.certify.microchip,
+      bornAt: data.bornAt == "จังหวัด" ? "-" : data.bornAt,
       momId:
         mom == undefined
           ? undefined
@@ -365,8 +367,7 @@ const PedigreeRequestForm = () => {
                       <label>ชื่อเจ้าของ</label>
                       <div className="flex items-center gap-2">
                         <select
-                          required
-                          {...register("prefix", { required: true })}
+                          {...register("prefix")}
                           className="select-bordered  select  disabled:bg-slate-200"
                         >
                           <option value="นาย">นาย</option>
@@ -374,11 +375,11 @@ const PedigreeRequestForm = () => {
                           <option value="นางสาว">นางสาว</option>
                         </select>
                         <input
-                          {...register("ownerName", { required: true })}
+                          {...register("ownerName")}
                           placeholder="ชื่อ นามสกุล"
                           className="input w-full disabled:bg-slate-200"
                           type="text"
-                        ></input>
+                        />
                       </div>
                     </div>
                     <div className="form-control">
