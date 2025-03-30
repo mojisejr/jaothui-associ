@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter } from "../trpc";
-import { publicProcedure, protectedProcedure } from "../trpc";
+import { publicProcedure } from "../trpc";
 import { z } from "zod";
 import { getDaysPassedSincePaid } from "../utils/getDaysPassedSincePaid";
-import { warn } from "console";
+
 import {
   getMemberByMemberId,
   updateWallet,

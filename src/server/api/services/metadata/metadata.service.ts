@@ -3,8 +3,9 @@ import { MetadataApprover } from "~/interfaces/Metadata";
 import { CreatePedigreeRequest } from "~/interfaces/Pedigree";
 import { prisma } from "~/server/db";
 import { supabase } from "~/server/supabase";
-import { certificationApprovementNotify } from "../line/notify";
+// import { certificationApprovementNotify } from "../line/notify";
 import { getMetadataByMicrochip } from "../blockchain/Metadata/read";
+import { n8nApprovementNotify } from "../n8n";
 
 export const saveRequestForPed = async (data: CreatePedigreeRequest) => {
   await prisma.certificate.create({
@@ -129,17 +130,28 @@ export const approve = async (
 
   ///only position 2 approver will send the notification to line
   if (approverPosition == 1) {
-    const buffalo = await getMetadataByMicrochip(microchip);
+    const buffalo = await prisma.pedigree.findUnique({
+      where: { microchip },
+    });
     const user = await prisma.user.findUnique({
       where: { wallet: approverWallet },
     });
+
     if (buffalo == undefined) return;
     if (user == undefined) return;
-    await certificationApprovementNotify({
+    //TODO: impl CERTIFICATION APPROVMENT NOTIFY
+    // await certificationApprovementNotify({
+    //   microchip,
+    //   buffaloName: buffalo?.name,
+    //   ownerName: target?.ownerName,
+    //   approverName: user?.name ?? "ไม่พบ",
+    // });
+    await n8nApprovementNotify({
       microchip,
       buffaloName: buffalo?.name,
       ownerName: target?.ownerName,
       approverName: user?.name ?? "ไม่พบ",
+      buffaloUrl: buffalo.image!,
     });
   }
 
