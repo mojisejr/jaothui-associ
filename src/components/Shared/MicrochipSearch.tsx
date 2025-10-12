@@ -1,34 +1,38 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ImSearch } from "react-icons/im";
-import { useRef } from "react";
-import { api } from "~/utils/api";
 
 function MicrochipSearch() {
   const searchInput = useRef<HTMLInputElement>(null);
 
-  const { data: allMetadata, isLoading } =
-    api.microchip.getAllMetadata.useQuery();
-
   function handleSearch() {
-    if (isLoading) return;
-    const startedWithNumber = /^[0-9]/.test(searchInput.current!.value.trim());
+    // Guard the ref and normalize input value
+    const inputEl = searchInput.current;
+    const raw = inputEl?.value ?? "";
+    const query = raw.trim();
+    if (!query) return;
 
-    if (window !== undefined && startedWithNumber) {
-      const index = allMetadata?.findIndex(
-        (m) => m.certify.microchip == searchInput.current!.value
-      );
+    // Avoid ReferenceError in non-browser environments
+    if (typeof window === "undefined") return;
 
-      console.log(index);
+    // Test whether the input starts with a digit
+    const startedWithNumber = /^[0-9]/.test(query);
 
-      if (index === undefined) return;
-
+    if (startedWithNumber) {
+      // Numeric query -> direct certificate page
       window.open(
-        `https://jaothui.com/cert/${searchInput.current!.value}?i=${index + 1}`
+        `https://jaothui.com/cert/${encodeURIComponent(query)}`
       );
     } else {
+      // Non-numeric query -> search page
       window.open(
-        `https://jaothui.com/cert/search?q=${searchInput.current!.value}`
+        `https://jaothui.com/cert/search?q=${encodeURIComponent(query)}`
       );
+    }
+  }
+
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   }
 
@@ -40,9 +44,9 @@ function MicrochipSearch() {
         maxLength={15}
         className="input input-sm w-full max-w-[420px] rounded-full text-black focus:outline-none"
         ref={searchInput}
-      ></input>
+        onKeyPress={handleKeyPress}
+      />
       <button
-        disabled={isLoading}
         className="text-slate-700"
         onClick={handleSearch}
       >
